@@ -19,7 +19,7 @@ struct BossButton: View {
                 TapGesture()
                     .onEnded {
                         isDead.toggle()
-                        defaults.set(isDead, forKey: iconName)
+                        UserDefaults.standard.set(isDead, forKey: iconName)
                     }
             )
             .modifier(AppearanceModifier(type: .boss, isActive: isDead))

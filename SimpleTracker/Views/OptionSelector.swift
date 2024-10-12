@@ -38,7 +38,7 @@ struct OptionSelector: View {
                 TapGesture()
                     .onEnded {
                         selection = (selection + 1) % options.count
-                        defaults.set(selection, forKey: key)
+                        UserDefaults.standard.set(selection, forKey: key)
                     }
             )
     }

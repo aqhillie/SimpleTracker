@@ -21,7 +21,7 @@ struct ItemButton: View {
                     TapGesture()
                         .onEnded {
                             collected.toggle()
-                            defaults.set(collected, forKey: iconName)
+                            UserDefaults.standard.set(collected, forKey: iconName)
                         }
                 )
         } else {

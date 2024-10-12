@@ -10,6 +10,7 @@ import SwiftUI
 struct ConsumableButton: View {
     var iconName: String
     @State var collected: Int
+    @State var appState = AppState()
 
     private func getNumItems() -> String {
         if ["etank", "reservetank"].contains(iconName) {
@@ -26,9 +27,9 @@ struct ConsumableButton: View {
                 .gesture(
                     TapGesture()
                         .onEnded {
-                            if collected < maxPacks[iconName]! {
+                            if collected < appState.maxPacks[iconName]! {
                                 collected += 1
-                                defaults.set(collected, forKey: iconName)
+                                UserDefaults.standard.set(collected, forKey: iconName)
                             }
                         }
                 )
@@ -37,7 +38,7 @@ struct ConsumableButton: View {
                         .onEnded { _ in
                             if collected > 0 {
                                 collected -= 1
-                                defaults.set(collected, forKey: iconName)
+                                UserDefaults.standard.set(collected, forKey: iconName)
                             }
                         }
                 )

@@ -10,15 +10,18 @@ import SwiftUI
 
 @main
 struct Simple_TrackerApp: App {
+    
+    @State var appState = AppState()
+    
     func resetTracker() {
-        for bossName in bossNames {
-            defaults.set(false, forKey: bossName)
+        for bossName in appState.bossNames {
+            UserDefaults.standard.set(false, forKey: bossName)
         }
-        for itemName in itemNames {
-            if consumables.contains(itemName) {
-                defaults.set(0, forKey: itemName)
+        for itemName in appState.itemNames {
+            if appState.consumables.contains(itemName) {
+                UserDefaults.standard.set(0, forKey: itemName)
             } else {
-                defaults.set(false, forKey: itemName)
+                UserDefaults.standard.set(false, forKey: itemName)
             }
         }
     }
