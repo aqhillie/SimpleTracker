@@ -11,7 +11,20 @@ struct ConsumableButton: View {
     var iconName: String
     @State var collected: Int
     @State var appState = AppState()
-
+    
+    init(iconName: String, collected: Int, appState: AppState = AppState()) {
+        self.iconName = iconName
+        self.collected = collected
+        self.appState = appState
+    }
+    
+    init(_ name: String) {
+        self.iconName = name
+        self.collected = 0
+        self.appState = AppState()
+    }
+    
+    
     private func getNumItems() -> String {
         if ["etank", "reservetank"].contains(iconName) {
             return String(collected)
@@ -21,13 +34,14 @@ struct ConsumableButton: View {
     }
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {                Image(iconName)
+        ZStack(alignment: .bottomTrailing) {
+            Image(iconName)
                 .resizable()
                 .frame(width: 60, height: 60)
                 .gesture(
                     TapGesture()
                         .onEnded {
-                            if collected < appState.maxPacks[iconName]! {
+                            if collected < maxPacks[iconName]! {
                                 collected += 1
                                 UserDefaults.standard.set(collected, forKey: iconName)
                             }

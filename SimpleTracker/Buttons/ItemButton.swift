@@ -8,20 +8,23 @@
 import SwiftUI
 
 struct ItemButton: View {
-    var iconName: String
-    @State var collected: Bool
 
+    @State var item: Item
+    
+    init(item: Item) {
+        self.item = item
+    }
+    
     var body: some View {
-        if iconName != "" {
-            Image(iconName)
+        if item.name != "" {
+            Image(item.name)
                 .resizable()
                 .frame(width: 60, height: 60)
-                .modifier(AppearanceModifier(type: .item, isActive: collected))
+                .modifier(AppearanceModifier(type: .item, isActive: item.getCollection() > 0))
                 .gesture(
                     TapGesture()
                         .onEnded {
-                            collected.toggle()
-                            UserDefaults.standard.set(collected, forKey: iconName)
+                            item.collect()
                         }
                 )
         } else {

@@ -11,24 +11,22 @@ import SwiftUI
 @main
 struct Simple_TrackerApp: App {
     
-    @State var appState = AppState()
+    @State var appState: AppState
+    
+    init() {
+        self.appState = AppState()
+    }
+
     
     func resetTracker() {
-        for bossName in appState.bossNames {
-            UserDefaults.standard.set(false, forKey: bossName)
-        }
-        for itemName in appState.itemNames {
-            if appState.consumables.contains(itemName) {
-                UserDefaults.standard.set(0, forKey: itemName)
-            } else {
-                UserDefaults.standard.set(false, forKey: itemName)
-            }
-        }
+        appState.resetItems()
+        appState.resetUserDefaults()
+        
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(appState: appState)
         }
         .commands {
             CommandGroup(replacing: .newItem) {

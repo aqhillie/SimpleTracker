@@ -8,10 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    // Application State
     
-    @State var appState = AppState()
+    @Bindable var appState: AppState
     
+    init(appState: AppState) {
+        self.appState = appState
+    }
+    
+    //@State var charge: Item = Item(name: "charge", maxValue: 4)
     private var bosses: some View {
         VStack(spacing: 30) {
             ForEach(appState.bossNames, id: \.self) { bossName in
@@ -25,19 +29,45 @@ struct ContentView: View {
             ForEach(0..<5) { column in
                 VStack(spacing: 4) {
                     ForEach(0..<6) { row in
-                        let itemName = appState.itemNames[column * 6 + row]
-                        if (appState.consumables.contains(itemName)) {
-                            ConsumableButton(iconName: itemName, collected: (UserDefaults.standard.object(forKey: itemName) != nil) ? UserDefaults.standard.integer(forKey: itemName) : 0)
-                        } else {
-                            if (itemName == "walljump") {
-                                if (appState.collectibleWallJump == true) {
-                                    ItemButton(iconName: itemName, collected: (UserDefaults.standard.object(forKey: itemName) != nil) ? UserDefaults.standard.bool(forKey: itemName) : false)
-                                } else {
-                                    ItemButton(iconName: "", collected: false)
+                        @Bindable var item = appState.items[column * 6 + row]
+                        switch item.isConsumable {
+                            case true:
+                                ZStack(alignment: .bottomTrailing) {
+                                    Image(item.name)
+                                        .resizable()
+                                        .frame(width: 60, height: 60)
+                                        .gesture(
+                                            TapGesture()
+                                                .onEnded {
+                                                    item.collect()
+                                                }
+                                        )
+                                        .gesture(
+                                            LongPressGesture()
+                                                .onEnded { _ in
+                                                    item.reset()
+                                                }
+                                        )
+                                        .modifier(
+                                            AppearanceModifier(type: .item, isActive: item.getCollection() > 0)
+                                        )
+                                    ItemCount(count: String(describing: item.getCollection()))
+                                        .frame(alignment: .bottomTrailing)
                                 }
-                            } else {
-                                ItemButton(iconName: itemName, collected: (UserDefaults.standard.object(forKey: itemName) != nil) ? UserDefaults.standard.bool(forKey: itemName) : false)
-                            }
+                                .frame(width: 60, height: 60)
+                            case false:
+                                if (item.name == "walljump") {
+                                    if (appState.collectibleWallJump == true) {
+                                        //ItemButton(iconName: item.name, collected: item.getCollection() > 0)
+                                        ItemButton(item: item)
+                                    } else {
+                                        ItemButton(item: item)
+                                        //ItemButton(iconName: "", collected: false)
+                                    }
+                                } else {
+                                    ItemButton(item: item)
+                                    //ItemButton(iconName: item.name, collected: item.getCollection() > 0)
+                                }
                         }
                     }
                 }
@@ -72,5 +102,4 @@ struct ContentView: View {
         .padding(0)
     }
 }
-
 
