@@ -19,7 +19,6 @@ struct BossBody: View {
                 TapGesture()
                     .onEnded {
                         $isDead.wrappedValue.toggle()
-                        print(isDead)
                     }
             )
             .modifier(AppearanceModifier(type: .boss, isActive: isDead))

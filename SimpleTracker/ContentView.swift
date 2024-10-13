@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    // Application State
+    @State var appSettings = AppSettings()
     
     var body: some View {
         ZStack {
@@ -16,7 +16,8 @@ struct ContentView: View {
             HStack(spacing: 20) {
                 bosses
                 itemGrid
-                gameOptions
+                GameOptions()
+                    .environment(appSettings)
             }
         }
         .padding(0)
@@ -59,17 +60,16 @@ private var itemGrid: some View {
     .padding(0)
 }
 
-private var gameOptions: some View {
-    return VStack(spacing: 20) {
-        ForEach(configOptions, id: \.title) { option in
-            OptionSelector(
-                key: option.key,
-                title: option.title,
-                options: option.options,
-                colors: option.colors,
-                selection: option.selection
-            )
+struct GameOptions: View {
+    var body: some View {
+        VStack(spacing: 20) {
+            SeedObjectiveSelector()
+            SeedDifficultySelector()
+            SeedItemProgressionSelector()
+            SeedQualityOfLifeSelector()
+            SeedMapLayoutSelector()
         }
+        .background(Color.black)
     }
-    .background(Color.black)
 }
+

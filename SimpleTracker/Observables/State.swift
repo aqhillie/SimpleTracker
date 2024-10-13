@@ -16,23 +16,23 @@ class AppState {
     var draygonDead: Bool = false
     
     // Items
-    var chargeCollected: Bool = false
-    var iceCollected: Bool = false
-    var waveCollected: Bool = false
+    var chargeBeamCollected: Bool = false
+    var iceBeamCollected: Bool = false
+    var waveBeamCollected: Bool = false
     var spazerCollected: Bool = false
-    var plasmaCollected: Bool = false
+    var plasmaBeamCollected: Bool = false
     
-    var variaCollected: Bool = false
-    var gravityCollected: Bool = false
-    var grappleCollected: Bool = false
-    var xrayCollected: Bool = false
-    var morphCollected: Bool = false
+    var variaSuitCollected: Bool = false
+    var gravitySuitCollected: Bool = false
+    var grappleBeamCollected: Bool = false
+    var xrayScopeCollected: Bool = false
+    var morphBallCollected: Bool = false
     var bombCollected: Bool = false
     var springballCollected: Bool = false
-    var screwCollected: Bool = false
+    var screwAttackCollected: Bool = false
     var hijumpCollected: Bool = false
-    var spaceCollected: Bool = false
-    var speedCollected: Bool = false
+    var spaceJumpCollected: Bool = false
+    var speedBoosterCollected: Bool = false
     
     // Only relevant if AppSettings.collectibleWallJump is turned on
     var walljumpCollected:Bool = false

@@ -12,18 +12,10 @@ struct SimpleTrackerApp: App {
     @State var appState = AppState()
     
     func resetTracker() {
-        print(appState.ridleyDead)
-        print(appState.phantoonDead)
-        print(appState.kraidDead)
-        print(appState.draygonDead)
         appState.ridleyDead = false
         appState.phantoonDead = false
         appState.kraidDead = false
         appState.draygonDead = false
-        print(appState.ridleyDead)
-        print(appState.phantoonDead)
-        print(appState.kraidDead)
-        print(appState.draygonDead)
     }
 
     var body: some Scene {
