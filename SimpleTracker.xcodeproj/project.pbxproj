@@ -1,0 +1,573 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		FAA0EEE02CB38061008D6B24 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FAA0EEC62CB3805F008D6B24 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FAA0EECD2CB3805F008D6B24;
+			remoteInfo = "Simple Tracker";
+		};
+		FAA0EEEA2CB38061008D6B24 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FAA0EEC62CB3805F008D6B24 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FAA0EECD2CB3805F008D6B24;
+			remoteInfo = "Simple Tracker";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FAA0EECE2CB3805F008D6B24 /* SimpleTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAA0EEDF2CB38061008D6B24 /* SimpleTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAA0EEE92CB38061008D6B24 /* SimpleTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SimpleTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FAB328162CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Fonts/super-metroid-snes.ttf",
+			);
+			target = FAA0EEDE2CB38061008D6B24 /* SimpleTrackerTests */;
+		};
+		FAB328172CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Fonts/super-metroid-snes.ttf",
+			);
+			target = FAA0EEE82CB38061008D6B24 /* SimpleTrackerUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		FAA0EED02CB3805F008D6B24 /* SimpleTracker */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FAB328162CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerTests" target */,
+				FAB328172CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerUITests" target */,
+			);
+			path = SimpleTracker;
+			sourceTree = "<group>";
+		};
+		FAA0EEE22CB38061008D6B24 /* SimpleTrackerTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SimpleTrackerTests;
+			sourceTree = "<group>";
+		};
+		FAA0EEEC2CB38061008D6B24 /* SimpleTrackerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SimpleTrackerUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FAA0EECB2CB3805F008D6B24 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAA0EEDC2CB38061008D6B24 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAA0EEE62CB38061008D6B24 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FAA0EEC52CB3805F008D6B24 = {
+			isa = PBXGroup;
+			children = (
+				FAA0EED02CB3805F008D6B24 /* SimpleTracker */,
+				FAA0EEE22CB38061008D6B24 /* SimpleTrackerTests */,
+				FAA0EEEC2CB38061008D6B24 /* SimpleTrackerUITests */,
+				FAA0EECF2CB3805F008D6B24 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FAA0EECF2CB3805F008D6B24 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FAA0EECE2CB3805F008D6B24 /* SimpleTracker.app */,
+				FAA0EEDF2CB38061008D6B24 /* SimpleTrackerTests.xctest */,
+				FAA0EEE92CB38061008D6B24 /* SimpleTrackerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FAA0EECD2CB3805F008D6B24 /* SimpleTracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAA0EEF32CB38061008D6B24 /* Build configuration list for PBXNativeTarget "SimpleTracker" */;
+			buildPhases = (
+				FAA0EECA2CB3805F008D6B24 /* Sources */,
+				FAA0EECB2CB3805F008D6B24 /* Frameworks */,
+				FAA0EECC2CB3805F008D6B24 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				FAA0EED02CB3805F008D6B24 /* SimpleTracker */,
+			);
+			name = SimpleTracker;
+			packageProductDependencies = (
+			);
+			productName = "Simple Tracker";
+			productReference = FAA0EECE2CB3805F008D6B24 /* SimpleTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FAA0EEDE2CB38061008D6B24 /* SimpleTrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAA0EEF62CB38061008D6B24 /* Build configuration list for PBXNativeTarget "SimpleTrackerTests" */;
+			buildPhases = (
+				FAA0EEDB2CB38061008D6B24 /* Sources */,
+				FAA0EEDC2CB38061008D6B24 /* Frameworks */,
+				FAA0EEDD2CB38061008D6B24 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FAA0EEE12CB38061008D6B24 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FAA0EEE22CB38061008D6B24 /* SimpleTrackerTests */,
+			);
+			name = SimpleTrackerTests;
+			packageProductDependencies = (
+			);
+			productName = "Simple TrackerTests";
+			productReference = FAA0EEDF2CB38061008D6B24 /* SimpleTrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FAA0EEE82CB38061008D6B24 /* SimpleTrackerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FAA0EEF92CB38061008D6B24 /* Build configuration list for PBXNativeTarget "SimpleTrackerUITests" */;
+			buildPhases = (
+				FAA0EEE52CB38061008D6B24 /* Sources */,
+				FAA0EEE62CB38061008D6B24 /* Frameworks */,
+				FAA0EEE72CB38061008D6B24 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FAA0EEEB2CB38061008D6B24 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FAA0EEEC2CB38061008D6B24 /* SimpleTrackerUITests */,
+			);
+			name = SimpleTrackerUITests;
+			packageProductDependencies = (
+			);
+			productName = "Simple TrackerUITests";
+			productReference = FAA0EEE92CB38061008D6B24 /* SimpleTrackerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FAA0EEC62CB3805F008D6B24 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					FAA0EECD2CB3805F008D6B24 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					FAA0EEDE2CB38061008D6B24 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = FAA0EECD2CB3805F008D6B24;
+					};
+					FAA0EEE82CB38061008D6B24 = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = FAA0EECD2CB3805F008D6B24;
+					};
+				};
+			};
+			buildConfigurationList = FAA0EEC92CB3805F008D6B24 /* Build configuration list for PBXProject "SimpleTracker" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FAA0EEC52CB3805F008D6B24;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = FAA0EECF2CB3805F008D6B24 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FAA0EECD2CB3805F008D6B24 /* SimpleTracker */,
+				FAA0EEDE2CB38061008D6B24 /* SimpleTrackerTests */,
+				FAA0EEE82CB38061008D6B24 /* SimpleTrackerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FAA0EECC2CB3805F008D6B24 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAA0EEDD2CB38061008D6B24 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAA0EEE72CB38061008D6B24 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FAA0EECA2CB3805F008D6B24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAA0EEDB2CB38061008D6B24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FAA0EEE52CB38061008D6B24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FAA0EEE12CB38061008D6B24 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAA0EECD2CB3805F008D6B24 /* SimpleTracker */;
+			targetProxy = FAA0EEE02CB38061008D6B24 /* PBXContainerItemProxy */;
+		};
+		FAA0EEEB2CB38061008D6B24 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FAA0EECD2CB3805F008D6B24 /* SimpleTracker */;
+			targetProxy = FAA0EEEA2CB38061008D6B24 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FAA0EEF12CB38061008D6B24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FAA0EEF22CB38061008D6B24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		FAA0EEF42CB38061008D6B24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SimpleTracker/SimpleTracker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SimpleTracker/Preview Content\"";
+				DEVELOPMENT_TEAM = 67CZ3ZPAE4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimpleTracker/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.warpixel.simpletracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		FAA0EEF52CB38061008D6B24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SimpleTracker/SimpleTracker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"SimpleTracker/Preview Content\"";
+				DEVELOPMENT_TEAM = 67CZ3ZPAE4;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SimpleTracker/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.warpixel.simpletracker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		FAA0EEF72CB38061008D6B24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.warpixel.Simple-TrackerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimpleTracker";
+			};
+			name = Debug;
+		};
+		FAA0EEF82CB38061008D6B24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.warpixel.Simple-TrackerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SimpleTracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SimpleTracker";
+			};
+			name = Release;
+		};
+		FAA0EEFA2CB38061008D6B24 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.warpixel.Simple-TrackerUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Simple Tracker";
+			};
+			name = Debug;
+		};
+		FAA0EEFB2CB38061008D6B24 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.warpixel.Simple-TrackerUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = "Simple Tracker";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FAA0EEC92CB3805F008D6B24 /* Build configuration list for PBXProject "SimpleTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAA0EEF12CB38061008D6B24 /* Debug */,
+				FAA0EEF22CB38061008D6B24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAA0EEF32CB38061008D6B24 /* Build configuration list for PBXNativeTarget "SimpleTracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAA0EEF42CB38061008D6B24 /* Debug */,
+				FAA0EEF52CB38061008D6B24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAA0EEF62CB38061008D6B24 /* Build configuration list for PBXNativeTarget "SimpleTrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAA0EEF72CB38061008D6B24 /* Debug */,
+				FAA0EEF82CB38061008D6B24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FAA0EEF92CB38061008D6B24 /* Build configuration list for PBXNativeTarget "SimpleTrackerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FAA0EEFA2CB38061008D6B24 /* Debug */,
+				FAA0EEFB2CB38061008D6B24 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FAA0EEC62CB3805F008D6B24 /* Project object */;
+}
