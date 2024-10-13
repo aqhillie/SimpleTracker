@@ -9,17 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @Bindable var appState: AppState
+    @Bindable var viewModel: ViewModel
     
-    init(appState: AppState) {
-        self.appState = appState
+    init(appState: ViewModel) {
+        self.viewModel = appState
     }
     
-    //@State var charge: Item = Item(name: "charge", maxValue: 4)
     private var bosses: some View {
         VStack(spacing: 30) {
-            ForEach(appState.bossNames, id: \.self) { bossName in
-                BossButton(iconName: bossName, isDead: (UserDefaults.standard.object(forKey: bossName) != nil) ? UserDefaults.standard.bool(forKey: bossName) : false)
+            ForEach(viewModel.bosses, id: \.self) { boss in
+                BossButton(for: boss)
             }
         }
         .padding(0)
@@ -29,46 +28,8 @@ struct ContentView: View {
             ForEach(0..<5) { column in
                 VStack(spacing: 4) {
                     ForEach(0..<6) { row in
-                        @Bindable var item = appState.items[column * 6 + row]
-                        switch item.isConsumable {
-                            case true:
-                                ZStack(alignment: .bottomTrailing) {
-                                    Image(item.name)
-                                        .resizable()
-                                        .frame(width: 60, height: 60)
-                                        .gesture(
-                                            TapGesture()
-                                                .onEnded {
-                                                    item.collect()
-                                                }
-                                        )
-                                        .gesture(
-                                            LongPressGesture()
-                                                .onEnded { _ in
-                                                    item.reset()
-                                                }
-                                        )
-                                        .modifier(
-                                            AppearanceModifier(type: .item, isActive: item.getCollection() > 0)
-                                        )
-                                    ItemCount(count: String(describing: item.getCollection()))
-                                        .frame(alignment: .bottomTrailing)
-                                }
-                                .frame(width: 60, height: 60)
-                            case false:
-                                if (item.name == "walljump") {
-                                    if (appState.collectibleWallJump == true) {
-                                        //ItemButton(iconName: item.name, collected: item.getCollection() > 0)
-                                        ItemButton(item: item)
-                                    } else {
-                                        ItemButton(item: item)
-                                        //ItemButton(iconName: "", collected: false)
-                                    }
-                                } else {
-                                    ItemButton(item: item)
-                                    //ItemButton(iconName: item.name, collected: item.getCollection() > 0)
-                                }
-                        }
+                        @Bindable var item = viewModel.items[column * 6 + row]
+                        ItemButton(item: item)
                     }
                 }
             }
@@ -77,14 +38,9 @@ struct ContentView: View {
     }
     private var gameOptions: some View {
         return VStack(spacing: 20) {
-            ForEach(appState.configOptions, id: \.title) { option in
-                OptionSelector(
-                    key: option.key,
-                    title: option.title,
-                    options: option.options,
-                    colors: option.colors,
-                    selection: option.selection
-                )
+            ForEach(viewModel.options, id: \.title) { option in
+                @State var option = option
+                OptionSelectorView(gameOption: option)
             }
         }
         .background(Color.black)

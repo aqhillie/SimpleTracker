@@ -15,30 +15,31 @@ private func getColor(idx: Int, colors: [UInt]) -> UInt {
     }
 }
 
-struct OptionSelector: View {
-    let key: String
-    let title: String
-    let options: [String]
-    let colors: [UInt]
-    @State var selection: Int
+struct OptionSelectorView: View {
+    
+    @State var gameOption: Option
 
+    init(gameOption: Option) {
+        self.gameOption = gameOption
+    }
+    
     var body: some View {
         VStack(spacing: 10) {
-            Text(title.uppercased())
+            Text(gameOption.title.uppercased())
                 .background(.black)
                 .foregroundColor(.white)
                 .font(.custom("Apple Symbols", size: 18))
-            Text(options[selection].uppercased())
+            Text(gameOption.options[gameOption.selection].uppercased())
                 .frame(width: 320, alignment: .center)
                 .background(.black)
-                .foregroundColor(Color(getColor(idx: selection, colors: colors)))
+                .foregroundColor(Color(getColor(idx: gameOption.selection, colors: gameOption.colors)))
                 .font(.custom("Super Metroid (SNES)", size: 28))
         }
             .gesture(
                 TapGesture()
                     .onEnded {
-                        selection = (selection + 1) % options.count
-                        UserDefaults.standard.set(selection, forKey: key)
+                        let selection = (gameOption.selection + 1) % gameOption.options.count
+                        gameOption.update(selection)
                     }
             )
     }

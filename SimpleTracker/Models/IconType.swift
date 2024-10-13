@@ -12,11 +12,3 @@ enum IconType {
     case item
     case consumable
 }
-
-struct GameOption {
-    let key: String
-    let title: String
-    let options: [String]
-    let colors: [UInt]
-    var selection: Int
-}

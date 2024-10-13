@@ -8,20 +8,24 @@
 import SwiftUI
 
 struct BossButton: View {
-    var iconName: String
-    @State var isDead: Bool
+    
+    @State var boss: Boss
+    
+    init(for boss: Boss) {
+        self.boss = boss
+    }
 
     var body: some View {
-        Image(isDead ? "dead" + iconName : iconName)
+        let name = boss.getName()
+        Image(boss.isDead() ? "dead" + name : name)
             .resizable()
             .frame(width: 65, height: 65)
             .gesture(
                 TapGesture()
                     .onEnded {
-                        isDead.toggle()
-                        UserDefaults.standard.set(isDead, forKey: iconName)
+                        boss.killToggle()
                     }
             )
-            .modifier(AppearanceModifier(type: .boss, isActive: isDead))
+            .modifier(Appearance(type: .boss, isActive: boss.isDead()))
     }
 }

@@ -11,15 +11,17 @@ import SwiftUI
 @main
 struct Simple_TrackerApp: App {
     
-    @State var appState: AppState
+    @State var appState: ViewModel
     
     init() {
-        self.appState = AppState()
+        self.appState = ViewModel()
     }
 
     
     func resetTracker() {
+        appState.resetBosses()
         appState.resetItems()
+        appState.resetOptions()
         appState.resetUserDefaults()
         
     }
