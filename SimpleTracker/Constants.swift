@@ -5,6 +5,8 @@
 //  Created by Alex Quintana on 10/13/24.
 //
 
+import SwiftUI
+
 class AppConstants {
     // Max Consumable Packs
     static let maxMissilePacks: Int = 46
@@ -12,7 +14,7 @@ class AppConstants {
     static let maxPowerBombPacks: Int = 10
     static let maxETanks: Int = 14
     static let maxReserveTanks: Int = 4
-    
+        
     // Gets Map Rando Seed Configuration options for right-hand option selectors
     static let configOptions: [GameOption] = [
         GameOption(key: "objective", title: "Objectives", options: ["None", "Bosses", "Minibosses", "Metroids", "Chozos", "Pirates", "Random"], colors: [0x808080], selection: objective),

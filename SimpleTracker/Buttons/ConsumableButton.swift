@@ -20,7 +20,8 @@ struct ConsumableButton: View {
     }
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {                Image(iconName)
+        ZStack(alignment: .bottomTrailing) {
+            Image(iconName)
                 .resizable()
                 .frame(width: 60, height: 60)
                 .gesture(

@@ -15,7 +15,7 @@ struct ContentView: View {
             Color.black.edgesIgnoringSafeArea(.all)
             HStack(spacing: 20) {
                 bosses
-                itemGrid
+                ItemGrid()
                 GameOptions()
                     .environment(appSettings)
             }
@@ -34,30 +34,27 @@ private var bosses: some View {
     .padding(0)
 }
 
-private var itemGrid: some View {
-    return HStack(spacing: 12) {
-        ForEach(0..<5) { column in
-            VStack(spacing: 4) {
-                ForEach(0..<6) { row in
-                    let itemName = itemNames[column * 6 + row]
-                    if (consumables.contains(itemName)) {
-                        ConsumableButton(iconName: itemName, collected: (defaults.object(forKey: itemName) != nil) ? defaults.integer(forKey: itemName) : 0)
-                    } else {
-                        if (itemName == "walljump") {
-                            if (collectibleWallJump == true) {
-                                ItemButton(iconName: itemName, collected: (defaults.object(forKey: itemName) != nil) ? defaults.bool(forKey: itemName) : false)
-                            } else {
-                                ItemButton(iconName: "", collected: false)
-                            }
-                        } else {
-                            ItemButton(iconName: itemName, collected: (defaults.object(forKey: itemName) != nil) ? defaults.bool(forKey: itemName) : false)
-                        }
+struct ItemGrid: View {
+    let itemMatrix = [
+        [ChargeBeam.self, VariaSuit.self, MorphBall().self, HiJumpBoots.self, Missiles.self],
+        [IceBeam.self, GravitySuit.self, MorphBallBomb.self, SpaceJump.self, SuperMissiles.self],
+        [WaveBeam.self, EmptyCell.self, SpringBall.self, SpeedBooster.self, PowerBombs.self],
+        [Spazer.self, GrappleBeam.self, ScrewAttack.self, EmptyCell.self, EnergyTanks.self],
+        [PlasmaBeam.self, XRayScope.self, EmptyCell.self, EmptyCell.self, ReserveTanks.self]
+    ]
+
+    var body: some View {
+        VStack(spacing: 4) {
+            ForEach(0..<5) { row in
+                HStack(spacing: 12) {
+                    ForEach(0..<5) { col in
+                        itemMatrix[row][col]
                     }
                 }
             }
         }
+        .padding(0)
     }
-    .padding(0)
 }
 
 struct GameOptions: View {
