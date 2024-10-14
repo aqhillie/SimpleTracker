@@ -44,20 +44,12 @@
 			);
 			target = FAA0EEE82CB38061008D6B24 /* SimpleTrackerUITests */;
 		};
-		FAB328372CB45C2D009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTracker" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = FAA0EECD2CB3805F008D6B24 /* SimpleTracker */;
-		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FAA0EED02CB3805F008D6B24 /* SimpleTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				FAB328372CB45C2D009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTracker" target */,
 				FAB328162CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerTests" target */,
 				FAB328172CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerUITests" target */,
 			);
@@ -426,7 +418,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleTracker/Preview Content\"";
-				DEVELOPMENT_TEAM = DU39M55TZF;
+				DEVELOPMENT_TEAM = 67CZ3ZPAE4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SimpleTracker/Info.plist;
@@ -437,7 +429,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.djryanash.simpletracker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.warpixel.simpletracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -454,7 +446,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SimpleTracker/Preview Content\"";
-				DEVELOPMENT_TEAM = DU39M55TZF;
+				DEVELOPMENT_TEAM = 67CZ3ZPAE4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SimpleTracker/Info.plist;
@@ -465,7 +457,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.djryanash.simpletracker;
+				PRODUCT_BUNDLE_IDENTIFIER = com.warpixel.simpletracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

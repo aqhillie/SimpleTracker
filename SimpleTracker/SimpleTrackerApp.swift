@@ -7,28 +7,29 @@
 
 import SwiftUI
 
-
 @main
-struct Simple_TrackerApp: App {
-    
-    @State var appState: ViewModel
-    
-    init() {
-        self.appState = ViewModel()
-    }
-
+struct SimpleTrackerApp: App {
+    @State var appState = AppState()
     
     func resetTracker() {
-        appState.resetBosses()
-        appState.resetItems()
-        appState.resetOptions()
-        appState.resetUserDefaults()
-        
+        print(appState.ridleyDead)
+        print(appState.phantoonDead)
+        print(appState.kraidDead)
+        print(appState.draygonDead)
+        appState.ridleyDead = false
+        appState.phantoonDead = false
+        appState.kraidDead = false
+        appState.draygonDead = false
+        print(appState.ridleyDead)
+        print(appState.phantoonDead)
+        print(appState.kraidDead)
+        print(appState.draygonDead)
     }
 
     var body: some Scene {
         WindowGroup {
-            ContentView(appState: appState)
+            ContentView()
+                .environment(appState)
         }
         .commands {
             CommandGroup(replacing: .newItem) {

@@ -8,43 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @Bindable var viewModel: ViewModel
-    
-    init(appState: ViewModel) {
-        self.viewModel = appState
-    }
-    
-    private var bosses: some View {
-        VStack(spacing: 30) {
-            ForEach(viewModel.bosses, id: \.self) { boss in
-                BossButton(for: boss)
-            }
-        }
-        .padding(0)
-    }
-    private var itemGrid: some View {
-        return HStack(spacing: 12) {
-            ForEach(0..<5) { column in
-                VStack(spacing: 4) {
-                    ForEach(0..<6) { row in
-                        @Bindable var item = viewModel.items[column * 6 + row]
-                        ItemButton(item: item)
-                    }
-                }
-            }
-        }
-        .padding(0)
-    }
-    private var gameOptions: some View {
-        return VStack(spacing: 20) {
-            ForEach(viewModel.options, id: \.title) { option in
-                @State var option = option
-                OptionSelectorView(gameOption: option)
-            }
-        }
-        .background(Color.black)
-    }
+    // Application State
     
     var body: some View {
         ZStack {
@@ -59,3 +23,53 @@ struct ContentView: View {
     }
 }
 
+private var bosses: some View {
+    VStack(spacing: 30) {
+        BossRidley()
+        BossPhantoon()
+        BossKraid()
+        BossDraygon()
+    }
+    .padding(0)
+}
+
+private var itemGrid: some View {
+    return HStack(spacing: 12) {
+        ForEach(0..<5) { column in
+            VStack(spacing: 4) {
+                ForEach(0..<6) { row in
+                    let itemName = itemNames[column * 6 + row]
+                    if (consumables.contains(itemName)) {
+                        ConsumableButton(iconName: itemName, collected: (defaults.object(forKey: itemName) != nil) ? defaults.integer(forKey: itemName) : 0)
+                    } else {
+                        if (itemName == "walljump") {
+                            if (collectibleWallJump == true) {
+                                ItemButton(iconName: itemName, collected: (defaults.object(forKey: itemName) != nil) ? defaults.bool(forKey: itemName) : false)
+                            } else {
+                                ItemButton(iconName: "", collected: false)
+                            }
+                        } else {
+                            ItemButton(iconName: itemName, collected: (defaults.object(forKey: itemName) != nil) ? defaults.bool(forKey: itemName) : false)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .padding(0)
+}
+
+private var gameOptions: some View {
+    return VStack(spacing: 20) {
+        ForEach(configOptions, id: \.title) { option in
+            OptionSelector(
+                key: option.key,
+                title: option.title,
+                options: option.options,
+                colors: option.colors,
+                selection: option.selection
+            )
+        }
+    }
+    .background(Color.black)
+}
