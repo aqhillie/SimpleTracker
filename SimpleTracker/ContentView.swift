@@ -8,19 +8,57 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var appSettings = AppSettings()
-    
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
-            HStack(spacing: 20) {
-                bosses
-                ItemGrid()
-                GameOptions()
-                    .environment(appSettings)
+            VStack(spacing: 25) {
+                SeedName()
+                HStack(spacing: 20) {
+                    bosses
+                    ItemGrid()
+                    GameOptions()
+                }
             }
+            .edgesIgnoringSafeArea(.all)
         }
         .padding(0)
+    }
+}
+
+struct SeedName: View {
+    @State var editing = false;
+    @Environment(AppSettings.self) private var appSettings
+
+        
+    var body: some View {
+        @Bindable var appSettings = appSettings
+        
+        if (appSettings.showSeedName) {
+            if (editing) {
+                TextField("set seed name", text: $appSettings.seedName)
+                    .frame(maxWidth: 400, alignment: .center)
+                    .background(.black)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .font(.custom("Super Metroid (SNES)", size: 28))
+                    .frame(maxWidth: .infinity, alignment: .top)
+                    .onSubmit {
+                        AppSettings.defaults.set(appSettings.seedName, forKey: "seedName")
+                        $editing.wrappedValue.toggle()
+                    }
+            } else {
+                Text(appSettings.seedName)
+                    .frame(maxWidth: 400, alignment: .center)
+                    .background(.black)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
+                    .font(.custom("Super Metroid (SNES)", size: 28))
+                    .frame(maxWidth: .infinity, alignment: .top)
+                    .onTapGesture {
+                        $editing.wrappedValue.toggle()
+                    }
+            }
+        }
     }
 }
 
@@ -35,22 +73,45 @@ private var bosses: some View {
 }
 
 struct ItemGrid: View {
-    let itemMatrix = [
-        [ChargeBeam.self, VariaSuit.self, MorphBall().self, HiJumpBoots.self, Missiles.self],
-        [IceBeam.self, GravitySuit.self, MorphBallBomb.self, SpaceJump.self, SuperMissiles.self],
-        [WaveBeam.self, EmptyCell.self, SpringBall.self, SpeedBooster.self, PowerBombs.self],
-        [Spazer.self, GrappleBeam.self, ScrewAttack.self, EmptyCell.self, EnergyTanks.self],
-        [PlasmaBeam.self, XRayScope.self, EmptyCell.self, EmptyCell.self, ReserveTanks.self]
-    ]
-
+    let horizontalSpacing: CGFloat = 12
+    let verticalSpacing: CGFloat = 4
+    
     var body: some View {
-        VStack(spacing: 4) {
-            ForEach(0..<5) { row in
-                HStack(spacing: 12) {
-                    ForEach(0..<5) { col in
-                        itemMatrix[row][col]
-                    }
-                }
+        VStack(spacing: verticalSpacing) {
+            HStack(spacing: horizontalSpacing) {
+                ChargeBeam()
+                VariaSuit()
+                MorphBall()
+                HiJumpBoots()
+                Missiles()
+            }
+            HStack(spacing: horizontalSpacing) {
+                IceBeam()
+                GravitySuit()
+                MorphBallBomb()
+                SpaceJump()
+                SuperMissiles()
+            }
+            HStack(spacing: horizontalSpacing) {
+                WaveBeam()
+                EmptyCell()
+                SpringBall()
+                SpeedBooster()
+                PowerBombs()
+            }
+            HStack(spacing: horizontalSpacing) {
+                Spazer()
+                GrappleBeam()
+                ScrewAttack()
+                WallJump()
+                EnergyTanks()
+            }
+            HStack(spacing: horizontalSpacing) {
+                PlasmaBeam()
+                XRayScope()
+                EmptyCell()
+                EmptyCell()
+                ReserveTanks()
             }
         }
         .padding(0)

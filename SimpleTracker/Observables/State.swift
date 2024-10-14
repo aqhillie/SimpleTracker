@@ -37,6 +37,9 @@ class AppState {
     // Only relevant if AppSettings.collectibleWallJump is turned on
     var walljumpCollected:Bool = false
     
+    // Only relevant if AppSettings.showPlanetWakeStatus is turned on
+    var isPlanetAwake = false
+    
     var missilesCollected: Int = 0
     var supersCollected: Int = 0
     var powerbombsCollected: Int = 0

@@ -29,7 +29,7 @@ struct ItemBody: View {
                         $collected.wrappedValue.toggle()
                     }
             )
-            .modifier(AppearanceModifier(type: .boss, isActive: collected))
+            .modifier(AppearanceModifier(type: .item, isActive: collected))
     }
 }
 
@@ -188,7 +188,7 @@ struct HiJumpBoots: View {
 }
 
 struct SpaceJump: View {
-    let name: String = "spacejump"
+    let name: String = "space"
     @Environment(AppState.self) private var appState
     
     var body: some View {
@@ -212,10 +212,15 @@ struct SpeedBooster: View {
 struct WallJump: View {
     let name: String = "walljump"
     @Environment(AppState.self) private var appState
+    @Environment(AppSettings.self) private var appSettings
     
     var body: some View {
         @Bindable var appState = appState
 
-        ItemBody(iconName: name, collected: $appState.walljumpCollected)
+        if (appSettings.collectibleWallJump) {
+            ItemBody(iconName: name, collected: $appState.walljumpCollected)
+        } else {
+            EmptyCell()
+        }
     }
 }
