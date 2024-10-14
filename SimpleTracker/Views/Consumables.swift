@@ -32,7 +32,7 @@ struct ConsumableBody: View {
         ZStack(alignment: .bottomTrailing) {
             Image(iconName)
                 .resizable()
-                .frame(width: 65, height: 65)
+                .frame(width: 60, height: 60)
                 .gesture(
                     TapGesture()
                         .onEnded {

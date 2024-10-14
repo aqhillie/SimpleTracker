@@ -22,7 +22,7 @@ struct ItemBody: View {
     var body: some View {
         Image(iconName)
             .resizable()
-            .frame(width: 65, height: 65)
+            .frame(width: 60, height: 60)
             .gesture(
                 TapGesture()
                     .onEnded {
