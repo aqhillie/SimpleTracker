@@ -16,34 +16,6 @@ struct SimpleTrackerApp: App {
         viewModel.resetItems()
     }
 
-    let editMenu: CommandGroup = CommandGroup(replacing: .newItem) {
-        Button("Reset Tracker") {
-            resetTracker()
-        }
-        .keyboardShortcut("R", modifiers: [.command])
-    }
-
-    let settingsMenu: CommandMenu = CommandMenu("Settings") {
-        //            CommandMenu("View") {
-        //                Button(appSettings.showSeedName ? "Hide Seed Name" : "Show Seed Name") {
-        //                    appSettings.showSeedName.toggle()
-        //                    AppSettings.defaults.set(appSettings.showSeedName, forKey: "showSeedName")
-        //                }
-        //            }
-        ForEach(Array(viewModel.seedOptions.enumerated()), id: \.offset) { index, seedOption in
-            ForEach(Array(seedOption.enumerated()), id: \.offset) { index, seedOption in
-                Menu(seedOption.title) {
-                    ForEach(Array(seedOption.options.enumerated()), id: \.offset) { index, option in
-                        Button(option) {
-                            seedOption.update(selection: index)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -51,8 +23,31 @@ struct SimpleTrackerApp: App {
         }
         .defaultSize(width: 857, height: 468)
         .commands {
-            editMenu()
-            settingsMenu()
+            CommandGroup(replacing: .newItem) {
+                Button("Reset Tracker") {
+                    resetTracker()
+                }
+                .keyboardShortcut("R", modifiers: [.command])
+            }
+            CommandMenu("Settings") {
+//                CommandMenu("View") {
+//                    Button(appSettings.showSeedName ? "Hide Seed Name" : "Show Seed Name") {
+//                        appSettings.showSeedName.toggle()
+//                        AppSettings.defaults.set(appSettings.showSeedName, forKey: "showSeedName")
+//                    }
+//                }
+                ForEach(Array(viewModel.seedOptions.enumerated()), id: \.offset) { index, seedOption in
+                    ForEach(Array(seedOption.enumerated()), id: \.offset) { index, seedOption in
+                        Menu(seedOption.title) {
+                            ForEach(Array(seedOption.options.enumerated()), id: \.offset) { index, option in
+                                Button(option) {
+                                    seedOption.update(selection: index)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
