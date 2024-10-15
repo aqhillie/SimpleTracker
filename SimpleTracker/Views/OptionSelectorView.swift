@@ -7,14 +7,6 @@
 
 import SwiftUI
 
-private func getColor(idx: Int, colors: [UInt]) -> UInt {
-    if idx > colors.count - 1 {
-        return colors[colors.count - 1]
-    } else {
-        return colors[idx]
-    }
-}
-
 struct OptionSelectorView: View {
     
     @State var gameOption: Option
@@ -32,7 +24,7 @@ struct OptionSelectorView: View {
             Text(gameOption.options[gameOption.selection].uppercased())
                 .frame(width: 320, alignment: .center)
                 .background(.black)
-                .foregroundColor(Color(getColor(idx: gameOption.selection, colors: gameOption.colors)))
+                .foregroundStyle(OptionStyle(gameOption))
                 .font(.custom("Super Metroid (SNES)", size: 28))
         }
             .gesture(

@@ -10,12 +10,12 @@
 import SwiftUI
 
 @Observable
-class Option {
+class Option: @unchecked Sendable {
     
     let key: String
     let title: String
     let options: [String]
-    let colors: [UInt]
+    let colors: [CustomColor]
     let initSelection: Int
     var selection: Int {
         didSet {
@@ -23,7 +23,7 @@ class Option {
         }
     }
     
-    init(key: String, title: String, options: [String], colors: [UInt], selection: Int) {
+    init(key: String, title: String, options: [String], colors: [CustomColor], selection: Int) {
         self.key = key
         self.title = title
         self.options = options

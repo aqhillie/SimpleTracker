@@ -10,7 +10,9 @@
 import SwiftUI
 
 @Observable
-class Item {
+class Item: Identifiable {
+    
+    let id = UUID()
     
     let name: String
     var collection: Int = 0 {
