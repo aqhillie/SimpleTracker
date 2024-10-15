@@ -10,8 +10,8 @@
 import SwiftUI
 
 @Observable
-class Boss: Hashable, Identifiable {
-    
+class Boss {
+
     let id = UUID()
     
     private let name: String
@@ -41,16 +41,22 @@ class Boss: Hashable, Identifiable {
         self.deadOrNot = false
     }
     
+}
+
+extension Boss: Hashable {
+    
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
     
 }
 
+extension Boss: Identifiable { }
+
 extension Boss: Equatable {
-    
     static func == (lhs: Boss, rhs: Boss) -> Bool {
         return lhs.id == rhs.id
     }
+    
     
 }
