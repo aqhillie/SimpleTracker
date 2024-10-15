@@ -16,6 +16,18 @@ struct SimpleTrackerApp: App {
         viewModel.resetItems()
     }
 
+    private var settingsMenu: some View {
+        ForEach(viewModel.seedOptions, id: \.key) { seedOption in
+            Menu(seedOption.title) {
+                ForEach(Array(seedOption.options.enumerated()), id: \.offset) { index, option in
+                    Button(option, action: {
+                        seedOption.update(index)
+                    })
+                }
+            }
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -36,17 +48,7 @@ struct SimpleTrackerApp: App {
 //                        AppSettings.defaults.set(appSettings.showSeedName, forKey: "showSeedName")
 //                    }
 //                }
-                ForEach(Array(viewModel.seedOptions.enumerated()), id: \.offset) { index, seedOption in
-                    ForEach(Array(seedOption.enumerated()), id: \.offset) { index, seedOption in
-                        Menu(seedOption.title) {
-                            ForEach(Array(seedOption.options.enumerated()), id: \.offset) { index, option in
-                                Button(option) {
-                                    seedOption.update(selection: index)
-                                }
-                            }
-                        }
-                    }
-                }
+                settingsMenu
             }
         }
     }
