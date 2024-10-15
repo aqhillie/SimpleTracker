@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-enum IconType {
-    case boss
-    case item
-    case consumable
-}
-
 struct GameOption {
     let key: String
     let title: String

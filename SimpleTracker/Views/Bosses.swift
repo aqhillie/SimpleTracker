@@ -21,7 +21,7 @@ struct BossBody: View {
                         $isDead.wrappedValue.toggle()
                     }
             )
-            .modifier(AppearanceModifier(type: .boss, isActive: isDead))
+            .modifier(Appearance(type: .boss, isActive: isDead))
     }
 }
 

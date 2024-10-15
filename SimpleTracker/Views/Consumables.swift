@@ -46,7 +46,7 @@ struct ConsumableBody: View {
                         $collected.wrappedValue -= 1
                     }
                 })
-                .modifier(AppearanceModifier(type: .consumable, isActive: collected > 0))
+                .modifier(Appearance(type: .consumable, isActive: collected > 0))
             if (collected > 0) {
                 ItemCount(count: getItemCount())
                     .frame(alignment: .bottomTrailing)

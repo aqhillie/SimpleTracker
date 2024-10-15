@@ -16,7 +16,7 @@ struct ItemButton: View {
             Image(iconName)
                 .resizable()
                 .frame(width: 60, height: 60)
-                .modifier(AppearanceModifier(type: .item, isActive: collected))
+                .modifier(Appearance(type: .item, isActive: collected))
                 .gesture(
                     TapGesture()
                         .onEnded {

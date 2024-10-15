@@ -42,7 +42,7 @@ struct ConsumableButton: View {
                             }
                         }
                 )
-                .modifier(AppearanceModifier(type: .item, isActive: collected > 0))
+                .modifier(Appearance(type: .item, isActive: collected > 0))
             if (collected > 0) {
                 ItemCount(count: getNumItems())
                     .frame(alignment: .bottomTrailing)

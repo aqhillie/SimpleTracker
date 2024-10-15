@@ -29,7 +29,7 @@ struct ItemBody: View {
                         $collected.wrappedValue.toggle()
                     }
             )
-            .modifier(AppearanceModifier(type: .item, isActive: collected))
+            .modifier(Appearance(type: .item, isActive: collected))
     }
 }
 
