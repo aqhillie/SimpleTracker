@@ -9,17 +9,24 @@
 
 import SwiftUI
 class Item {
+    @Environment(ViewModel.self) private var viewModel
+
+    let id = UUID()
     
     let key: String
     let name: String
-    var collected: Int = 0 {
-        didSet {
-            UserDefaults.standard.set(collected, forKey: "\(collected)_collected")
-        }
-    }
+    var collected: Int
     let maxValue: Int
     let multiplier: Int
     let isConsumable: Bool
+    var isActive: Bool {
+        switch(key) {
+            case "walljump":
+            return UserDefaults.standard.integer(forKey: "collectibleWallJump") == 1
+            default:
+                return true
+        }
+    }
     
     init(key: String, name: String, maxValue: Int = 1, multiplier: Int = 1) {
         self.key = key
@@ -31,13 +38,27 @@ class Item {
     }
     
     func collect() {
+        print("collecting")
         if (isConsumable) {
+            print("consumable")
             if collected < maxValue {
                 collected += multiplier
             }
         } else {
+            print("not consumable")
             collected += (collected == 0) ? 1 : -1
         }
+        print(getCount())
+    }
+    
+    func decrease() {
+        if (isConsumable && collected > 0) {
+            collected -= 1
+        }
+    }
+    
+    func isCollected() -> Bool {
+        return collected > 0
     }
     
     func getCount() -> Int {

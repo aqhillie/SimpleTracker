@@ -16,20 +16,32 @@ class ViewModel {
     let itemSize: CGFloat
     let itemGridHorizontalSpacing: CGFloat
     let itemGridVerticalSpacing: CGFloat
+    let itemGridRows: Int
+    let itemGridColumns: Int
+    let seedOptionsSpacing: CGFloat
+    let seedOptionTitleFontSize: CGFloat
+    let seedOptionSelectionFontSize: CGFloat
 
     var bosses: [Boss]
     var items: [Item?]
     var seedOptions: [SeedOption]
+    
+    var collectibleWallJump: Bool {
+        return (seedOptions.first(where: {$0.key == "collectibleWallJump"})?.selection == 1) ? true : false
+    }
     
     init() {
         self.bossSize = 65
         self.itemSize = 60
         self.itemGridHorizontalSpacing = 12
         self.itemGridVerticalSpacing = 4
+        self.itemGridRows = 5
+        self.itemGridColumns = 5
+        self.seedOptionsSpacing = 10
+        self.seedOptionTitleFontSize = 18
+        self.seedOptionSelectionFontSize = 28
 
         self.bosses = [
-            // Even though name is optional I still get this error if I don't supply it here:
-            // Missing argument for parameter 'name' in call
             Boss(key: "ridley", name: "Ridley"),
             Boss(key: "phantoon", name: "Phantoon"),
             Boss(key: "kraid", name: "Kraid"),
@@ -75,7 +87,7 @@ class ViewModel {
                           "Chozos",
                           "Pirates",
                           "Random"],
-               selection: 1
+                selection: UserDefaults.standard.integer(forKey: "objective") ?? 1
             ),
             SeedOption(
                 key: "difficulty",
@@ -94,7 +106,7 @@ class ViewModel {
                          0x0766C0,
                          0x0400C3,
                          0xC706C9],
-                selection: 0
+                selection: UserDefaults.standard.integer(forKey: "difficulty") ?? 0
             ),
             SeedOption(
                 key: "itemProgression",
@@ -107,7 +119,7 @@ class ViewModel {
                          0xCBCA02,
                          0xC20003,
                          0xC706C9],
-                selection: 0
+                selection: UserDefaults.standard.integer(forKey: "itemProgression") ?? 0
             ),
             SeedOption(
                 key: "qualityOfLife",
@@ -120,7 +132,7 @@ class ViewModel {
                          0xC20003,
                          0xCBCA02,
                          0x066815],
-                selection: 2
+                selection: UserDefaults.standard.integer(forKey: "qualityOfLife") ?? 2
             ),
             SeedOption(
                 key: "mapLayout",
@@ -131,13 +143,13 @@ class ViewModel {
                 colors: [0x066815,
                          0xCBCA02,
                          0xC20003],
-                selection: 1
+                selection: UserDefaults.standard.integer(forKey: "mapLayout") ?? 1
             ),
             SeedOption(
                 key: "collectibleWallJump",
                 title: "Collectible Wall Jump",
                 options: ["Vanilla", "Collectible"],
-                selection: 0,
+                selection: UserDefaults.standard.integer(forKey: "collectibleWallJump") ?? 0,
                 visible: false
             )
         ]

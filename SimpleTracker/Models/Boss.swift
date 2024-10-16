@@ -18,19 +18,21 @@ class Boss: Hashable, Identifiable, Equatable {
     private let name: String?
     private var _isDead: Bool = false
 
-    /*
-     * The default bosses are all one word names, but if I ever decide to say display icons for
-     * other objectives like minibosses then there's bosses like "Spore Spawn" and "Bomb Torizo."
-     * I added the name separate from the key in case I want to do some accessibility or maybe
-     * different themes, I dunno. :P
-     */
-    init(key: String, name: String?) {
+    init(key: String, name: String) {
         self.key = key
-        self.name = name ?? key.capitalized
+        self.name = name
     }
     
     internal func isDead() -> Bool {
         return _isDead
+    }
+    
+    internal func getKey() -> String {
+        return key
+    }
+    
+    internal func getName() -> String {
+        return name ?? ""
     }
     
     internal func deathToggle() {
