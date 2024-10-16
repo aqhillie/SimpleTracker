@@ -8,8 +8,15 @@
 //
 
 import SwiftUI
-class Item {
-    @Environment(ViewModel.self) private var viewModel
+
+class EmptyItem: Item {
+    init() {
+        super.init(key: "", name: "")
+    }
+}
+
+@Observable
+class Item: Hashable, Identifiable, Equatable {
 
     let id = UUID()
     
@@ -19,41 +26,31 @@ class Item {
     let maxValue: Int
     let multiplier: Int
     let isConsumable: Bool
-    var isActive: Bool {
-        switch(key) {
-            case "walljump":
-            return UserDefaults.standard.integer(forKey: "collectibleWallJump") == 1
-            default:
-                return true
-        }
-    }
+    var isActive: Bool
     
-    init(key: String, name: String, maxValue: Int = 1, multiplier: Int = 1) {
+    init(key: String, name: String, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool = true) {
         self.key = key
         self.name = name
         self.collected = 0
         self.maxValue = maxValue
         self.multiplier = multiplier
         self.isConsumable = (maxValue == 1) ? false : true
+        self.isActive = isActive
     }
     
     func collect() {
-        print("collecting")
         if (isConsumable) {
-            print("consumable")
-            if collected < maxValue {
+            if collected < (maxValue * multiplier) {
                 collected += multiplier
             }
         } else {
-            print("not consumable")
             collected += (collected == 0) ? 1 : -1
         }
-        print(getCount())
     }
     
     func decrease() {
         if (isConsumable && collected > 0) {
-            collected -= 1
+            collected -= multiplier
         }
     }
     
@@ -67,5 +64,13 @@ class Item {
 
     func reset() {
         collected = 0
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
+    }
+    
+    static func == (lhs: Item, rhs: Item) -> Bool {
+        return lhs.id == rhs.id
     }
 }

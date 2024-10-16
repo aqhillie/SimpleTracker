@@ -90,19 +90,23 @@ struct Bosses: View {
 struct ItemGrid: View {
     @Environment(ViewModel.self) private var viewModel
     
+    func isItemActive(item: Item, viewModel: ViewModel) -> Binding<Bool> {
+        @Bindable var viewModel = viewModel
+
+        switch(item.key) {
+            case "walljump":
+                return $viewModel.collectibleWallJump
+            default:
+            return .constant(true)
+        }
+    }
+    
     var body: some View {
         VStack(spacing: viewModel.itemGridVerticalSpacing) {
-            ForEach(0..<viewModel.itemGridRows, id: \.self) { row in
+            ForEach(viewModel.items, id: \.self) { row in
                 HStack(spacing: viewModel.itemGridHorizontalSpacing) {
-                    ForEach(0..<viewModel.itemGridColumns, id: \.self) { column in
-                        let item = viewModel.items[row * viewModel.itemGridColumns + column]
-                        if (item != nil) {
-                            ItemButton(item: item!)
-                        } else {
-                            Rectangle()
-                                .fill(Color.black)
-                                .frame(width: viewModel.itemSize, height: viewModel.itemSize)
-                        }
+                    ForEach(row, id: \.id) { item in
+                        ItemButton(item: item, isActive: isItemActive(item: item, viewModel: viewModel))
                     }
                 }
             }

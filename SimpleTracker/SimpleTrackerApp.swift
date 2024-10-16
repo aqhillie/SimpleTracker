@@ -26,9 +26,17 @@ struct SimpleTrackerApp: App {
                     set: { seedOption.update($0) })) {
                     ForEach(Array(seedOption.options.enumerated()), id: \.offset) { index, option in
                         Text(option)
-                            .tag(index) // Use 'index' as the tag if you're selecting by index
+                            .tag(index)
                     }
                 }
+            }
+            Picker("Collectible Wall Jump", selection: Binding(
+                get: {viewModel.collectibleWallJump},
+                set: {viewModel.collectibleWallJump = $0 })) {
+                Text("Vanilla")
+                    .tag(false)
+                Text("Collectible")
+                    .tag(true)
             }
         }
     }

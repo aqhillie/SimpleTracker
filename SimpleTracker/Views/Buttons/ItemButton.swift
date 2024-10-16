@@ -8,17 +8,19 @@
 import SwiftUI
 
 struct ItemButton: View {
-    @State var item: Item
     @Environment(ViewModel.self) private var viewModel
+    @State var item: Item
+    @Binding var isActive: Bool
 
-    init(item: Item) {
+    init(item: Item, isActive: Binding<Bool>) {
         self.item = item
+        self._isActive = isActive
     }
     
     var body: some View {
         
-        if item.isActive {
-            ZStack {
+        if isActive && item.key != "" {
+            ZStack (alignment: .bottomTrailing){
                 Image(item.key)
                     .resizable()
                     .frame(width: viewModel.itemSize, height: viewModel.itemSize)
@@ -26,20 +28,16 @@ struct ItemButton: View {
                     .gesture(
                         TapGesture()
                             .onEnded {
-                                print("tappa")
-                                print(item.collected > 0)
                                 item.collect()
-                                print(item.collected > 0)
                             }
                     )
                     .gesture(
                         LongPressGesture()
                             .onEnded { _ in
-                                print("long tappa")
                                 item.decrease()
                             }
                     )
-                if item.isConsumable {
+                if item.isConsumable && item.getCount() > 0 {
                     ItemCount(count: String(describing: item.getCount()))
                         .frame(alignment: .bottomTrailing)
                 }

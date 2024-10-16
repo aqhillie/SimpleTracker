@@ -23,23 +23,27 @@ class ViewModel {
     let seedOptionSelectionFontSize: CGFloat
 
     var bosses: [Boss]
-    var items: [Item?]
+    var items: [[Item]]
     var seedOptions: [SeedOption]
     
     var collectibleWallJump: Bool {
-        return (seedOptions.first(where: {$0.key == "collectibleWallJump"})?.selection == 1) ? true : false
+        didSet {
+            UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
+        }
     }
     
     init() {
         self.bossSize = 65
         self.itemSize = 60
         self.itemGridHorizontalSpacing = 12
-        self.itemGridVerticalSpacing = 4
+        self.itemGridVerticalSpacing = 6
         self.itemGridRows = 5
         self.itemGridColumns = 5
         self.seedOptionsSpacing = 10
         self.seedOptionTitleFontSize = 18
         self.seedOptionSelectionFontSize = 28
+        
+        self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
 
         self.bosses = [
             Boss(key: "ridley", name: "Ridley"),
@@ -49,31 +53,41 @@ class ViewModel {
         ]
         
         self.items = [
-            Item(key: "charge", name: "Charge Beam"),
-            Item(key: "varia", name: "Varia Suit"),
-            Item(key: "morph", name: "Morphing Ball"),
-            Item(key: "hijump", name: "HiJump Boots"),
-            Item(key: "missile", name: "Missiles", maxValue: 46, multiplier: 5),
-            Item(key: "ice", name: "Ice Beam"),
-            Item(key: "gravity", name: "Gravity Suit"),
-            Item(key: "bomb", name: "Morph Ball Bombs"),
-            Item(key: "space", name: "Space Jump"),
-            Item(key: "super", name: "Super Missiles", maxValue: 10, multiplier: 5),
-            Item(key: "wave", name: "Wave Beam"),
-            nil,
-            Item(key: "springball", name: "Spring Ball"),
-            Item(key: "speed", name: "Speed Booster"),
-            Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5),
-            Item(key: "spazer", name: "Spazer"),
-            Item(key: "grapple", name: "Grapple Beam"),
-            Item(key: "screw", name: "Screw Attack"),
-            Item(key: "walljump", name: "Wall Jump Boots"),
-            Item(key: "etank", name: "Energy Tanks"),
-            Item(key: "plasma", name: "Plasma Beam"),
-            Item(key: "xray", name: "XRay Scope"),
-            nil,
-            nil,
-            Item(key: "reservetank", name: "Reserve Tanks")
+            [
+                Item(key: "charge", name: "Charge Beam"),
+                Item(key: "varia", name: "Varia Suit"),
+                Item(key: "morph", name: "Morphing Ball"),
+                Item(key: "hijump", name: "HiJump Boots"),
+                Item(key: "missile", name: "Missiles", maxValue: 46, multiplier: 5)
+            ],
+            [
+                Item(key: "ice", name: "Ice Beam"),
+                Item(key: "gravity", name: "Gravity Suit"),
+                Item(key: "bomb", name: "Morph Ball Bombs"),
+                Item(key: "space", name: "Space Jump"),
+                Item(key: "super", name: "Super Missiles", maxValue: 10, multiplier: 5)
+            ],
+            [
+                Item(key: "wave", name: "Wave Beam"),
+                EmptyItem(),
+                Item(key: "springball", name: "Spring Ball"),
+                Item(key: "speed", name: "Speed Booster"),
+                Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
+            ],
+            [
+                Item(key: "spazer", name: "Spazer"),
+                Item(key: "grapple", name: "Grapple Beam"),
+                Item(key: "screw", name: "Screw Attack"),
+                Item(key: "walljump", name: "Wall Jump Boots"),
+                Item(key: "etank", name: "Energy Tanks", maxValue: 14)
+            ],
+            [
+                Item(key: "plasma", name: "Plasma Beam"),
+                Item(key: "xray", name: "XRay Scope"),
+                EmptyItem(),
+                EmptyItem(),
+                Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+            ]
         ]
         
         self.seedOptions = [
@@ -87,7 +101,7 @@ class ViewModel {
                           "Chozos",
                           "Pirates",
                           "Random"],
-                selection: UserDefaults.standard.integer(forKey: "objective") ?? 1
+                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "objective", defaultValue: 1)
             ),
             SeedOption(
                 key: "difficulty",
@@ -106,7 +120,7 @@ class ViewModel {
                          0x0766C0,
                          0x0400C3,
                          0xC706C9],
-                selection: UserDefaults.standard.integer(forKey: "difficulty") ?? 0
+                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "difficulty", defaultValue: 0)
             ),
             SeedOption(
                 key: "itemProgression",
@@ -119,7 +133,7 @@ class ViewModel {
                          0xCBCA02,
                          0xC20003,
                          0xC706C9],
-                selection: UserDefaults.standard.integer(forKey: "itemProgression") ?? 0
+                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "itemProgression", defaultValue: 0)
             ),
             SeedOption(
                 key: "qualityOfLife",
@@ -132,8 +146,8 @@ class ViewModel {
                          0xC20003,
                          0xCBCA02,
                          0x066815],
-                selection: UserDefaults.standard.integer(forKey: "qualityOfLife") ?? 2
-            ),
+                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "qualityOfLife", defaultValue: 2)
+           ),
             SeedOption(
                 key: "mapLayout",
                 title: "Map Layout",
@@ -143,14 +157,7 @@ class ViewModel {
                 colors: [0x066815,
                          0xCBCA02,
                          0xC20003],
-                selection: UserDefaults.standard.integer(forKey: "mapLayout") ?? 1
-            ),
-            SeedOption(
-                key: "collectibleWallJump",
-                title: "Collectible Wall Jump",
-                options: ["Vanilla", "Collectible"],
-                selection: UserDefaults.standard.integer(forKey: "collectibleWallJump") ?? 0,
-                visible: false
+                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "mapLayout", defaultValue: 1)
             )
         ]
         
@@ -163,8 +170,10 @@ class ViewModel {
     }
     
     func resetItems() {
-        for item in items {
-            item?.reset()
+        for itemRow in items {
+            for item in itemRow {
+                item.reset()
+            }
         }
     }
     
