@@ -2,8 +2,14 @@
 //  Config.xcconfig
 //  SimpleTracker
 //
-//  Created by Alex Quintana on 10/17/24.
+//  Created by fiftyshadesofurban on 10/17/24.
+//
+//  Copyright (C) 2024 Warpixel
 //
 
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
+
+MAJOR_VERSION = 0
+MINOR_VERSION = 3
+BUILD_NUMBER = 4

@@ -2,9 +2,11 @@
 //  SeedOption.swift
 //  SimpleTracker
 //
-//  Created by Alex Quintana on 10/14/24.
+//  Created by fiftyshadesofurban on 10/14/24.
 //
 //  Thanks to Ryan Ashton for the help with SwiftUI and the layout of this file.
+//
+//  Copyright (C) 2024 Warpixel
 //
 
 import SwiftUI

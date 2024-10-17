@@ -2,7 +2,11 @@
 //  ItemButton.swift
 //  SimpleTracker
 //
-//  Created by Alex Quintana on 10/7/24.
+//  Created by fiftyshadesofurban on 10/7/24.
+//
+//  Thanks to Ryan Ashton for the help with SwiftUI and the layout of this file.
+//
+//  Copyright (C) 2024 Warpixel
 //
 
 import SwiftUI
@@ -38,7 +42,7 @@ struct ItemButton: View {
                             }
                     )
                 if item.isConsumable && item.getCount() > 0 {
-                    ItemCount(count: String(describing: item.getCount()))
+                    CountOverlay(count: String(describing: item.getCount()))
                         .frame(alignment: .bottomTrailing)
                 }
             }

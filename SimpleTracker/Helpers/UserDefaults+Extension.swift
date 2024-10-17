@@ -2,7 +2,9 @@
 //  UserDefaults+Extension.swift
 //  SimpleTracker
 //
-//  Created by Alex Quintana on 10/16/24.
+//  Created by fiftyshadesofurban on 10/16/24.
+//
+//  Copyright (C) 2024 Warpixel
 //
 
 import SwiftUI
