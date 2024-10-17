@@ -2,7 +2,9 @@
 //  ContentView.swift
 //  Simple Tracker
 //
-//  Created by Alex Quintana on 10/6/24.
+//  Created by fiftyshadesofurban on 10/6/24.
+//
+// Copyright (C) 2024 Warpixel
 //
 
 import SwiftUI
@@ -15,9 +17,9 @@ struct ContentView: View {
             ZStack {
                 Color.black.edgesIgnoringSafeArea(.all)
                 VStack(spacing: viewModel.rootVStackSpacing) {
-                    #if os(macOS)
-                    //                SeedName()
-                    #endif
+//                    #if os(macOS)
+//                                    SeedName()
+//                    #endif
                     HStack(spacing: viewModel.rootHStackSpacing) {
                         Bosses()
                         ItemGrid()
@@ -33,7 +35,7 @@ struct ContentView: View {
     }
 }
 
-#if os(macOS)
+//#if os(macOS)
 //struct SeedName: View {
 //    @State var editing = false;
 //    @Environment(ViewModel.self) private var viewModel
@@ -48,7 +50,7 @@ struct ContentView: View {
 //                    .background(.black)
 //                    .foregroundColor(.white)
 //                    .multilineTextAlignment(.center)
-//                    .font(.custom("Super Metroid (SNES)", size: 28))
+//                    .font(.custom("SuperMetroidSNES", size: 28))
 //                    .frame(maxWidth: .infinity, alignment: .top)
 //                    .onSubmit {
 //                        AppSettings.defaults.set(appSettings.seedName, forKey: "seedName")
@@ -59,7 +61,7 @@ struct ContentView: View {
 //                    .background(.black)
 //                    .foregroundColor(.white)
 //                    .multilineTextAlignment(.center)
-//                    .font(.custom("Super Metroid (SNES)", size: 28))
+//                    .font(.custom("SuperMetroidSNES", size: 28))
 //                    .frame(maxWidth: .infinity, alignment: .top)
 //                    .onTapGesture {
 //                        $editing.wrappedValue.toggle()
@@ -68,7 +70,7 @@ struct ContentView: View {
 //        }
 //    }
 //}
-#endif
+//#endif
 
 struct Bosses: View {
     @Environment(ViewModel.self) private var viewModel

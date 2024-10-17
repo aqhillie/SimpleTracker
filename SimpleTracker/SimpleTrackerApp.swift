@@ -2,10 +2,11 @@
 //  Simple_TrackerApp.swift
 //  Simple Tracker
 //
-//  Created by Alex Quintana on 10/6/24.
+//  Created by fiftyshadesofurban on 10/6/24.
+//
+//  Copyright (C) 2024 Warpixel
 //
 
-//import UIKit
 import SwiftUI
 
 @main

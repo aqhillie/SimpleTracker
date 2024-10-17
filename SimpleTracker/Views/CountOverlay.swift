@@ -2,12 +2,14 @@
 //  ItemCount.swift
 //  SimpleTracker
 //
-//  Created by Alex Quintana on 10/7/24.
+//  Created by fiftyshadesofurban on 10/7/24.
+//
+//  Copyright (C) 2024 Warpixel
 //
 
 import SwiftUI
 
-struct ItemCount: View {
+struct CountOverlay: View {
     var count: String
 
     var body: some View {

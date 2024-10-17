@@ -2,7 +2,7 @@
 //  Simple_TrackerUITestsLaunchTests.swift
 //  Simple TrackerUITests
 //
-//  Created by Alex Quintana on 10/6/24.
+//  Created by fiftyshadesofurban on 10/6/24.
 //
 
 import XCTest
