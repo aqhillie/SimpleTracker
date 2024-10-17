@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AppearanceModifier: ViewModifier {
+struct Appearance: ViewModifier {
     var type: IconType
     var isActive: Bool
     

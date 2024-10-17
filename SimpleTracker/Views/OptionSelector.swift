@@ -7,38 +7,39 @@
 
 import SwiftUI
 
-private func getColor(idx: Int, colors: [UInt]) -> UInt {
-    if idx > colors.count - 1 {
-        return colors[colors.count - 1]
-    } else {
-        return colors[idx]
-    }
-}
-
 struct OptionSelector: View {
-    let key: String
-    let title: String
-    let options: [String]
-    let colors: [UInt]
-    @State var selection: Int
+    @Environment(ViewModel.self) private var viewModel
+    @State var seedOption: SeedOption
+    
+    init (seedOption: SeedOption) {
+        self.seedOption = seedOption
+    }
 
+    private func getColor(idx: Int, colors: [UInt]) -> UInt {
+        if idx > colors.count - 1 {
+            return colors[colors.count - 1]
+        } else {
+            return colors[idx]
+        }
+    }
+    
     var body: some View {
-        VStack(spacing: 10) {
-            Text(title.uppercased())
+        VStack(spacing: viewModel.seedOptionsSpacing) {
+            Text(seedOption.title.uppercased())
                 .background(.black)
                 .foregroundColor(.white)
-                .font(.custom("Apple Symbols", size: 18))
-            Text(options[selection].uppercased())
-                .frame(width: 320, alignment: .center)
+                .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
+            Text(seedOption.options[seedOption.selection].uppercased())
+                .frame(width: viewModel.seedOptionsWidth, alignment: .center)
                 .background(.black)
-                .foregroundColor(Color(getColor(idx: selection, colors: colors)))
-                .font(.custom("Super Metroid (SNES)", size: 28))
+                .foregroundColor(Color(getColor(idx: seedOption.selection, colors: seedOption.colors)))
+                .font(.custom("SuperMetroidSNES", size: viewModel.seedOptionSelectionFontSize))
         }
             .gesture(
                 TapGesture()
                     .onEnded {
-                        selection = (selection + 1) % options.count
-                        defaults.set(selection, forKey: key)
+                        let selection = (seedOption.selection + 1) % seedOption.options.count
+                        seedOption.update(selection)
                     }
             )
     }

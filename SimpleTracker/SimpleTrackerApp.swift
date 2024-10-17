@@ -5,32 +5,58 @@
 //  Created by Alex Quintana on 10/6/24.
 //
 
+//import UIKit
 import SwiftUI
 
 @main
 struct SimpleTrackerApp: App {
-    @State var appState = AppState()
+    @State var viewModel = ViewModel()
     
     func resetTracker() {
-        print(appState.ridleyDead)
-        print(appState.phantoonDead)
-        print(appState.kraidDead)
-        print(appState.draygonDead)
-        appState.ridleyDead = false
-        appState.phantoonDead = false
-        appState.kraidDead = false
-        appState.draygonDead = false
-        print(appState.ridleyDead)
-        print(appState.phantoonDead)
-        print(appState.kraidDead)
-        print(appState.draygonDead)
+        viewModel.resetBosses()
+        viewModel.resetItems()
     }
+    
+    #if os(macOS)
+    init() {
+        if let fontURL = Bundle.main.url(forResource: "super-metroid-snes", withExtension: "ttf") {
+            CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
+        }
+    }
+    #endif
 
+    struct settingsMenu: View {
+        @Environment(ViewModel.self) private var viewModel
+        
+        var body: some View {
+            ForEach(viewModel.seedOptions, id: \.key) { seedOption in
+                Picker(seedOption.title, selection: Binding(
+                    get: { seedOption.selection },
+                    set: { seedOption.update($0) })) {
+                    ForEach(Array(seedOption.options.enumerated()), id: \.offset) { index, option in
+                        Text(option)
+                            .tag(index)
+                    }
+                }
+            }
+            Picker("Collectible Wall Jump", selection: Binding(
+                get: {viewModel.collectibleWallJump},
+                set: {viewModel.collectibleWallJump = $0 })) {
+                Text("Vanilla")
+                    .tag(false)
+                Text("Collectible")
+                    .tag(true)
+            }
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environment(appState)
+                .environment(viewModel)
         }
+        #if os(macOS)
+        .defaultSize(width: 857, height: 468)
         .commands {
             CommandGroup(replacing: .newItem) {
                 Button("Reset Tracker") {
@@ -38,6 +64,17 @@ struct SimpleTrackerApp: App {
                 }
                 .keyboardShortcut("R", modifiers: [.command])
             }
+            //                CommandMenu("View") {
+            //                    Button(appSettings.showSeedName ? "Hide Seed Name" : "Show Seed Name") {
+            //                        appSettings.showSeedName.toggle()
+            //                        AppSettings.defaults.set(appSettings.showSeedName, forKey: "showSeedName")
+            //                    }
+            //                }
+            CommandMenu("Settings") {
+                settingsMenu()
+                    .environment(viewModel)
+            }
         }
+        #endif
     }
 }
