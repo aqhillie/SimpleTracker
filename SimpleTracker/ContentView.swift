@@ -8,15 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(ViewModel.self) private var viewModel
     @State private var title = "Crazytown"
 
     var body: some View {
-        NavigationStack {
             ZStack {
                 Color.black.edgesIgnoringSafeArea(.all)
-                VStack(spacing: 25) {
+                VStack(spacing: viewModel.rootVStackSpacing) {
+                    #if os(macOS)
                     //                SeedName()
-                    HStack(spacing: 20) {
+                    #endif
+                    HStack(spacing: viewModel.rootHStackSpacing) {
                         Bosses()
                         ItemGrid()
                         SeedOptions()
@@ -25,12 +27,13 @@ struct ContentView: View {
                 .edgesIgnoringSafeArea(.all)
             }
             .padding(0)
+            #if os(macOS)
             .navigationTitle("\(title) - SimpleTracker")
-            .toolbarRole(.editor)
-        }
+            #endif
     }
 }
 
+#if os(macOS)
 //struct SeedName: View {
 //    @State var editing = false;
 //    @Environment(ViewModel.self) private var viewModel
@@ -65,12 +68,13 @@ struct ContentView: View {
 //        }
 //    }
 //}
+#endif
 
 struct Bosses: View {
     @Environment(ViewModel.self) private var viewModel
     
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: viewModel.bossVerticalSpacing) {
             ForEach(viewModel.bosses, id: \.id) { boss in
                 BossButton(for: boss)
             }
@@ -120,7 +124,7 @@ struct SeedOptions: View {
     @Environment(ViewModel.self) private var viewModel
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: viewModel.seedOptionVStackSpacing) {
             ForEach(viewModel.seedOptions, id: \.key) { seedOption in
                 if (seedOption.visible) {
                     OptionSelector(seedOption: seedOption)

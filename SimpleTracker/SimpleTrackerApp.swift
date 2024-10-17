@@ -5,6 +5,7 @@
 //  Created by Alex Quintana on 10/6/24.
 //
 
+//import UIKit
 import SwiftUI
 
 @main
@@ -15,6 +16,14 @@ struct SimpleTrackerApp: App {
         viewModel.resetBosses()
         viewModel.resetItems()
     }
+    
+    #if os(macOS)
+    init() {
+        if let fontURL = Bundle.main.url(forResource: "super-metroid-snes", withExtension: "ttf") {
+            CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
+        }
+    }
+    #endif
 
     struct settingsMenu: View {
         @Environment(ViewModel.self) private var viewModel
@@ -46,6 +55,7 @@ struct SimpleTrackerApp: App {
             ContentView()
                 .environment(viewModel)
         }
+        #if os(macOS)
         .defaultSize(width: 857, height: 468)
         .commands {
             CommandGroup(replacing: .newItem) {
@@ -65,5 +75,6 @@ struct SimpleTrackerApp: App {
                     .environment(viewModel)
             }
         }
+        #endif
     }
 }

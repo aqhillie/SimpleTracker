@@ -30,10 +30,10 @@ struct OptionSelector: View {
                 .foregroundColor(.white)
                 .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
             Text(seedOption.options[seedOption.selection].uppercased())
-                .frame(width: 320, alignment: .center)
+                .frame(width: viewModel.seedOptionsWidth, alignment: .center)
                 .background(.black)
                 .foregroundColor(Color(getColor(idx: seedOption.selection, colors: seedOption.colors)))
-                .font(.custom("Super Metroid (SNES)", size: viewModel.seedOptionSelectionFontSize))
+                .font(.custom("SuperMetroidSNES", size: viewModel.seedOptionSelectionFontSize))
         }
             .gesture(
                 TapGesture()

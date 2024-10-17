@@ -14,11 +14,16 @@ class ViewModel {
     
     let bossSize: CGFloat
     let itemSize: CGFloat
+    let rootVStackSpacing: CGFloat
+    let rootHStackSpacing: CGFloat
+    let bossVerticalSpacing: CGFloat
     let itemGridHorizontalSpacing: CGFloat
     let itemGridVerticalSpacing: CGFloat
     let itemGridRows: Int
     let itemGridColumns: Int
+    let seedOptionVStackSpacing: CGFloat
     let seedOptionsSpacing: CGFloat
+    let seedOptionsWidth: CGFloat
     let seedOptionTitleFontSize: CGFloat
     let seedOptionSelectionFontSize: CGFloat
 
@@ -33,15 +38,31 @@ class ViewModel {
     }
     
     init() {
-        self.bossSize = 65
-        self.itemSize = 60
+
+        self.bossVerticalSpacing = 30
+        self.rootVStackSpacing = 25
+        self.rootHStackSpacing = 25
         self.itemGridHorizontalSpacing = 12
         self.itemGridVerticalSpacing = 6
-        self.itemGridRows = 5
-        self.itemGridColumns = 5
+        self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10
+
+        #if os(iOS)
+        self.bossSize = 75
+        self.itemSize = 70
+        self.seedOptionsWidth = 250
+        self.seedOptionTitleFontSize = 18
+        self.seedOptionSelectionFontSize = 20
+        #else
+        self.bossSize = 65
+        self.itemSize = 60
+        self.seedOptionsWidth = 320
         self.seedOptionTitleFontSize = 18
         self.seedOptionSelectionFontSize = 28
+        #endif
+
+        self.itemGridRows = 5
+        self.itemGridColumns = 5
         
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
 
