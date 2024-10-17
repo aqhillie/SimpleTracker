@@ -34,6 +34,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Config.xcconfig,
+				Info.plist,
+				"Preview Content/Preview Assets.xcassets",
 				Scripts/buildupdate.sh,
 			);
 			target = FAA0EECD2CB3805F008D6B24 /* SimpleTracker */;
