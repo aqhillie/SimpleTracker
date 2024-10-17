@@ -11,7 +11,7 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;cd &quot;$SRCROOT/$PRODUCT_NAME/Scripts&quot;&#10;&#10;source buildupdate.sh&#10;">
+               scriptText = "#!/bin/sh&#10;# Type a script or drag a script file from your workspace to insert its path.&#10;#cd &quot;$SRCROOT/$PRODUCT_NAME&quot;&#10;&#10;#source buildupdate.sh&#10;">
             </ActionContent>
          </ExecutionAction>
       </PreActions>
