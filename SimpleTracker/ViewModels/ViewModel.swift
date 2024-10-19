@@ -10,17 +10,20 @@
 //
 
 import SwiftUI
+#if os(iOS)
+import UIKit
+#endif
 
 @Observable
 class ViewModel {
+
+    #if os(iOS)
+    let deviceWidth: CGFloat
+    let deviceHeight: CGFloat
+    #endif
     
     let bossSize: CGFloat
     let itemSize: CGFloat
-    let rootVStackSpacing: CGFloat
-    let rootHStackSpacing: CGFloat
-    let bossVerticalSpacing: CGFloat
-    let itemGridHorizontalSpacing: CGFloat
-    let itemGridVerticalSpacing: CGFloat
     let itemGridRows: Int
     let itemGridColumns: Int
     let seedOptionVStackSpacing: CGFloat
@@ -28,6 +31,14 @@ class ViewModel {
     let seedOptionsWidth: CGFloat
     let seedOptionTitleFontSize: CGFloat
     let seedOptionSelectionFontSize: CGFloat
+
+#if os(macOS)
+    let rootVStackSpacing: CGFloat
+    let rootHStackSpacing: CGFloat
+    let bossVerticalSpacing: CGFloat
+    let itemGridHorizontalSpacing: CGFloat
+    let itemGridVerticalSpacing: CGFloat
+    #endif
 
     var bosses: [Boss]
     var items: [[Item]]
@@ -46,7 +57,27 @@ class ViewModel {
     }
     
     init() {
+        #if os(iOS)
+        self.deviceWidth = UIScreen.main.bounds.width
+        self.deviceHeight = UIScreen.main.bounds.height
+        #if DEBUG
+        print(self.deviceHeight)
+        #endif
 
+        self.bossSize = self.deviceWidth * 0.18
+        self.itemSize = self.deviceWidth * 0.15
+        self.seedOptionsWidth = 280
+        self.seedOptionTitleFontSize = 18
+        self.seedOptionSelectionFontSize = 22
+        self.seedOptionVStackSpacing = 20
+        self.seedOptionsSpacing = 10
+        
+        #else
+        self.bossSize = 65
+        self.itemSize = 60
+        self.seedOptionsWidth = 320
+        self.seedOptionTitleFontSize = 18
+        self.seedOptionSelectionFontSize = 28
         self.bossVerticalSpacing = 30
         self.rootVStackSpacing = 25
         self.rootHStackSpacing = 25
@@ -54,19 +85,6 @@ class ViewModel {
         self.itemGridVerticalSpacing = 6
         self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10
-
-        #if os(iOS)
-        self.bossSize = 75
-        self.itemSize = 70
-        self.seedOptionsWidth = 250
-        self.seedOptionTitleFontSize = 18
-        self.seedOptionSelectionFontSize = 20
-        #else
-        self.bossSize = 65
-        self.itemSize = 60
-        self.seedOptionsWidth = 320
-        self.seedOptionTitleFontSize = 18
-        self.seedOptionSelectionFontSize = 28
         #endif
 
         self.itemGridRows = 5

@@ -29,18 +29,18 @@ struct ContentView: View {
         .padding(0)
         .navigationTitle("\(title) - SimpleTracker")
         #else
-        GeometryReader { geometry in
+        GeometryReader { g in
             ZStack {
                 Color.black.edgesIgnoringSafeArea(.all)
-                if (geometry.size.width > geometry.size.height) {
+                if (g.size.width > g.size.height) {
                     VStack {
                         HStack {
                             Spacer()
-                            Bosses(geometry: geometry)
+                            Bosses(g: g)
                             Spacer()
-                            ItemGrid(geometry: geometry)
+                            ItemGrid(g: g)
                             Spacer()
-                            GameOptions(geometry: geometry)
+                            GameOptions(g: g)
                             Spacer()
                         }
                     }
@@ -48,11 +48,11 @@ struct ContentView: View {
                     HStack {
                         VStack {
                             Spacer()
-                            Bosses(geometry: geometry)
+                            Bosses(g: g)
                             Spacer()
-                            ItemGrid(geometry: geometry)
+                            ItemGrid(g: g)
                             Spacer()
-                            GameOptions(geometry: geometry)
+                            GameOptions(g: g)
                             Spacer()
                         }
                     }
@@ -121,7 +121,7 @@ struct BossLayout: View {
 struct Bosses: View {
     @Environment(ViewModel.self) private var viewModel
     #if os(iOS)
-    let geometry: GeometryProxy
+    let g: GeometryProxy
     #endif
         
     var body: some View {
@@ -131,14 +131,14 @@ struct Bosses: View {
         }
         .padding(0)
         #else
-        if (geometry.size.width > geometry.size.height) {
+        if (g.size.width > g.size.height) {
             VStack {
-                BossLayout(bosses: viewModel.bosses, size: geometry.size.height * 0.18)
+                BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
             }
             .padding(0)
         } else {
             HStack {
-                BossLayout(bosses: viewModel.bosses, size: geometry.size.width * 0.18)
+                BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
             }
             .padding(0)
         }
@@ -166,12 +166,12 @@ struct ItemRows: View {
 
     var body: some View {
         #if os(iOS)
-        Spacer()
+//        Spacer()
         #endif
         ForEach(row, id: \.id) { item in
             ItemButton(item: item, size: size, isActive: isItemActive(item: item, viewModel: viewModel))
             #if os(iOS)
-            Spacer()
+//            Spacer()
             #endif
         }
     }
@@ -180,13 +180,10 @@ struct ItemRows: View {
 struct ItemGrid: View {
     @Environment(ViewModel.self) private var viewModel
     #if os(iOS)
-    let geometry: GeometryProxy
-    
-    let fullSize: CGFloat
-    
-    init(geometry: GeometryProxy) {
-        self.geometry = geometry
-        self.fullSize = (geometry.size.width > geometry.size.height) ? geometry.size.height : geometry.size.width
+    let g: GeometryProxy
+       
+    init(g: GeometryProxy) {
+        self.g = g
     }
     #endif
 
@@ -205,7 +202,7 @@ struct ItemGrid: View {
             Spacer()
             ForEach(viewModel.items, id: \.self) { row in
                 HStack {
-                    ItemRows(row: row, size: fullSize * 0.15)
+                    ItemRows(row: row, size: viewModel.itemSize)
                 }
                 Spacer()
             }
@@ -218,48 +215,102 @@ struct ItemGrid: View {
 struct GameOptions: View {
     @Environment(ViewModel.self) private var viewModel
     #if os(iOS)
-    let geometry: GeometryProxy
+    let g: GeometryProxy
     #endif
     
     var body: some View {
-        HStack {
-            VStack(spacing: viewModel.seedOptionVStackSpacing) {
+        #if os(macOS)
+        SeedOptions()
+        .background(Color.black)
+        #else
+        if g.size.width > g.size.height {
+            VStack {
+                Spacer()
+                #if os(iOS)
+                MobileOptions(orientation: .landscape)
+                    .minimumScaleFactor(0.1)
+                Spacer()
+                #endif
+                SeedOptions()
+                    .minimumScaleFactor(0.1)
+                Spacer()
+            }
+            .background(Color.black)
+        } else {
+            HStack {
+                SeedOptions()
+                    .minimumScaleFactor(0.1)
+                #if os(iOS)
+                Spacer()
+                MobileOptions()
+                    .minimumScaleFactor(0.1)
+                Spacer()
+                #endif
+            }
+            .background(Color.black)
+        }
+        #endif
+    }
+}
+
+struct SeedOptions: View {
+    @Environment(ViewModel.self) private var viewModel
+
+    var body: some View {
+        #if os(macOS)
+        VStack(spacing: viewModel.seedOptionVStackSpacing) {
+            ForEach(viewModel.seedOptions, id: \.key) { seedOption in
+                if (seedOption.visible) {
+                    OptionSelector(seedOption: seedOption)
+                }
+            }
+        }
+        #else
+        VStack {
                 ForEach(viewModel.seedOptions, id: \.key) { seedOption in
                     if (seedOption.visible) {
                         OptionSelector(seedOption: seedOption)
                     }
                 }
-            }
-            #if os(iOS)
-            if geometry.size.height > geometry.size.width {
-                Spacer()
-            }
-            MobileOptions()
-            if geometry.size.height > geometry.size.width {
-                Spacer()
-            }
-            #endif
         }
-        .background(Color.black)
+        .frame(alignment: .center)
+        #endif
     }
 }
 
 #if os(iOS)
 struct MobileOptions: View {
     @Environment(ViewModel.self) private var viewModel
+    let orientation: Orientation
+    
+    init(orientation: Orientation = .portrait) {
+        self.orientation = orientation
+    }
 
     var body: some View {
-        VStack {
-            Spacer()
-            ResetTracker()
-            Spacer()
-            ToggleCollectibleWallJump()
-            Spacer()
-            ToggleZebesAwake()
-            Spacer()
+        if (orientation == .portrait) {
+            VStack {
+                Spacer()
+                ResetTracker()
+                Spacer()
+                ToggleCollectibleWallJump()
+                Spacer()
+                ToggleZebesAwake()
+                Spacer()
+            }
+            .padding(0)
+        } else {
+            HStack {
+                Spacer()
+                ResetTracker()
+                Spacer()
+                ToggleCollectibleWallJump()
+                Spacer()
+                ToggleZebesAwake()
+                Spacer()
+            }
+            .padding(0)
         }
-        .frame(alignment: .topLeading)
-        .padding(0)
     }
 }
 #endif

@@ -9,6 +9,8 @@
 
 import SwiftUI
 
+
+
 @main
 struct SimpleTrackerApp: App {
     @State var viewModel = ViewModel()

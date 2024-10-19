@@ -12,11 +12,18 @@ import SwiftUI
 struct OptionSelector: View {
     @Environment(ViewModel.self) private var viewModel
     @State var seedOption: SeedOption
+//    let g: GeometryProxy
     
+    #if os(macOS)
     init (seedOption: SeedOption) {
         self.seedOption = seedOption
     }
-
+    #else
+    init (seedOption: SeedOption) {
+        self.seedOption = seedOption
+    }
+    #endif
+    
     private func getColor(idx: Int, colors: [UInt]) -> UInt {
         if idx > colors.count - 1 {
             return colors[colors.count - 1]
@@ -26,6 +33,7 @@ struct OptionSelector: View {
     }
     
     var body: some View {
+        #if os(macOS)
         VStack(spacing: viewModel.seedOptionsSpacing) {
             Text(seedOption.title.uppercased())
                 .background(.black)
@@ -44,5 +52,29 @@ struct OptionSelector: View {
                         seedOption.update(selection)
                     }
             )
+        #else
+        VStack {
+            Text(seedOption.title.uppercased())
+                .background(.black)
+                .foregroundColor(.white)
+                .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
+            Spacer()
+                .frame(minHeight: 2, maxHeight: 5)
+            Text(seedOption.options[seedOption.selection].uppercased())
+                .frame(width: viewModel.seedOptionsWidth, alignment: .center)
+                .background(.black)
+                .foregroundColor(Color(getColor(idx: seedOption.selection, colors: seedOption.colors)))
+                .font(.custom("SuperMetroidSNES", size: viewModel.seedOptionSelectionFontSize))
+            Spacer()
+                .frame(minHeight: 0, maxHeight: 20)
+        }
+            .gesture(
+                TapGesture()
+                    .onEnded {
+                        let selection = (seedOption.selection + 1) % seedOption.options.count
+                        seedOption.update(selection)
+                    }
+            )
+        #endif
     }
 }

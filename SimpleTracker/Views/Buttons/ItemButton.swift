@@ -29,7 +29,7 @@ struct ItemButton: View {
             ZStack (alignment: .bottomTrailing){
                 Image(item.key)
                     .resizable()
-                    .frame(width: viewModel.itemSize, height: viewModel.itemSize)
+                    .frame(width: size, height: size)
                     .modifier(Appearance(type: .item, isActive: item.isCollected() ))
                     .gesture(
                         TapGesture()
@@ -51,7 +51,7 @@ struct ItemButton: View {
         } else {
             Rectangle()
                 .fill(Color.black)
-                .frame(width: viewModel.itemSize, height: viewModel.itemSize)
+                .frame(width: size, height: size)
         }
     }
 }
