@@ -67,13 +67,16 @@ struct SimpleTrackerApp: App {
                 }
                 .keyboardShortcut("R", modifiers: [.command])
             }
-            //                CommandMenu("View") {
-            //                    Button(appSettings.showSeedName ? "Hide Seed Name" : "Show Seed Name") {
-            //                        appSettings.showSeedName.toggle()
-            //                        AppSettings.defaults.set(appSettings.showSeedName, forKey: "showSeedName")
-            //                    }
-            //                }
-            CommandMenu("Settings") {
+            CommandGroup(replacing: .sidebar) {
+                Button("\(viewModel.zebesAwake ? "Hide" : "Show") Planet Awake Status") {
+                    viewModel.zebesAwake.toggle()
+                }
+                Button("\(viewModel.collectibleWallJump ? "Hide" : "Show") Wall Jump Boots") {
+                    viewModel.collectibleWallJump.toggle()
+                }
+                Divider()
+            }
+            CommandMenu("Map Rando Settings") {
                 settingsMenu()
                     .environment(viewModel)
             }

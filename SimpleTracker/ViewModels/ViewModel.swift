@@ -24,8 +24,6 @@ class ViewModel {
     
     let bossSize: CGFloat
     let itemSize: CGFloat
-    let itemGridRows: Int
-    let itemGridColumns: Int
     let seedOptionVStackSpacing: CGFloat
     let seedOptionsSpacing: CGFloat
     let seedOptionsWidth: CGFloat
@@ -38,6 +36,32 @@ class ViewModel {
     let bossVerticalSpacing: CGFloat
     let itemGridHorizontalSpacing: CGFloat
     let itemGridVerticalSpacing: CGFloat
+    let lastItemRows: [[Item]] = [
+        [
+            Item(key: "plasma", name: "Plasma Beam"),
+            Item(key: "xray", name: "XRay Scope"),
+            EmptyItem(),
+            EmptyItem(),
+            Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+        ],
+        [
+            EmptyItem(),
+            EmptyItem(),
+            Item(key: "zebesawake", name: "Zebes Awake"),
+            EmptyItem(),
+            EmptyItem()
+        ]
+    ]
+    #else
+    let lastItemRows: [[Item]] = [
+        [
+            Item(key: "plasma", name: "Plasma Beam"),
+            Item(key: "xray", name: "XRay Scope"),
+            Item(key: "zebesawake", name: "Zebes Awake"),
+            EmptyItem(),
+            Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+        ]
+    ]
     #endif
 
     var bosses: [Boss]
@@ -86,9 +110,6 @@ class ViewModel {
         self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10
         #endif
-
-        self.itemGridRows = 5
-        self.itemGridColumns = 5
         
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
         self.zebesAwake = UserDefaults.standard.boolWithDefaultValue(forKey: "zebesAwake", defaultValue: false)
@@ -128,15 +149,8 @@ class ViewModel {
                 Item(key: "screw", name: "Screw Attack"),
                 Item(key: "walljump", name: "Wall Jump Boots"),
                 Item(key: "etank", name: "Energy Tanks", maxValue: 14)
-            ],
-            [
-                Item(key: "plasma", name: "Plasma Beam"),
-                Item(key: "xray", name: "XRay Scope"),
-                Item(key: "zebesawake", name: "Zebes Awake"),
-                EmptyItem(),
-                Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
             ]
-        ]
+        ] + lastItemRows
         
         self.seedOptions = [
             SeedOption(

@@ -436,7 +436,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SimpleTracker/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "SimpleTracker for Map Rando";
+				INFOPLIST_KEY_CFBundleDisplayName = SimpleTracker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024 Warpixel";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
@@ -474,7 +474,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SimpleTracker/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "SimpleTracker for Map Rando";
+				INFOPLIST_KEY_CFBundleDisplayName = SimpleTracker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024 Warpixel";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
