@@ -39,6 +39,12 @@ class ViewModel {
         }
     }
     
+    var zebesAwake: Bool {
+        didSet {
+            UserDefaults.standard.set(zebesAwake, forKey: "zebesAwake")
+        }
+    }
+    
     init() {
 
         self.bossVerticalSpacing = 30
@@ -67,6 +73,7 @@ class ViewModel {
         self.itemGridColumns = 5
         
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
+        self.zebesAwake = UserDefaults.standard.boolWithDefaultValue(forKey: "zebesAwake", defaultValue: false)
 
         self.bosses = [
             Boss(key: "ridley", name: "Ridley"),
@@ -107,7 +114,7 @@ class ViewModel {
             [
                 Item(key: "plasma", name: "Plasma Beam"),
                 Item(key: "xray", name: "XRay Scope"),
-                EmptyItem(),
+                Item(key: "zebesawake", name: "Zebes Awake"),
                 EmptyItem(),
                 Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
             ]

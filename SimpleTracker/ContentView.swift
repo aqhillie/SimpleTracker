@@ -14,23 +14,53 @@ struct ContentView: View {
     @State private var title = "Crazytown"
 
     var body: some View {
+        #if os(macOS)
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            VStack(spacing: viewModel.rootVStackSpacing) {
+//                SeedName()
+                HStack(spacing: viewModel.rootHStackSpacing) {
+                    Bosses()
+                    ItemGrid()
+                    GameOptions()
+                }
+            }
+        }
+        .padding(0)
+        .navigationTitle("\(title) - SimpleTracker")
+        #else
+        GeometryReader { geometry in
             ZStack {
                 Color.black.edgesIgnoringSafeArea(.all)
-                VStack(spacing: viewModel.rootVStackSpacing) {
-//                    #if os(macOS)
-//                                    SeedName()
-//                    #endif
-                    HStack(spacing: viewModel.rootHStackSpacing) {
-                        Bosses()
-                        ItemGrid()
-                        GameOptions()
+                if (geometry.size.width > geometry.size.height) {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Bosses(geometry: geometry)
+                            Spacer()
+                            ItemGrid(geometry: geometry)
+                            Spacer()
+                            GameOptions(geometry: geometry)
+                            Spacer()
+                        }
+                    }
+                } else {
+                    HStack {
+                        VStack {
+                            Spacer()
+                            Bosses(geometry: geometry)
+                            Spacer()
+                            ItemGrid(geometry: geometry)
+                            Spacer()
+                            GameOptions(geometry: geometry)
+                            Spacer()
+                        }
                     }
                 }
             }
             .padding(0)
-            #if os(macOS)
-            .navigationTitle("\(title) - SimpleTracker")
-            #endif
+        }
+        #endif
     }
 }
 
@@ -71,58 +101,125 @@ struct ContentView: View {
 //}
 //#endif
 
-struct Bosses: View {
-    @Environment(ViewModel.self) private var viewModel
+struct BossLayout: View {
+    let bosses: [Boss]
+    let size: CGFloat
     
     var body: some View {
-        VStack(spacing: viewModel.bossVerticalSpacing) {
-            ForEach(viewModel.bosses, id: \.id) { boss in
-                BossButton(for: boss)
-            }
+        #if os(iOS)
+        Spacer()
+        #endif
+        ForEach(bosses, id: \.id) { boss in
+            BossButton(for: boss, size: size)
+            #if os(iOS)
+            Spacer()
+            #endif
         }
-        .padding(0)
     }
 }
 
-//struct ItemOrElse: View {
-//    @Environment(ViewModel.self) private var viewModel
-//    let item: Item?
-//    
-//    var body: some View {
-//    }
-//}
-
-struct ItemGrid: View {
+struct Bosses: View {
     @Environment(ViewModel.self) private var viewModel
-    
+    #if os(iOS)
+    let geometry: GeometryProxy
+    #endif
+        
+    var body: some View {
+        #if os(macOS)
+        VStack(spacing: viewModel.bossVerticalSpacing) {
+            BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
+        }
+        .padding(0)
+        #else
+        if (geometry.size.width > geometry.size.height) {
+            VStack {
+                BossLayout(bosses: viewModel.bosses, size: geometry.size.height * 0.18)
+            }
+            .padding(0)
+        } else {
+            HStack {
+                BossLayout(bosses: viewModel.bosses, size: geometry.size.width * 0.18)
+            }
+            .padding(0)
+        }
+        #endif
+    }
+}
+
+struct ItemRows: View {
+    @Environment(ViewModel.self) private var viewModel
+    let row: [Item]
+    let size: CGFloat
+
     func isItemActive(item: Item, viewModel: ViewModel) -> Binding<Bool> {
         @Bindable var viewModel = viewModel
 
         switch(item.key) {
             case "walljump":
                 return $viewModel.collectibleWallJump
+            case "zebesawake":
+                return $viewModel.zebesAwake
             default:
-            return .constant(true)
+                return .constant(true)
         }
     }
-    
+
     var body: some View {
+        #if os(iOS)
+        Spacer()
+        #endif
+        ForEach(row, id: \.id) { item in
+            ItemButton(item: item, size: size, isActive: isItemActive(item: item, viewModel: viewModel))
+            #if os(iOS)
+            Spacer()
+            #endif
+        }
+    }
+}
+
+struct ItemGrid: View {
+    @Environment(ViewModel.self) private var viewModel
+    #if os(iOS)
+    let geometry: GeometryProxy
+    
+    let fullSize: CGFloat
+    
+    init(geometry: GeometryProxy) {
+        self.geometry = geometry
+        self.fullSize = (geometry.size.width > geometry.size.height) ? geometry.size.height : geometry.size.width
+    }
+    #endif
+
+    var body: some View {
+        #if os(macOS)
         VStack(spacing: viewModel.itemGridVerticalSpacing) {
             ForEach(viewModel.items, id: \.self) { row in
                 HStack(spacing: viewModel.itemGridHorizontalSpacing) {
-                    ForEach(row, id: \.id) { item in
-                        ItemButton(item: item, isActive: isItemActive(item: item, viewModel: viewModel))
-                    }
+                    ItemRows(row: row, size: viewModel.itemSize)
                 }
             }
         }
         .padding(0)
+        #else
+        VStack {
+            Spacer()
+            ForEach(viewModel.items, id: \.self) { row in
+                HStack {
+                    ItemRows(row: row, size: fullSize * 0.15)
+                }
+                Spacer()
+            }
+        }
+        .padding(0)
+        #endif
     }
 }
 
-
 struct GameOptions: View {
     @Environment(ViewModel.self) private var viewModel
+    #if os(iOS)
+    let geometry: GeometryProxy
+    #endif
     
     var body: some View {
         HStack {
@@ -134,7 +231,13 @@ struct GameOptions: View {
                 }
             }
             #if os(iOS)
+            if geometry.size.height > geometry.size.width {
+                Spacer()
+            }
             MobileOptions()
+            if geometry.size.height > geometry.size.width {
+                Spacer()
+            }
             #endif
         }
         .background(Color.black)
@@ -151,6 +254,8 @@ struct MobileOptions: View {
             ResetTracker()
             Spacer()
             ToggleCollectibleWallJump()
+            Spacer()
+            ToggleZebesAwake()
             Spacer()
         }
         .frame(alignment: .topLeading)

@@ -14,10 +14,12 @@ import SwiftUI
 struct ItemButton: View {
     @Environment(ViewModel.self) private var viewModel
     @State var item: Item
+    var size: CGFloat
     @Binding var isActive: Bool
 
-    init(item: Item, isActive: Binding<Bool>) {
+    init(item: Item, size: CGFloat, isActive: Binding<Bool>) {
         self.item = item
+        self.size = size
         self._isActive = isActive
     }
     

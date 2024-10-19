@@ -12,18 +12,20 @@
 import SwiftUI
 
 struct BossButton: View {
-    @State var boss: Boss
     @Environment(ViewModel.self) private var viewModel
+    @State var boss: Boss
+    var size: CGFloat
     
-    init (for boss: Boss) {
+    init (for boss: Boss, size: CGFloat) {
         self.boss = boss
+        self.size = size
     }
     
     var body: some View {
         let key = boss.getKey()
         Image(boss.isDead() ? "dead" + key : key)
             .resizable()
-            .frame(width: viewModel.bossSize, height: viewModel.bossSize)
+            .frame(width: size, height: size)
             .gesture(
                 TapGesture()
                     .onEnded {
