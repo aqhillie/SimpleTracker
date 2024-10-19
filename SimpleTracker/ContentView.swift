@@ -23,10 +23,9 @@ struct ContentView: View {
                     HStack(spacing: viewModel.rootHStackSpacing) {
                         Bosses()
                         ItemGrid()
-                        SeedOptions()
+                        GameOptions()
                     }
                 }
-                .edgesIgnoringSafeArea(.all)
             }
             .padding(0)
             #if os(macOS)
@@ -122,18 +121,40 @@ struct ItemGrid: View {
 }
 
 
-struct SeedOptions: View {
+struct GameOptions: View {
     @Environment(ViewModel.self) private var viewModel
     
     var body: some View {
-        VStack(spacing: viewModel.seedOptionVStackSpacing) {
-            ForEach(viewModel.seedOptions, id: \.key) { seedOption in
-                if (seedOption.visible) {
-                    OptionSelector(seedOption: seedOption)
+        HStack {
+            VStack(spacing: viewModel.seedOptionVStackSpacing) {
+                ForEach(viewModel.seedOptions, id: \.key) { seedOption in
+                    if (seedOption.visible) {
+                        OptionSelector(seedOption: seedOption)
+                    }
                 }
             }
+            #if os(iOS)
+            MobileOptions()
+            #endif
         }
         .background(Color.black)
     }
 }
 
+#if os(iOS)
+struct MobileOptions: View {
+    @Environment(ViewModel.self) private var viewModel
+
+    var body: some View {
+        VStack {
+            Spacer()
+            ResetTracker()
+            Spacer()
+            ToggleCollectibleWallJump()
+            Spacer()
+        }
+        .frame(alignment: .topLeading)
+        .padding(0)
+    }
+}
+#endif

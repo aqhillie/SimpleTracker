@@ -17,5 +17,5 @@ new_build_number=$((old_build_number + 1))
 
 # update BUILD_NUMBER with new build number while backing up Config.xcconfig
 # then delete the backup after it completes
-sed -i -e "/BUILD_NUMBER =/ s/= .*/= $new_build_number/" Config.xcconfig >> log.txt
-rm -f Config.xcconfig-e >> log.txt
+sed -i -e "/BUILD_NUMBER =/ s/= .*/= $new_build_number/" Config.xcconfig
+rm -f Config.xcconfig-e
