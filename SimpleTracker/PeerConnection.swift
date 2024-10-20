@@ -18,7 +18,9 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     private let peerID: MCPeerID
     private var mcSession: MCSession!
     private var mcAdvertiser: MCNearbyServiceAdvertiser!
-    private var  mcBrowser: MCNearbyServiceBrowser!
+    private var mcBrowser: MCNearbyServiceBrowser!
+    
+    var viewModel: ViewModel?
     
     override init() {
         #if os(iOS)
@@ -34,65 +36,61 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         self.mcSession = MCSession(peer: peerID, securityIdentity: nil, encryptionPreference: .required)
         self.mcSession.delegate = self
     }
-    
-//    private func generateHash() -> String {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd"
-//        
-//        let hashInput = "SimpleTracker for Map Rando \(dateFormatter.string(from: Date()))"
-//        let data = Data(hashInput.utf8)
-//        
-//        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-//        
-//        data.withUnsafeBytes {
-//            _ = CC_SHA256($0.baseAddress, CC_LONG(data.count), digest)
-//        }
-//        
-//        return digest.map { String(format: "%02hhx", $0) }.joined()
-//    }
-    
+        
     func setupAdvertiser() {
-        mcAdvertiser = MCNearbyServiceAdvertiser(peer: peerID, discoveryInfo: nil, serviceType: "trackersync")
+        mcAdvertiser = MCNearbyServiceAdvertiser(peer: peerID, discoveryInfo: nil, serviceType: "smmr-tracker")
         mcAdvertiser.delegate = self
         mcAdvertiser.startAdvertisingPeer()
     }
     
     func setupBrowser() {
-        mcBrowser = MCNearbyServiceBrowser(peer: peerID, serviceType: "trackersync")
+        mcBrowser = MCNearbyServiceBrowser(peer: peerID, serviceType: "smmr-tracker")
+        mcBrowser.delegate = self
+        mcBrowser.startBrowsingForPeers()
     }
     
-    func sendMessage(_ message: String) {
-//        let hash = generateHash()
-
-//        if let messageData = "\(message)|\(hash)".data(using: .utf8) {
-
-        
-        if mcSession.connectedPeers.isEmpty {
-            print("No connected peers. Message not sent: \(message)")
-            return
-        }
-        
-        if let messageData = message.data(using: .utf8) {
-            do {
-                try mcSession.send(messageData, toPeers: mcSession.connectedPeers, with: .reliable)
-                print("Message sent: \(message)")
-            } catch {
-                print("Error sending message: \(error)")
+    func sendMessage(_ message: [String: Any]) {
+        if let jsonData = try? JSONSerialization.data(withJSONObject: message, options: []),
+           let jsonString = String(data: jsonData, encoding: .utf8) {
+            
+            if mcSession.connectedPeers.isEmpty {
+                print("No connected peers. Message not sent: \(jsonString)")
+                return
             }
+
+            if let messageData = jsonString.data(using: .utf8) {
+                do {
+                    try mcSession.send(messageData, toPeers: mcSession.connectedPeers, with: .reliable)
+                    print("Message sent: \(jsonString)")
+                } catch {
+                    print("Error sending message: \(error)")
+                }
+            }
+        } else {
+            print("Error converting message to JSON")
         }
     }
-
+    
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        if let message = String(data: data, encoding: .utf8) {
-//            let messageParts = message.split(separator: "|")
-//            let hash = message[1]
-//            if hash == generateHash() {
-//                print("Received message: \(message[0])")
-            print("Received message: \(message)")
-//            } else {
-//                print("Invalid hash received.")
-//                print("Message rejected: \(message[0])")
-//            }
+        do {
+            // Convert the received data into a dictionary
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                // Now you can access your data as needed
+                if let type = json["type"] as? String, let key = json["key"] as? String, let value = json["value"] as? Bool {
+                    print("Received message: type = \(type) key = \(key), isDead = \(value)")
+
+                    switch(type) {
+                    case "boss":
+                        viewModel?.updateBoss(from: json)
+                    case "item":
+                        viewModel?.updateItem(from: json)
+                    default:
+                        return
+                    }
+                }
+            }
+        } catch {
+            print("Error decoding received data: \(error)")
         }
     }
 

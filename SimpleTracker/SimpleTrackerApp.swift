@@ -62,6 +62,7 @@ struct SimpleTrackerApp: App {
                 .onAppear {
                     peerConnection.setupAdvertiser()
                     peerConnection.setupBrowser()
+                    peerConnection.viewModel = viewModel
                 }
         }
         #if os(macOS)

@@ -16,9 +16,9 @@ class Boss: Hashable, Identifiable, Equatable {
     
     let id = UUID()
     
-    private let key: String
-    private let name: String?
-    private var _isDead: Bool = false
+    let key: String
+    let name: String?
+    var _isDead: Bool = false
 
     init(key: String, name: String) {
         self.key = key
@@ -44,7 +44,7 @@ class Boss: Hashable, Identifiable, Equatable {
     internal func reset() {
         self._isDead = false
     }
-    
+        
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }

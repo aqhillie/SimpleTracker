@@ -31,7 +31,12 @@ struct BossButton: View {
                 TapGesture()
                     .onEnded {
                         boss.deathToggle()
-                        peerConnection.sendMessage(boss.getKey())
+                        let message = [
+                            "type": "boss",
+                            "key": boss.getKey(),
+                            "value": boss.isDead()
+                        ]
+                        peerConnection.sendMessage(message)
                     }
             )
             .modifier(Appearance(type: .boss, isActive: boss.isDead()))

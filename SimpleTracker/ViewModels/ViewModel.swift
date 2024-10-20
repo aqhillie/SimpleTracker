@@ -239,6 +239,32 @@ class ViewModel {
         }
     }
     
+    func updateBoss(from message: [String: Any]) {
+        guard let key = message["key"] as? String,
+              let value = message["value"] as? Bool else { return }
+        
+        for boss in bosses {
+            if boss.key == key {
+                boss._isDead = value
+                return
+            }
+        }
+    }
+    
+    func updateItem(from message: [String: Any]) {
+        guard let key = message["key"] as? String,
+              let value = message["value"] as? Int else { return }
+        
+        for itemRow in items {
+            for item in itemRow {
+                if item.key == key {
+                    item.collected = value
+                    return
+                }
+            }
+        }
+    }
+    
     func resetUserDefaults() {
         let domain = Bundle.main.bundleIdentifier!
         UserDefaults.standard.removePersistentDomain(forName: domain)

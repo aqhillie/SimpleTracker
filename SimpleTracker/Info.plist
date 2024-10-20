@@ -4,8 +4,8 @@
 <dict>
     <key>NSBonjourServices</key>
     <array>
-        <string>_SimpleTracker._tcp</string>
-        <string>_SimpleTracker._udp</string>
+        <string>_smmr-tracker._tcp</string>
+        <string>_smmr-tracker._udp</string>
     </array>
     <key>NSLocalNetworkUsageDescription</key>
     <string>Your app requires access to the local network for peer discovery.</string>

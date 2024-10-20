@@ -13,6 +13,7 @@ import SwiftUI
 
 struct ItemButton: View {
     @Environment(ViewModel.self) private var viewModel
+    @Environment(PeerConnection.self) private var peerConnection
     @State var item: Item
     var size: CGFloat
     @Binding var isActive: Bool
@@ -35,12 +36,24 @@ struct ItemButton: View {
                         TapGesture()
                             .onEnded {
                                 item.collect()
+                                let message = [
+                                    "type": "item",
+                                    "key": item.key,
+                                    "value": item.collected
+                                ]
+                                peerConnection.sendMessage(message)
                             }
                     )
                     .gesture(
                         LongPressGesture()
                             .onEnded { _ in
                                 item.decrease()
+                                let message = [
+                                    "type": "item",
+                                    "key": item.key,
+                                    "value": item.collected
+                                ]
+                                peerConnection.sendMessage(message)
                             }
                     )
                 if item.isConsumable && item.getCount() > 0 {
