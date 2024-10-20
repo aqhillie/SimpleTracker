@@ -2,6 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_SimpleTracker._tcp</string>
+        <string>_SimpleTracker._udp</string>
+    </array>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Your app requires access to the local network for peer discovery.</string>
+    <key>NSNearbyInteractionUsageDescription</key>
+    <string>Your app requires access to nearby interactions for peer communication.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>super-metroid-snes.ttf</string>

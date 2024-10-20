@@ -14,6 +14,7 @@ import SwiftUI
 @main
 struct SimpleTrackerApp: App {
     @State var viewModel = ViewModel()
+    @State var peerConnection = PeerConnection()
     
     func resetTracker() {
         viewModel.resetBosses()
@@ -57,6 +58,11 @@ struct SimpleTrackerApp: App {
         WindowGroup {
             ContentView()
                 .environment(viewModel)
+                .environment(peerConnection)
+                .onAppear {
+                    peerConnection.setupAdvertiser()
+                    peerConnection.setupBrowser()
+                }
         }
         #if os(macOS)
         .defaultSize(width: 857, height: 468)

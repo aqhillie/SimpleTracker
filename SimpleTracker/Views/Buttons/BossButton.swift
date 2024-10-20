@@ -13,6 +13,7 @@ import SwiftUI
 
 struct BossButton: View {
     @Environment(ViewModel.self) private var viewModel
+    @Environment(PeerConnection.self) private var peerConnection
     @State var boss: Boss
     var size: CGFloat
     
@@ -30,6 +31,7 @@ struct BossButton: View {
                 TapGesture()
                     .onEnded {
                         boss.deathToggle()
+                        peerConnection.sendMessage(boss.getKey())
                     }
             )
             .modifier(Appearance(type: .boss, isActive: boss.isDead()))
