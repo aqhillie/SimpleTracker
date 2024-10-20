@@ -35,7 +35,6 @@
 			membershipExceptions = (
 				Config.xcconfig,
 				Info.plist,
-				"Preview Content/Preview Assets.xcassets",
 				Scripts/buildupdate.sh,
 			);
 			target = FAA0EECD2CB3805F008D6B24 /* SimpleTracker */;
@@ -431,7 +430,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}";
-				DEVELOPMENT_ASSET_PATHS = "SimpleTracker/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 67CZ3ZPAE4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -469,7 +468,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}";
-				DEVELOPMENT_ASSET_PATHS = "SimpleTracker/Preview\\ Content";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 67CZ3ZPAE4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

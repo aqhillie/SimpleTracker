@@ -11,7 +11,6 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(ViewModel.self) private var viewModel
-    @State private var title = "Crazytown"
 
     var body: some View {
         #if os(macOS)
@@ -27,7 +26,7 @@ struct ContentView: View {
             }
         }
         .padding(0)
-        .navigationTitle("\(title) - SimpleTracker")
+//        .navigationTitle("\(title) - SimpleTracker")
         #else
         GeometryReader { g in
             ZStack {
