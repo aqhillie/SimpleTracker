@@ -1,4 +1,3 @@
-#if os(iOS)
 //
 //  CollectibleWallJump.swift
 //  SimpleTracker
@@ -10,6 +9,11 @@ import SwiftUI
 
 struct ToggleZebesAwake: View {
     @Environment(ViewModel.self) private var viewModel
+    let size: CGFloat
+    
+    init(size: CGFloat = 32) {
+        self.size = size
+    }
 
     var body: some View {
         Button(action: {
@@ -18,14 +22,16 @@ struct ToggleZebesAwake: View {
             ZStack {
                 Image("zebesawake_icon")
                     .resizable()
-                    .frame(width: 24, height:24)
+                    .frame(width: size, height: size)
                     .saturation(0)
-                Image(systemName: "nosign")
-                    .foregroundColor(.white)
-                    .font(.system(size: 32)) // Adjust size as needed
-                    .opacity(viewModel.zebesAwake ? 1 : 0)
+                    .brightness(0.4)
+                Slash(size: size)
+                    .opacity(viewModel.zebesAwake ? 0 : 1)
             }
         }
+        #if os(macOS)
+        .buttonStyle(PlainButtonStyle())
+        .focusable(false)
+        #endif
     }
 }
-#endif

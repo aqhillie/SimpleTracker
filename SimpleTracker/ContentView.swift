@@ -14,9 +14,11 @@ struct ContentView: View {
 
     var body: some View {
         #if os(macOS)
-        ZStack {
+        ZStack(alignment: .top) {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack(spacing: viewModel.rootVStackSpacing) {
+                Spacer()
+                    .frame(height: 30)
 //                SeedName()
                 HStack(spacing: viewModel.rootHStackSpacing) {
                     Bosses()
@@ -24,7 +26,9 @@ struct ContentView: View {
                     GameOptions()
                 }
             }
+            TitleBar()
         }
+        .edgesIgnoringSafeArea(.top)
         .padding(0)
 //        .navigationTitle("\(title) - SimpleTracker")
         #else
@@ -62,6 +66,32 @@ struct ContentView: View {
         #endif
     }
 }
+
+#if os(macOS)
+struct TitleBar: View {
+    @Environment(ViewModel.self) private var viewModel
+
+    var body: some View {
+        ZStack(alignment: .top) {
+            Text("SimpleTracker")
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .opacity(viewModel.isWindowActive ? 1 : 0.3)
+            HStack {
+                Spacer()
+                ResetTracker(size: 15)
+                ToggleCollectibleWallJump(size: 15)
+                ToggleZebesAwake(size: 15)
+                NetworkStatusAndToggle(size: 15)
+            }
+            .opacity(viewModel.isWindowActive ? 1 : 0.3)
+        }
+        .frame(height: 30)
+        .padding(.horizontal, 10)
+        .background(viewModel.isWindowActive ? Color.titleActive : Color.titleInactive)
+    }
+}
+#endif
 
 //#if os(macOS)
 //struct SeedName: View {
@@ -296,6 +326,8 @@ struct MobileOptions: View {
                 Spacer()
                 ToggleZebesAwake()
                 Spacer()
+                NetworkStatusAndToggle()
+                Spacer()
             }
             .padding(0)
         } else {
@@ -306,6 +338,8 @@ struct MobileOptions: View {
                 ToggleCollectibleWallJump()
                 Spacer()
                 ToggleZebesAwake()
+                Spacer()
+                NetworkStatusAndToggle()
                 Spacer()
             }
             .padding(0)

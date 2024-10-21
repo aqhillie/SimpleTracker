@@ -19,8 +19,9 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     private var mcSession: MCSession!
     private var mcAdvertiser: MCNearbyServiceAdvertiser!
     private var mcBrowser: MCNearbyServiceBrowser!
-    
+        
     var viewModel: ViewModel?
+    var hasConnectedPeers: Bool = false
     
     override init() {
         #if os(iOS)
@@ -48,6 +49,26 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         mcBrowser.delegate = self
         mcBrowser.startBrowsingForPeers()
     }
+
+    func disconnectPeer() {
+        mcSession.disconnect()
+    }
+    
+    func startAdvertisingPeer() {
+        mcAdvertiser.startAdvertisingPeer()
+    }
+
+    func startBrowsingForPeers() {
+        mcBrowser.startBrowsingForPeers()
+    }
+
+    func stopAdvertisingPeer() {
+        mcAdvertiser.stopAdvertisingPeer()
+    }
+
+    func stopBrowsingForPeers() {
+        mcBrowser.stopBrowsingForPeers()
+    }
     
     func sendMessage(_ message: [String: Any]) {
         if let jsonData = try? JSONSerialization.data(withJSONObject: message, options: []),
@@ -71,19 +92,38 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         }
     }
     
+    func sendSettings() {
+        var message = [
+            "type": "cmd"
+            "key": "syncSettings"
+            value: [
+                "localMode"
+            ]
+        ]
+    }
+    
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         do {
             // Convert the received data into a dictionary
             if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 // Now you can access your data as needed
-                if let type = json["type"] as? String, let key = json["key"] as? String, let value = json["value"] as? Bool {
-                    print("Received message: type = \(type) key = \(key), isDead = \(value)")
+                if let type = json["type"] as? String, let key = json["key"] as? String, let value = json["value"] {
+                    print("Received message: type = \(type) key = \(key), value = \(value)")
 
                     switch(type) {
                     case "boss":
                         viewModel?.updateBoss(from: json)
                     case "item":
                         viewModel?.updateItem(from: json)
+                    case "cmd":
+                        switch(key) {
+                            case "resetTracker":
+                                viewModel?.resetBosses()
+                                viewModel?.resetItems()
+                            default:
+                                return
+                            
+                        }
                     default:
                         return
                     }
@@ -98,13 +138,17 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         switch state {
         case .connected:
             print("Connected to peer: \(peerID.displayName)")
+            #if os(macOS)
+            #endif
         case .connecting:
             print("Connecting to peer: \(peerID.displayName)")
         case .notConnected:
             print("Disconnected from peer: \(peerID.displayName)")
+            print(hasConnectedPeers)
         @unknown default:
             fatalError("Unknown state for peer: \(peerID.displayName)")
         }
+        hasConnectedPeers = !mcSession.connectedPeers.isEmpty
     }
 
     // These delegate methods are required but not needed for basic functionality

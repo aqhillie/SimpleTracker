@@ -31,6 +31,7 @@ class ViewModel {
     let seedOptionSelectionFontSize: CGFloat
 
 #if os(macOS)
+    var isWindowActive: Bool
     let rootVStackSpacing: CGFloat
     let rootHStackSpacing: CGFloat
     let bossVerticalSpacing: CGFloat
@@ -97,6 +98,7 @@ class ViewModel {
         self.seedOptionsSpacing = 10
         
         #else
+        self.isWindowActive = true
         self.bossSize = 65
         self.itemSize = 60
         self.seedOptionsWidth = 320

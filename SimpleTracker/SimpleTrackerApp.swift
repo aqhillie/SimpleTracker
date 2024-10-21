@@ -27,6 +27,23 @@ struct SimpleTrackerApp: App {
             CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
         }
     }
+    
+    func setupWindow() {
+        // Ensure we are using AppKit to access the NSWindow
+        if let window = NSApplication.shared.windows.first {
+            window.titleVisibility = .hidden  // Hide the window title
+            window.titlebarAppearsTransparent = true  // Make the title bar transparent
+        }
+    }
+    
+    func setupWindowStateListener() {
+        NotificationCenter.default.addObserver(forName: NSWindow.didBecomeKeyNotification, object: nil, queue: .main) { _ in
+            viewModel.isWindowActive = true
+        }
+        NotificationCenter.default.addObserver(forName: NSWindow.didResignKeyNotification, object: nil, queue: .main) { _ in
+            viewModel.isWindowActive = false
+        }
+    }
     #endif
 
     struct settingsMenu: View {
@@ -60,6 +77,11 @@ struct SimpleTrackerApp: App {
                 .environment(viewModel)
                 .environment(peerConnection)
                 .onAppear {
+                    #if os(macOS)
+                    setupWindow()
+                    setupWindowStateListener()
+                    #endif
+                    
                     peerConnection.setupAdvertiser()
                     peerConnection.setupBrowser()
                     peerConnection.viewModel = viewModel
