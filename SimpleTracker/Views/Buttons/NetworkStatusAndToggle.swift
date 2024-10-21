@@ -10,7 +10,6 @@ import SwiftUI
 struct NetworkStatusAndToggle: View {
     @Environment(ViewModel.self) private var viewModel
     @Environment(PeerConnection.self) private var peerConnection
-    @State var localMode: Bool = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
     
     let size: CGFloat
 
@@ -20,7 +19,7 @@ struct NetworkStatusAndToggle: View {
     
     var body: some View {
         Button(action: {
-            if (localMode) {
+            if (viewModel.localMode) {
                 peerConnection.startAdvertisingPeer()
                 peerConnection.startBrowsingForPeers()
             } else {
@@ -28,10 +27,9 @@ struct NetworkStatusAndToggle: View {
                 peerConnection.stopBrowsingForPeers()
                 peerConnection.disconnectPeer()
             }
-            localMode.toggle()
-            UserDefaults.standard.set(localMode, forKey: "localMode")
+            viewModel.localMode.toggle()
         }) {
-            Image(systemName: localMode ? "wifi.slash" : "wifi")
+            Image(systemName: viewModel.localMode ? "wifi.slash" : "wifi")
                     .font(.system(size: size))
                     .foregroundColor(peerConnection.hasConnectedPeers ? .green : .white )
         }

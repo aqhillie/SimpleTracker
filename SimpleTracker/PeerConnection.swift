@@ -92,15 +92,25 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         }
     }
     
+    #if os(macOS)
     func sendSettings() {
-        var message = [
-            "type": "cmd"
-            "key": "syncSettings"
-            value: [
-                "localMode"
+        let message = [
+            "type": "cmd",
+            "key": "syncSettings",
+            "value": [
+                "showBosses": viewModel?.showBosses as Any,
+                "collectibleWallJump": viewModel?.collectibleWallJump as Any,
+                "zebesAwake": viewModel?.zebesAwake as Any,
+                "objectives": viewModel?.seedOptions[0].selection as Any,
+                "difficulty": viewModel?.seedOptions[1].selection as Any,
+                "itemProgression": viewModel?.seedOptions[2].selection as Any,
+                "qualityOfLife": viewModel?.seedOptions[3].selection as Any,
+                "mapLayout": viewModel?.seedOptions[4].selection as Any
             ]
-        ]
+        ] as [String : Any]
+        sendMessage(message)
     }
+    #endif
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         do {
@@ -120,6 +130,17 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                             case "resetTracker":
                                 viewModel?.resetBosses()
                                 viewModel?.resetItems()
+                            #if os(iOS)
+//                            case "syncSettings":
+//                                viewModel?.showBosses = value["showBosses"]
+//                                viewModel?.collectibleWallJump = value["collectibleWallJump"]
+//                                viewModel?.zebesAwake = value["zebesAwake"]
+//                                viewModel?.seedOptions[0].selection = value["objectives"]
+//                                viewModel?.seedOptions[1].selection = value["difficulty"]
+//                                viewModel?.seedOptions[2].selection = value["itemProgression"]
+//                                viewModel?.seedOptions[3].selection = value["qualityOfLife"]
+//                                viewModel?.seedOptions[4].selection = value["mapLayout"]
+                            #endif
                             default:
                                 return
                             

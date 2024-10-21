@@ -21,10 +21,14 @@ struct ContentView: View {
                     .frame(height: 30)
 //                SeedName()
                 HStack(spacing: viewModel.rootHStackSpacing) {
+                    Spacer()
+                        .frame(width: 37 - viewModel.rootHStackSpacing)
                     Bosses()
+                        .opacity(viewModel.showBosses ? 1 : 0)
                     ItemGrid()
                     GameOptions()
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             TitleBar()
         }
@@ -159,16 +163,19 @@ struct Bosses: View {
             BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
         }
         .padding(0)
+        .opacity(viewModel.showBosses ? 1 : 0)
         #else
         if (g.size.width > g.size.height) {
             VStack {
                 BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
             }
+            .opacity(viewModel.showBosses ? 1 : 0)
             .padding(0)
         } else {
             HStack {
                 BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
             }
+            .opacity(viewModel.showBosses ? 1 : 0)
             .padding(0)
         }
         #endif

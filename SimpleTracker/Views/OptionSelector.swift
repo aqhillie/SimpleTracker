@@ -50,6 +50,7 @@ struct OptionSelector: View {
                     .onEnded {
                         let selection = (seedOption.selection + 1) % seedOption.options.count
                         seedOption.update(selection)
+                        viewModel.showBosses = selection == 1 ? true : false
                     }
             )
         #else
@@ -73,6 +74,8 @@ struct OptionSelector: View {
                     .onEnded {
                         let selection = (seedOption.selection + 1) % seedOption.options.count
                         seedOption.update(selection)
+                        viewModel.showBosses = selection == 1 ? true : false
+                        print(viewModel.showBosses)
                     }
             )
         #endif

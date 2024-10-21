@@ -68,6 +68,18 @@ class ViewModel {
     var bosses: [Boss]
     var items: [[Item]]
     var seedOptions: [SeedOption]
+
+    var localMode: Bool {
+        didSet {
+            UserDefaults.standard.set(localMode, forKey: "localMode")
+        }
+    }
+
+    var showBosses: Bool {
+        didSet {
+            UserDefaults.standard.set(showBosses, forKey: "collectibleWallJump")
+        }
+    }
     
     var collectibleWallJump: Bool {
         didSet {
@@ -113,6 +125,8 @@ class ViewModel {
         self.seedOptionsSpacing = 10
         #endif
         
+        self.localMode = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
+        self.showBosses = UserDefaults.standard.boolWithDefaultValue(forKey: "showBosses", defaultValue: true)
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
         self.zebesAwake = UserDefaults.standard.boolWithDefaultValue(forKey: "zebesAwake", defaultValue: false)
 
