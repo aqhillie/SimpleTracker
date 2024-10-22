@@ -152,19 +152,20 @@ class ViewModel {
         
         #if os(macOS)
         let eyeD = UUID()
+        let cwjID = UUID()
         
         self.sixthItemRowBosses = [
             EmptyItem(),
             EmptyItem(),
-            Item(id: eyeD, key: "eye", name: "Zebes Awake", offImage: "eyeoff"),
-            EmptyItem(),
+            Item(id: eyeD, key: "eye", name: "Planet Awake", offImage: "eyeoff"),
+            Item(id: cwjID, key: "canwalljump", name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false),
             EmptyItem()
         ]
         self.sixthItemRowOthers = [
             EmptyItem(),
-            Item(id: eyeD, key: "eye", name: "Zebes Awake", offImage: "eyeoff"),
+            Item(id: eyeD, key: "eye", name: "Planet Awake", offImage: "eyeoff"),
             PhantoonItem(),
-            EmptyItem(),
+            Item(id: cwjID, key: "canwalljump", name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false),
             EmptyItem()
         ]
         #endif

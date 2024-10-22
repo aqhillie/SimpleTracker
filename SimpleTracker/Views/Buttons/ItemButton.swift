@@ -31,7 +31,7 @@ struct ItemButton: View {
                 Image(item.offImage != "" && item.collected == 0 ? item.offImage : item.key)
                     .resizable()
                     .frame(width: size, height: size)
-                    .modifier(Appearance(type: .item, isActive: item.isCollected() ))
+                    .modifier(Appearance(type: .item, isActive: !item.darkenImage || item.isCollected() ))
                     .gesture(
                         TapGesture()
                             .onEnded {
