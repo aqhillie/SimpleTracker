@@ -20,7 +20,7 @@ class EmptyItem: Item {
 
 class PhantoonItem: Item {
     init() {
-        super.init(key: "phantoon", name: "Phantoon")
+        super.init(key: "phantoon", name: "Phantoon", offImage: "phantoondead")
         self.collected = 1
     }
     

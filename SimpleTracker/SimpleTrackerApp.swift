@@ -111,6 +111,12 @@ struct SimpleTrackerApp: App {
             CommandGroup(replacing: .newItem) {
                 Button("Reset Tracker") {
                     resetTracker()
+                    let message = [
+                        "type": "cmd",
+                        "key": "resetTracker",
+                        "value": ""
+                    ]
+                    peerConnection.sendMessage(message)
                 }
                 .keyboardShortcut("R", modifiers: [.command])
             }
