@@ -38,13 +38,20 @@ class Item: Hashable, Identifiable, Equatable {
     let name: String
     let offImage: String
     let darkenImage: Bool
-    var collected: Int
+    var collected: Int {
+        didSet {
+            if (collected != oldValue) {
+                linkedItem?.collected = collected
+            }
+       }
+    }
     let maxValue: Int
     let multiplier: Int
     let isConsumable: Bool
     var isActive: Bool
+    var linkedItem: Item?
     
-    init(id: UUID = UUID(), key: String, name: String, offImage: String = "", darkenImage: Bool = true, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool = true) {
+    init(id: UUID = UUID(), key: String, name: String, offImage: String = "", darkenImage: Bool = true, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool = true, linkedItem: Item? = nil) {
         self.id = id
         self.key = key
         self.name = name
@@ -55,6 +62,7 @@ class Item: Hashable, Identifiable, Equatable {
         self.multiplier = multiplier
         self.isConsumable = (maxValue == 1) ? false : true
         self.isActive = isActive
+        self.linkedItem = linkedItem
     }
     
     func collect() {

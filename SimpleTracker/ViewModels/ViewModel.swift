@@ -37,6 +37,8 @@ class ViewModel {
     let bossVerticalSpacing: CGFloat
     let itemGridHorizontalSpacing: CGFloat
     let itemGridVerticalSpacing: CGFloat
+    let wallJumpBootsItem: Item
+    let canWallJumpItem: Item
     let fifthItemRow: [Item] = [
         Item(key: "plasma", name: "Plasma Beam"),
         Item(key: "xray", name: "XRay Scope"),
@@ -149,23 +151,29 @@ class ViewModel {
             ],
             []
         ]
-        
+
+        self.wallJumpBootsItem = Item(key: "walljump", name: "Wall Jump Boots")
+
         #if os(macOS)
+        self.canWallJumpItem = Item(key: "canwalljump", name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false)
+        
+        wallJumpBootsItem.linkedItem = canWallJumpItem
+        canWallJumpItem.linkedItem = wallJumpBootsItem
+        
         let eyeD = UUID()
-        let cwjID = UUID()
         
         self.sixthItemRowBosses = [
             EmptyItem(),
             EmptyItem(),
             Item(id: eyeD, key: "eye", name: "Planet Awake", offImage: "eyeoff"),
-            Item(id: cwjID, key: "canwalljump", name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false),
+            canWallJumpItem,
             EmptyItem()
         ]
         self.sixthItemRowOthers = [
             EmptyItem(),
             Item(id: eyeD, key: "eye", name: "Planet Awake", offImage: "eyeoff"),
             PhantoonItem(),
-            Item(id: cwjID, key: "canwalljump", name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false),
+            canWallJumpItem,
             EmptyItem()
         ]
         #endif
@@ -196,7 +204,7 @@ class ViewModel {
                 Item(key: "spazer", name: "Spazer"),
                 Item(key: "grapple", name: "Grapple Beam"),
                 Item(key: "screw", name: "Screw Attack"),
-                Item(key: "walljump", name: "Wall Jump Boots"),
+                wallJumpBootsItem,
                 Item(key: "etank", name: "Energy Tanks", maxValue: 14)
             ],
             fifthItemRow
@@ -316,7 +324,7 @@ class ViewModel {
 
         #if os(macOS)
         for item in sixthItemRowOthers {
-            if item.key == key {
+            if item.key == key && item.collected != value{
                 item.collected = value
                 return
             }
@@ -324,7 +332,7 @@ class ViewModel {
         #endif
         for itemRow in items {
             for item in itemRow {
-                if item.key == key {
+                if item.key == key && item.collected != value{
                     item.collected = value
                     return
                 }
