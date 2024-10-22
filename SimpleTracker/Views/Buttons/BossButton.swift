@@ -15,30 +15,38 @@ struct BossButton: View {
     @Environment(ViewModel.self) private var viewModel
     @Environment(PeerConnection.self) private var peerConnection
     @State var boss: Boss
-    var size: CGFloat
+    let size: CGFloat
+    let deadImage: String
     
     init (for boss: Boss, size: CGFloat) {
         self.boss = boss
         self.size = size
+        self.deadImage = boss.deadImage
     }
     
     var body: some View {
         let key = boss.getKey()
-        Image(boss.isDead() ? "dead" + key : key)
-            .resizable()
-            .frame(width: size, height: size)
-            .gesture(
-                TapGesture()
-                    .onEnded {
-                        boss.deathToggle()
-                        let message = [
-                            "type": "boss",
-                            "key": boss.getKey(),
-                            "value": boss.isDead()
-                        ]
-                        peerConnection.sendMessage(message)
-                    }
-            )
-            .modifier(Appearance(type: .boss, isActive: boss.isDead()))
+        if boss.key != "" {
+            Image(boss.isDead() && deadImage != "" ? deadImage : key)
+                .resizable()
+                .frame(width: size, height: size)
+                .gesture(
+                    TapGesture()
+                        .onEnded {
+                            boss.deathToggle()
+                            let message = [
+                                "type": "boss",
+                                "key": boss.getKey(),
+                                "value": boss.isDead()
+                            ]
+                            peerConnection.sendMessage(message)
+                        }
+                )
+                .modifier(Appearance(type: .boss, isActive: boss.isDead() && deadImage == ""))
+        } else {
+            Rectangle()
+                .fill(Color.black)
+                .frame(width: size, height: size)
+        }
     }
 }

@@ -11,6 +11,7 @@ import SwiftUI
 
 struct OptionSelector: View {
     @Environment(ViewModel.self) private var viewModel
+    @Environment(PeerConnection.self) private var peerConnection
     @State var seedOption: SeedOption
 //    let g: GeometryProxy
     
@@ -50,7 +51,13 @@ struct OptionSelector: View {
                     .onEnded {
                         let selection = (seedOption.selection + 1) % seedOption.options.count
                         seedOption.update(selection)
-                        viewModel.showBosses = selection == 1 ? true : false
+                        let message = [
+                            "type": "cmd",
+                            "key": seedOption.key,
+                            "value": seedOption.selection
+                        ] as [String: Any]
+                        
+                        peerConnection.sendMessage(message)
                     }
             )
         #else
@@ -74,8 +81,13 @@ struct OptionSelector: View {
                     .onEnded {
                         let selection = (seedOption.selection + 1) % seedOption.options.count
                         seedOption.update(selection)
-                        viewModel.showBosses = selection == 1 ? true : false
-                        print(viewModel.showBosses)
+                        let message = [
+                            "type": "cmd",
+                            "key": seedOption.key,
+                            "value": seedOption.selection
+                        ] as [String: Any]
+                        
+                        peerConnection.sendMessage(message)
                     }
             )
         #endif

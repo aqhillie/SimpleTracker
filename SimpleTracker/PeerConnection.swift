@@ -98,9 +98,8 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
             "type": "cmd",
             "key": "syncSettings",
             "value": [
-                "showBosses": viewModel?.showBosses as Any,
                 "collectibleWallJump": viewModel?.collectibleWallJump as Any,
-                "zebesAwake": viewModel?.zebesAwake as Any,
+                "showEye": viewModel?.showEye as Any,
                 "objectives": viewModel?.seedOptions[0].selection as Any,
                 "difficulty": viewModel?.seedOptions[1].selection as Any,
                 "itemProgression": viewModel?.seedOptions[2].selection as Any,
@@ -130,16 +129,42 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                             case "resetTracker":
                                 viewModel?.resetBosses()
                                 viewModel?.resetItems()
+                            case "objective":
+                                viewModel?.seedOptions[0].selection = value as! Int
+                            case "difficulty":
+                                viewModel?.seedOptions[1].selection = value as! Int
+                            case "itemProgression":
+                                viewModel?.seedOptions[2].selection = value as! Int
+                            case "qualityOfLife":
+                                viewModel?.seedOptions[3].selection = value as! Int
+                            case "mapLayout":
+                                viewModel?.seedOptions[4].selection = value as! Int
                             #if os(iOS)
-//                            case "syncSettings":
-//                                viewModel?.showBosses = value["showBosses"]
-//                                viewModel?.collectibleWallJump = value["collectibleWallJump"]
-//                                viewModel?.zebesAwake = value["zebesAwake"]
-//                                viewModel?.seedOptions[0].selection = value["objectives"]
-//                                viewModel?.seedOptions[1].selection = value["difficulty"]
-//                                viewModel?.seedOptions[2].selection = value["itemProgression"]
-//                                viewModel?.seedOptions[3].selection = value["qualityOfLife"]
-//                                viewModel?.seedOptions[4].selection = value["mapLayout"]
+                            case "syncSettings":
+                                if let settings = value as? [String: Any] {
+                                    // Safely unwrap each value and assign it to the viewModel
+                                    if let collectibleWallJump = settings["collectibleWallJump"] as? Bool {
+                                        viewModel?.collectibleWallJump = collectibleWallJump
+                                    }
+                                    if let showEye = settings["showEye"] as? Bool {
+                                        viewModel?.showEye = showEye
+                                    }
+                                    if let objectives = settings["objectives"] as? Int {
+                                        viewModel?.seedOptions[0].selection = objectives
+                                    }
+                                    if let difficulty = settings["difficulty"] as? Int {
+                                        viewModel?.seedOptions[1].selection = difficulty
+                                    }
+                                    if let itemProgression = settings["itemProgression"] as? Int {
+                                        viewModel?.seedOptions[2].selection = itemProgression
+                                    }
+                                    if let qualityOfLife = settings["qualityOfLife"] as? Int {
+                                        viewModel?.seedOptions[3].selection = qualityOfLife
+                                    }
+                                    if let mapLayout = settings["mapLayout"] as? Int {
+                                        viewModel?.seedOptions[4].selection = mapLayout
+                                    }
+                                }
                             #endif
                             default:
                                 return
@@ -160,6 +185,7 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         case .connected:
             print("Connected to peer: \(peerID.displayName)")
             #if os(macOS)
+            sendSettings()
             #endif
         case .connecting:
             print("Connecting to peer: \(peerID.displayName)")

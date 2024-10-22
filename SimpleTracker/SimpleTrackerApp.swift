@@ -9,12 +9,18 @@
 
 import SwiftUI
 
-
+let appName:String = (Bundle.main.infoDictionary!["CFBundleName"] as? String)!
+let appVersion:String = (Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String)!
+let buildNumber = Bundle.main.infoDictionary!["CFBundleVersion"] as? String
 
 @main
 struct SimpleTrackerApp: App {
     @State var viewModel = ViewModel()
     @State var peerConnection = PeerConnection()
+    
+    #if os(macOS)
+    let screenSize = NSScreen.main?.frame.size ?? CGSize(width: 1920, height: 1080)
+    #endif
     
     func resetTracker() {
         viewModel.resetBosses()
@@ -46,6 +52,15 @@ struct SimpleTrackerApp: App {
     }
     #endif
 
+    struct aboutMenu: View {
+        @Environment(\.openWindow) private var openWindow
+        var body: some View {
+            Button("About \(appName)") {
+                openWindow(id: "about")
+            }
+        }
+    }
+    
     struct settingsMenu: View {
         @Environment(ViewModel.self) private var viewModel
         
@@ -90,6 +105,9 @@ struct SimpleTrackerApp: App {
         #if os(macOS)
         .defaultSize(width: 857, height: 468)
         .commands {
+            CommandGroup(replacing: .appInfo) {
+                aboutMenu()
+            }
             CommandGroup(replacing: .newItem) {
                 Button("Reset Tracker") {
                     resetTracker()
@@ -97,8 +115,8 @@ struct SimpleTrackerApp: App {
                 .keyboardShortcut("R", modifiers: [.command])
             }
             CommandGroup(replacing: .sidebar) {
-                Button("\(viewModel.zebesAwake ? "Hide" : "Show") Planet Awake Status") {
-                    viewModel.zebesAwake.toggle()
+                Button("\(viewModel.showEye ? "Hide" : "Show") Planet Awake Status") {
+                    viewModel.showEye.toggle()
                 }
                 Button("\(viewModel.collectibleWallJump ? "Hide" : "Show") Wall Jump Boots") {
                     viewModel.collectibleWallJump.toggle()
@@ -111,5 +129,14 @@ struct SimpleTrackerApp: App {
             }
         }
         #endif
+        #if os(macOS)
+        // When I put this in the above macOS block the compiler can't parse it below the
+        // WindowGroup modifiers so I put it here in its own solitary macOS block.
+        Window("About \(appName)", id: "about") {
+            About()
+        }
+        .defaultSize(width: min(419, screenSize.width * 0.60), height: min(541, screenSize.height * 0.60))
+        #endif
+
     }
 }

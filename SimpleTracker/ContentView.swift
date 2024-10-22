@@ -20,11 +20,11 @@ struct ContentView: View {
                 Spacer()
                     .frame(height: 30)
 //                SeedName()
-                HStack(spacing: viewModel.rootHStackSpacing) {
+                HStack(alignment: .top, spacing: viewModel.rootHStackSpacing) {
                     Spacer()
                         .frame(width: 37 - viewModel.rootHStackSpacing)
                     Bosses()
-                        .opacity(viewModel.showBosses ? 1 : 0)
+                        .minimumScaleFactor(0.1)
                     ItemGrid()
                     GameOptions()
                 }
@@ -44,6 +44,7 @@ struct ContentView: View {
                         HStack {
                             Spacer()
                             Bosses(g: g)
+                                .minimumScaleFactor(0.1)
                             Spacer()
                             ItemGrid(g: g)
                             Spacer()
@@ -85,7 +86,7 @@ struct TitleBar: View {
                 Spacer()
                 ResetTracker(size: 15)
                 ToggleCollectibleWallJump(size: 15)
-                ToggleZebesAwake(size: 15)
+                ToggleEye(size: 15)
                 NetworkStatusAndToggle(size: 15)
             }
             .opacity(viewModel.isWindowActive ? 1 : 0.3)
@@ -138,6 +139,11 @@ struct BossLayout: View {
     let bosses: [Boss]
     let size: CGFloat
     
+    init(bosses: [Boss], size: CGFloat) {
+        self.bosses = (bosses.count > 0) ? bosses : [EmptyBoss(), EmptyBoss(), EmptyBoss(), EmptyBoss()]
+        self.size = size
+    }
+    
     var body: some View {
         #if os(iOS)
         Spacer()
@@ -160,22 +166,19 @@ struct Bosses: View {
     var body: some View {
         #if os(macOS)
         VStack(spacing: viewModel.bossVerticalSpacing) {
-            BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
+            BossLayout(bosses: viewModel.bosses[viewModel.seedOptions[0].selection], size: viewModel.bossSize)
         }
         .padding(0)
-        .opacity(viewModel.showBosses ? 1 : 0)
         #else
         if (g.size.width > g.size.height) {
             VStack {
-                BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
+                BossLayout(bosses: viewModel.bosses[viewModel.seedOptions[0].selection], size: viewModel.bossSize)
             }
-            .opacity(viewModel.showBosses ? 1 : 0)
             .padding(0)
         } else {
             HStack {
-                BossLayout(bosses: viewModel.bosses, size: viewModel.bossSize)
+                BossLayout(bosses: viewModel.bosses[viewModel.seedOptions[0].selection], size: viewModel.bossSize)
             }
-            .opacity(viewModel.showBosses ? 1 : 0)
             .padding(0)
         }
         #endif
@@ -193,8 +196,10 @@ struct ItemRows: View {
         switch(item.key) {
             case "walljump":
                 return $viewModel.collectibleWallJump
-            case "zebesawake":
-                return $viewModel.zebesAwake
+            case "eye":
+                return $viewModel.showEye
+            case "phantoon":
+                return .constant(viewModel.seedOptions[0].selection != 1)
             default:
                 return .constant(true)
         }
@@ -223,16 +228,21 @@ struct ItemGrid: View {
     }
     #endif
 
+    
     var body: some View {
         #if os(macOS)
+        let sixthItemRow = viewModel.seedOptions[0].selection == 1 ? viewModel.sixthItemRowBosses : viewModel.sixthItemRowOthers
         VStack(spacing: viewModel.itemGridVerticalSpacing) {
             ForEach(viewModel.items, id: \.self) { row in
                 HStack(spacing: viewModel.itemGridHorizontalSpacing) {
                     ItemRows(row: row, size: viewModel.itemSize)
                 }
             }
+            HStack(spacing: viewModel.itemGridHorizontalSpacing) {
+                ItemRows(row: sixthItemRow, size: viewModel.itemSize)
+            }
         }
-        .padding(0)
+        .padding(.top, 10)
         #else
         VStack {
             Spacer()
@@ -331,7 +341,7 @@ struct MobileOptions: View {
                 Spacer()
                 ToggleCollectibleWallJump()
                 Spacer()
-                ToggleZebesAwake()
+                ToggleEye()
                 Spacer()
                 NetworkStatusAndToggle()
                 Spacer()
@@ -344,7 +354,7 @@ struct MobileOptions: View {
                 Spacer()
                 ToggleCollectibleWallJump()
                 Spacer()
-                ToggleZebesAwake()
+                ToggleEye()
                 Spacer()
                 NetworkStatusAndToggle()
                 Spacer()

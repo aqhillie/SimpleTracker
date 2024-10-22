@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ToggleZebesAwake: View {
+struct ToggleEye: View {
     @Environment(ViewModel.self) private var viewModel
     let size: CGFloat
     
@@ -17,16 +17,16 @@ struct ToggleZebesAwake: View {
 
     var body: some View {
         Button(action: {
-            viewModel.zebesAwake.toggle()
+            viewModel.showEye.toggle()
         }) {
             ZStack {
-                Image("zebesawake_icon")
+                Image("eye")
                     .resizable()
                     .frame(width: size, height: size)
                     .saturation(0)
                     .brightness(0.4)
                 Slash(size: size)
-                    .opacity(viewModel.zebesAwake ? 0 : 1)
+                    .opacity(viewModel.showEye ? 0 : 1)
             }
         }
         #if os(macOS)

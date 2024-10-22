@@ -16,7 +16,7 @@ import UIKit
 
 @Observable
 class ViewModel {
-
+    
     #if os(iOS)
     let deviceWidth: CGFloat
     let deviceHeight: CGFloat
@@ -37,35 +37,26 @@ class ViewModel {
     let bossVerticalSpacing: CGFloat
     let itemGridHorizontalSpacing: CGFloat
     let itemGridVerticalSpacing: CGFloat
-    let lastItemRows: [[Item]] = [
-        [
-            Item(key: "plasma", name: "Plasma Beam"),
-            Item(key: "xray", name: "XRay Scope"),
-            EmptyItem(),
-            EmptyItem(),
-            Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
-        ],
-        [
-            EmptyItem(),
-            EmptyItem(),
-            Item(key: "zebesawake", name: "Zebes Awake"),
-            EmptyItem(),
-            EmptyItem()
-        ]
+    let fifthItemRow: [Item] = [
+        Item(key: "plasma", name: "Plasma Beam"),
+        Item(key: "xray", name: "XRay Scope"),
+        EmptyItem(),
+        EmptyItem(),
+        Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
     ]
+    let sixthItemRowBosses: [Item]
+    let sixthItemRowOthers: [Item]
     #else
-    let lastItemRows: [[Item]] = [
-        [
-            Item(key: "plasma", name: "Plasma Beam"),
-            Item(key: "xray", name: "XRay Scope"),
-            Item(key: "zebesawake", name: "Zebes Awake"),
-            EmptyItem(),
-            Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
-        ]
+    let fifthItemRow: [Item] = [
+        Item(key: "plasma", name: "Plasma Beam"),
+        Item(key: "xray", name: "XRay Scope"),
+        Item(key: "eye", name: "Zebes Awake", offImage: "eyeoff"),
+        PhantoonItem(),
+        Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
     ]
     #endif
 
-    var bosses: [Boss]
+    var bosses: [[Boss]]
     var items: [[Item]]
     var seedOptions: [SeedOption]
 
@@ -74,22 +65,16 @@ class ViewModel {
             UserDefaults.standard.set(localMode, forKey: "localMode")
         }
     }
-
-    var showBosses: Bool {
-        didSet {
-            UserDefaults.standard.set(showBosses, forKey: "collectibleWallJump")
-        }
-    }
-    
+  
     var collectibleWallJump: Bool {
         didSet {
             UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
         }
     }
     
-    var zebesAwake: Bool {
+    var showEye: Bool {
         didSet {
-            UserDefaults.standard.set(zebesAwake, forKey: "zebesAwake")
+            UserDefaults.standard.set(showEye, forKey: "showEye")
         }
     }
     
@@ -126,16 +111,63 @@ class ViewModel {
         #endif
         
         self.localMode = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
-        self.showBosses = UserDefaults.standard.boolWithDefaultValue(forKey: "showBosses", defaultValue: true)
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
-        self.zebesAwake = UserDefaults.standard.boolWithDefaultValue(forKey: "zebesAwake", defaultValue: false)
+        self.showEye = UserDefaults.standard.boolWithDefaultValue(forKey: "showEye", defaultValue: false)
 
         self.bosses = [
-            Boss(key: "ridley", name: "Ridley"),
-            Boss(key: "phantoon", name: "Phantoon"),
-            Boss(key: "kraid", name: "Kraid"),
-            Boss(key: "draygon", name: "Draygon")
+            [],
+            [
+                Boss(key: "ridley", name: "Ridley", deadImage: "ridleydead"),
+                Boss(key: "phantoon", name: "Phantoon", deadImage: "phantoondead"),
+                Boss(key: "kraid", name: "Kraid", deadImage: "kraiddead"),
+                Boss(key: "draygon", name: "Draygon", deadImage: "draygondead")
+            ],
+            [
+                Boss(key: "bombtorizo", name: "Bomb Torizo", deadImage: "bombtorizodead"),
+                Boss(key: "sporespawn", name: "Spore Spawn", deadImage: "sporespawndead"),
+                Boss(key: "crocomire", name: "Crocomire", deadImage: "crocomiredead"),
+                Boss(key: "botwoon", name: "Botwoon", deadImage: "botwoondead"),
+                Boss(key: "goldentorizo", name: "Golden Torizo", deadImage: "goldentorizodead")
+            ],
+            [
+                Boss(key: "metroids1", name: "Metroids 1", deadImage: "metroids1dead"),
+                Boss(key: "metroids2", name: "Metroids 2", deadImage: "metroids2dead"),
+                Boss(key: "metroids3", name: "Metroids 3", deadImage: "metroids3dead"),
+                Boss(key: "metroids4", name: "Metroids 4", deadImage: "metroids4dead")
+            ],
+            [
+                Boss(key: "chozo1", name: "Chozo Statue 1", deadImage: "chozo1dead"),
+                Boss(key: "chozo2", name: "Chozo Statue 2", deadImage: "chozo2dead"),
+                EmptyBoss(),
+                EmptyBoss()
+            ],
+            [
+                Boss(key: "pirates1", name: "Pirates 1"),
+                Boss(key: "pirates2", name: "Pirates 2"),
+                Boss(key: "pirates3", name: "Pirates 3"),
+                Boss(key: "pirates4", name: "Pirates 4")
+            ],
+            []
         ]
+        
+        #if os(macOS)
+        let eyeD = UUID()
+        
+        self.sixthItemRowBosses = [
+            EmptyItem(),
+            EmptyItem(),
+            Item(id: eyeD, key: "eye", name: "Zebes Awake", offImage: "eyeoff"),
+            EmptyItem(),
+            EmptyItem()
+        ]
+        self.sixthItemRowOthers = [
+            EmptyItem(),
+            Item(id: eyeD, key: "eye", name: "Zebes Awake", offImage: "eyeoff"),
+            PhantoonItem(),
+            EmptyItem(),
+            EmptyItem()
+        ]
+        #endif
         
         self.items = [
             [
@@ -165,8 +197,9 @@ class ViewModel {
                 Item(key: "screw", name: "Screw Attack"),
                 Item(key: "walljump", name: "Wall Jump Boots"),
                 Item(key: "etank", name: "Energy Tanks", maxValue: 14)
-            ]
-        ] + lastItemRows
+            ],
+            fifthItemRow
+        ]
         
         self.seedOptions = [
             SeedOption(
@@ -242,8 +275,10 @@ class ViewModel {
     }
     
     func resetBosses() {
-        for boss in bosses {
-            boss.reset()
+        for objectiveBosses in bosses {
+            for boss in objectiveBosses {
+                boss.reset()
+            }
         }
     }
     
@@ -253,16 +288,23 @@ class ViewModel {
                 item.reset()
             }
         }
+        #if os(macOS)
+        for item in sixthItemRowOthers {
+            item.reset()
+        }
+        #endif
     }
     
     func updateBoss(from message: [String: Any]) {
         guard let key = message["key"] as? String,
               let value = message["value"] as? Bool else { return }
         
-        for boss in bosses {
-            if boss.key == key {
-                boss._isDead = value
-                return
+        for objectiveBosses in bosses {
+            for boss in objectiveBosses {
+                if boss.key == key {
+                    boss._isDead = value
+                    return
+                }
             }
         }
     }
@@ -270,7 +312,15 @@ class ViewModel {
     func updateItem(from message: [String: Any]) {
         guard let key = message["key"] as? String,
               let value = message["value"] as? Int else { return }
-        
+
+        #if os(macOS)
+        for item in sixthItemRowOthers {
+            if item.key == key {
+                item.collected = value
+                return
+            }
+        }
+        #endif
         for itemRow in items {
             for item in itemRow {
                 if item.key == key {

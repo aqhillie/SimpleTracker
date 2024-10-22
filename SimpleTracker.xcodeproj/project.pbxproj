@@ -437,8 +437,9 @@
 				INFOPLIST_FILE = SimpleTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SimpleTracker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024 Warpixel";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Synchronize app state between iOS and macOS version";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "SimpleTracker is a Super Metroid Item Tracker for Map Rando based on the Emotracker pack by chicdead26.\\n\\n© 2024 fiftyshadesofurban";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Your app requires access to the local network for peer discovery.";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "Your app requires access to nearby interactions for peer communication.";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationLandscapeLeft;
@@ -476,8 +477,9 @@
 				INFOPLIST_FILE = SimpleTracker/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SimpleTracker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024 Warpixel";
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Synchronize app state between iOS and macOS version";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "SimpleTracker is a Super Metroid Item Tracker for Map Rando based on the Emotracker pack by chicdead26.\\n\\n© 2024 fiftyshadesofurban";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Your app requires access to the local network for peer discovery.";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "Your app requires access to nearby interactions for peer communication.";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationLandscapeLeft;

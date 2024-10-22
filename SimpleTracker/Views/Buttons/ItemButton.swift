@@ -28,7 +28,7 @@ struct ItemButton: View {
         
         if isActive && item.key != "" {
             ZStack (alignment: .bottomTrailing){
-                Image(item.key)
+                Image(item.offImage != "" && item.collected == 0 ? item.offImage : item.key)
                     .resizable()
                     .frame(width: size, height: size)
                     .modifier(Appearance(type: .item, isActive: item.isCollected() ))

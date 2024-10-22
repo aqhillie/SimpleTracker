@@ -17,22 +17,37 @@ class EmptyItem: Item {
     }
 }
 
+
+class PhantoonItem: Item {
+    init() {
+        super.init(key: "phantoon", name: "Phantoon")
+        self.collected = 1
+    }
+    
+    override func reset() {
+        collected = 1
+    }
+}
+
 @Observable
 class Item: Hashable, Identifiable, Equatable {
 
-    let id = UUID()
+    let id: UUID
     
     let key: String
     let name: String
+    let offImage: String
     var collected: Int
     let maxValue: Int
     let multiplier: Int
     let isConsumable: Bool
     var isActive: Bool
     
-    init(key: String, name: String, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool = true) {
+    init(id: UUID = UUID(), key: String, name: String, offImage: String = "", maxValue: Int = 1, multiplier: Int = 1, isActive: Bool = true) {
+        self.id = id
         self.key = key
         self.name = name
+        self.offImage = offImage
         self.collected = 0
         self.maxValue = maxValue
         self.multiplier = multiplier
