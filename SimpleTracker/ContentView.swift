@@ -194,12 +194,18 @@ struct ItemRows: View {
         @Bindable var viewModel = viewModel
 
         switch(item.key) {
+            case "canwalljump":
+                return $viewModel.showCanWallJumpIcon
             case "walljump":
-                return $viewModel.collectibleWallJump
+                return $viewModel.showWallJumpBoots
             case "eye":
                 return $viewModel.showEye
             case "phantoon":
-                return .constant(viewModel.seedOptions[0].selection != 1)
+                let showPhantoon = viewModel.seedOptions[0].selection != 1 && viewModel.showOptionalPhantoonIcon
+                return Binding(
+                    get: { showPhantoon },
+                    set: { _ in } // No-op setter, since we can't bind to a combined expression
+                )
             default:
                 return .constant(true)
         }
@@ -242,7 +248,7 @@ struct ItemGrid: View {
                 ItemRows(row: sixthItemRow, size: viewModel.itemSize)
             }
         }
-        .padding(.top, 10)
+        .padding(0)
         #else
         VStack {
             Spacer()
@@ -303,6 +309,8 @@ struct SeedOptions: View {
     @Environment(ViewModel.self) private var viewModel
 
     var body: some View {
+        @Bindable var viewModel = viewModel
+        
         #if os(macOS)
         VStack(spacing: viewModel.seedOptionVStackSpacing) {
             ForEach(viewModel.seedOptions, id: \.key) { seedOption in
@@ -312,12 +320,17 @@ struct SeedOptions: View {
             }
         }
         #else
-        VStack {
+        ScrollView {
+            VStack(spacing: 10) {
                 ForEach(viewModel.seedOptions, id: \.key) { seedOption in
                     if (seedOption.visible) {
                         OptionSelector(seedOption: seedOption)
                     }
                 }
+                OptionSelectorMini(key: "collectibleWallJump", title: "Collectible Wall Jump", colors: [0x066815, 0x5B0012], options: ["Vanilla", "Collectible"], selection: viewModel.collectibleWallJump ? 1 : 0, setting: $viewModel.collectibleWallJump)
+                OptionSelectorMini(key: "showOptionalPhantoonIcon", title: "Optional Phantoon Icon", colors: [0x808080], options: ["Disabled", "Enabled"], selection: viewModel.showOptionalPhantoonIcon ? 1 : 0, setting: $viewModel.showOptionalPhantoonIcon)
+                OptionSelectorMini(key: "showCanWallJumpIcon", title: "Can Wall Jump Icon", colors: [0x808080], options: ["Disabled", "Enabled"], selection: viewModel.showCanWallJumpIcon ? 1 : 0, setting: $viewModel.showCanWallJumpIcon)
+            }
         }
         .frame(alignment: .center)
         #endif

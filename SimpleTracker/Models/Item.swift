@@ -17,6 +17,16 @@ class EmptyItem: Item {
     }
 }
 
+class EyeItem: Item {
+    init(id: UUID = UUID()) {
+        super.init(id: id, key: "eye", name: "Planet Awake", offImage: "eyeoff")
+        self.collected = 1
+    }
+    
+    override func reset() {
+        collected = 1
+    }
+}
 
 class PhantoonItem: Item {
     init() {
@@ -26,6 +36,13 @@ class PhantoonItem: Item {
     
     override func reset() {
         collected = 1
+    }
+}
+
+class CanWallJumpItem: Item {
+    init() {
+        super.init(key: "canwalljump", name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false)
+        self.collected = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false) ? 0 : 1
     }
 }
 

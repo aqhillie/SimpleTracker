@@ -20,6 +20,8 @@ struct ResetTracker: View {
         Button(action: {
             viewModel.resetBosses()
             viewModel.resetItems()
+            viewModel.canWallJumpItem.collected = viewModel.collectibleWallJump ? 0 : 1
+            viewModel.wallJumpBootsItem.collected = viewModel.collectibleWallJump ? 0 : 1
             let message = [
                 "type": "cmd",
                 "key": "resetTracker",

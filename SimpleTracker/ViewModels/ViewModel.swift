@@ -30,6 +30,12 @@ class ViewModel {
     let seedOptionTitleFontSize: CGFloat
     let seedOptionSelectionFontSize: CGFloat
 
+    let wallJumpBootsItem: Item
+    let canWallJumpItem: Item
+    let planetAwakeItem: Item
+
+    let thirdItemRow: [Item]
+    
 #if os(macOS)
     var isWindowActive: Bool
     let rootVStackSpacing: CGFloat
@@ -37,25 +43,11 @@ class ViewModel {
     let bossVerticalSpacing: CGFloat
     let itemGridHorizontalSpacing: CGFloat
     let itemGridVerticalSpacing: CGFloat
-    let wallJumpBootsItem: Item
-    let canWallJumpItem: Item
-    let fifthItemRow: [Item] = [
-        Item(key: "plasma", name: "Plasma Beam"),
-        Item(key: "xray", name: "XRay Scope"),
-        EmptyItem(),
-        EmptyItem(),
-        Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
-    ]
+    let fifthItemRow: [Item]
     let sixthItemRowBosses: [Item]
     let sixthItemRowOthers: [Item]
     #else
-    let fifthItemRow: [Item] = [
-        Item(key: "plasma", name: "Plasma Beam"),
-        Item(key: "xray", name: "XRay Scope"),
-        Item(key: "eye", name: "Zebes Awake", offImage: "eyeoff"),
-        PhantoonItem(),
-        Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
-    ]
+    let fifthItemRow: [Item]
     #endif
 
     var bosses: [[Boss]]
@@ -71,12 +63,31 @@ class ViewModel {
     var collectibleWallJump: Bool {
         didSet {
             UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
+            canWallJumpItem.collected = collectibleWallJump ? 0 : 1
         }
     }
     
     var showEye: Bool {
         didSet {
             UserDefaults.standard.set(showEye, forKey: "showEye")
+        }
+    }
+
+    var showOptionalPhantoonIcon: Bool {
+        didSet {
+            UserDefaults.standard.set(showOptionalPhantoonIcon, forKey: "showOptionalPhantoonIcon")
+        }
+    }
+
+    var showCanWallJumpIcon: Bool {
+        didSet {
+            UserDefaults.standard.set(showCanWallJumpIcon, forKey: "showCanWallJumpIcon")
+        }
+    }
+
+    var showWallJumpBoots: Bool {
+        didSet {
+            UserDefaults.standard.set(showWallJumpBoots, forKey: "showWallJumpBoots")
         }
     }
     
@@ -95,7 +106,7 @@ class ViewModel {
         self.seedOptionSelectionFontSize = 22
         self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10
-        
+            
         #else
         self.isWindowActive = true
         self.bossSize = 65
@@ -110,11 +121,24 @@ class ViewModel {
         self.itemGridVerticalSpacing = 6
         self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10
+        
+        self.thirdItemRow = [
+            Item(key: "wave", name: "Wave Beam"),
+            EmptyItem(),
+            Item(key: "springball", name: "Spring Ball"),
+            Item(key: "speed", name: "Speed Booster"),
+            Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
+        ]
         #endif
         
         self.localMode = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
+        
+        // Variables to turn icons on/off (purely cosmetic not game settings)
         self.showEye = UserDefaults.standard.boolWithDefaultValue(forKey: "showEye", defaultValue: false)
+        self.showOptionalPhantoonIcon = UserDefaults.standard.boolWithDefaultValue(forKey: "showOptionalPhantoonIcon", defaultValue: false)
+        self.showCanWallJumpIcon = UserDefaults.standard.boolWithDefaultValue(forKey: "showCanWallJumpIcon", defaultValue: false)
+        self.showWallJumpBoots = UserDefaults.standard.boolWithDefaultValue(forKey: "showWallJumpBoots", defaultValue: UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false))
 
         self.bosses = [
             [],
@@ -153,28 +177,48 @@ class ViewModel {
         ]
 
         self.wallJumpBootsItem = Item(key: "walljump", name: "Wall Jump Boots")
+        self.canWallJumpItem = CanWallJumpItem()
+        self.planetAwakeItem = EyeItem()
 
-        #if os(macOS)
-        self.canWallJumpItem = Item(key: "canwalljump", name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false)
-        
         wallJumpBootsItem.linkedItem = canWallJumpItem
         canWallJumpItem.linkedItem = wallJumpBootsItem
-        
-        let eyeD = UUID()
-        
+
+        #if os(macOS)
+        self.fifthItemRow = [
+            Item(key: "plasma", name: "Plasma Beam"),
+            Item(key: "xray", name: "XRay Scope"),
+            EmptyItem(),
+            EmptyItem(),
+            Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+        ]
         self.sixthItemRowBosses = [
             EmptyItem(),
             EmptyItem(),
-            Item(id: eyeD, key: "eye", name: "Planet Awake", offImage: "eyeoff"),
+            planetAwakeItem,
             canWallJumpItem,
             EmptyItem()
         ]
         self.sixthItemRowOthers = [
             EmptyItem(),
-            Item(id: eyeD, key: "eye", name: "Planet Awake", offImage: "eyeoff"),
+            planetAwakeItem,
             PhantoonItem(),
             canWallJumpItem,
             EmptyItem()
+        ]
+        #else
+        self.thirdItemRow = [
+            Item(key: "wave", name: "Wave Beam"),
+            canWallJumpItem,
+            Item(key: "springball", name: "Spring Ball"),
+            Item(key: "speed", name: "Speed Booster"),
+            Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
+        ]
+        self.fifthItemRow = [
+            Item(key: "plasma", name: "Plasma Beam"),
+            Item(key: "xray", name: "XRay Scope"),
+            planetAwakeItem,
+            PhantoonItem(),
+            Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
         ]
         #endif
         
@@ -193,13 +237,7 @@ class ViewModel {
                 Item(key: "space", name: "Space Jump"),
                 Item(key: "super", name: "Super Missiles", maxValue: 10, multiplier: 5)
             ],
-            [
-                Item(key: "wave", name: "Wave Beam"),
-                EmptyItem(),
-                Item(key: "springball", name: "Spring Ball"),
-                Item(key: "speed", name: "Speed Booster"),
-                Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
-            ],
+            thirdItemRow,
             [
                 Item(key: "spazer", name: "Spazer"),
                 Item(key: "grapple", name: "Grapple Beam"),

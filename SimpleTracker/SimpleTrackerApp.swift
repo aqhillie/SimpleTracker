@@ -25,6 +25,8 @@ struct SimpleTrackerApp: App {
     func resetTracker() {
         viewModel.resetBosses()
         viewModel.resetItems()
+        viewModel.canWallJumpItem.collected = viewModel.collectibleWallJump ? 0 : 1
+        viewModel.wallJumpBootsItem.collected = viewModel.collectibleWallJump ? 0 : 1
     }
     
     #if os(macOS)
@@ -63,7 +65,8 @@ struct SimpleTrackerApp: App {
     
     struct settingsMenu: View {
         @Environment(ViewModel.self) private var viewModel
-        
+        let pc: PeerConnection
+
         var body: some View {
             ForEach(viewModel.seedOptions, id: \.key) { seedOption in
                 Picker(seedOption.title, selection: Binding(
@@ -77,7 +80,15 @@ struct SimpleTrackerApp: App {
             }
             Picker("Collectible Wall Jump", selection: Binding(
                 get: {viewModel.collectibleWallJump},
-                set: {viewModel.collectibleWallJump = $0 })) {
+                set: {
+                    viewModel.collectibleWallJump = $0
+                    let message = [
+                        "type": "cmd",
+                        "key": "collectibleWallJump",
+                        "value": $0
+                    ]
+                    pc.sendMessage(message)
+                })) {
                 Text("Vanilla")
                     .tag(false)
                 Text("Collectible")
@@ -121,16 +132,46 @@ struct SimpleTrackerApp: App {
                 .keyboardShortcut("R", modifiers: [.command])
             }
             CommandGroup(replacing: .sidebar) {
+                Button("\(viewModel.showWallJumpBoots ? "Hide" : "Show") Wall Jump Boots") {
+                    viewModel.showWallJumpBoots.toggle()
+                    let message = [
+                        "type": "cmd",
+                        "key": "showWallJumpBoots",
+                        "value": viewModel.showWallJumpBoots
+                    ]
+                    peerConnection.sendMessage(message)
+                }
                 Button("\(viewModel.showEye ? "Hide" : "Show") Planet Awake Status") {
                     viewModel.showEye.toggle()
+                    let message = [
+                        "type": "cmd",
+                        "key": "showEye",
+                        "value": viewModel.showEye
+                    ]
+                    peerConnection.sendMessage(message)
                 }
-                Button("\(viewModel.collectibleWallJump ? "Hide" : "Show") Wall Jump Boots") {
-                    viewModel.collectibleWallJump.toggle()
+                Button("\(viewModel.showOptionalPhantoonIcon ? "Hide" : "Show") Optional Phantoon Icon") {
+                    viewModel.showOptionalPhantoonIcon.toggle()
+                    let message = [
+                        "type": "cmd",
+                        "key": "showOptionalPhantoonIcon",
+                        "value": viewModel.showOptionalPhantoonIcon
+                    ]
+                    peerConnection.sendMessage(message)
+                }
+                Button("\(viewModel.showCanWallJumpIcon ? "Hide" : "Show") Can Wall Jump Icon") {
+                    viewModel.showCanWallJumpIcon.toggle()
+                    let message = [
+                        "type": "cmd",
+                        "key": "showCanWallJumpIcon",
+                        "value": viewModel.showCanWallJumpIcon
+                    ]
+                    peerConnection.sendMessage(message)
                 }
                 Divider()
             }
             CommandMenu("Map Rando Settings") {
-                settingsMenu()
+                settingsMenu(pc: peerConnection)
                     .environment(viewModel)
             }
         }

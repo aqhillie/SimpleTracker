@@ -42,7 +42,7 @@ struct BossButton: View {
                             peerConnection.sendMessage(message)
                         }
                 )
-                .modifier(Appearance(type: .boss, isActive: boss.isDead() && deadImage == ""))
+                .modifier(Appearance(type: .boss, isActive: boss.isDead()))
         } else {
             Rectangle()
                 .fill(Color.black)

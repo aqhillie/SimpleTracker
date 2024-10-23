@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-struct ToggleCollectibleWallJump: View {
+struct ToggleEye: View {
     @Environment(ViewModel.self) private var viewModel
+    @Environment(PeerConnection.self) private var peerConnection
     let size: CGFloat
     
     init(size: CGFloat = 32) {
@@ -17,16 +18,22 @@ struct ToggleCollectibleWallJump: View {
 
     var body: some View {
         Button(action: {
-            viewModel.collectibleWallJump.toggle()
+            viewModel.showEye.toggle()
+            let message = [
+                "type": "cmd",
+                "key": "showEye",
+                "value": viewModel.showEye
+            ]
+            peerConnection.sendMessage(message)
         }) {
             ZStack {
-                Image("walljump")
+                Image("eye")
                     .resizable()
                     .frame(width: size, height: size)
                     .saturation(0)
                     .brightness(0.4)
                 Slash(size: size)
-                    .opacity(viewModel.collectibleWallJump ? 0 : 1)
+                    .opacity(viewModel.showEye ? 0 : 1)
             }
         }
         #if os(macOS)

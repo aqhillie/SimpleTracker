@@ -1,5 +1,5 @@
 //
-//  RemoteControl.swift
+//  PeerConnection.swift
 //  SimpleTracker
 //
 //  Created by Alex Quintana on 10/19/24.
@@ -92,12 +92,15 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         }
     }
     
-    #if os(macOS)
+    #if os(iOS)
     func sendSettings() {
         let message = [
             "type": "cmd",
             "key": "syncSettings",
             "value": [
+                "showOptionalPhantoonIcon": viewModel?.showOptionalPhantoonIcon as Any,
+                "showWallJumpBoots": viewModel?.showWallJumpBoots as Any,
+                "showCanWallJumpIcon": viewModel?.showCanWallJumpIcon as Any,
                 "collectibleWallJump": viewModel?.collectibleWallJump as Any,
                 "showEye": viewModel?.showEye as Any,
                 "objectives": viewModel?.seedOptions[0].selection as Any,
@@ -126,9 +129,21 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                         viewModel?.updateItem(from: json)
                     case "cmd":
                         switch(key) {
+                            case "showOptionalPhantoonIcon":
+                            viewModel?.showOptionalPhantoonIcon = value as! Bool
+                            case "showCanWallJumpIcon":
+                            viewModel?.showCanWallJumpIcon = value as! Bool
+                            case "showEye":
+                                viewModel?.showEye = value as! Bool
+                            case "showWallJumpBoots":
+                                viewModel?.showWallJumpBoots = value as! Bool
+                            case "collectibleWallJump":
+                                viewModel?.collectibleWallJump = value as! Bool
                             case "resetTracker":
                                 viewModel?.resetBosses()
                                 viewModel?.resetItems()
+                                viewModel?.canWallJumpItem.collected = viewModel?.collectibleWallJump ?? false ? 0 : 1
+                                viewModel?.wallJumpBootsItem.collected = viewModel?.collectibleWallJump ?? false ? 0 : 1
                             case "objective":
                                 viewModel?.seedOptions[0].selection = value as! Int
                             case "difficulty":
@@ -139,10 +154,19 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                                 viewModel?.seedOptions[3].selection = value as! Int
                             case "mapLayout":
                                 viewModel?.seedOptions[4].selection = value as! Int
-                            #if os(iOS)
+                            #if os(macOS)
                             case "syncSettings":
                                 if let settings = value as? [String: Any] {
-                                    // Safely unwrap each value and assign it to the viewModel
+                                    if let showOptionalPhantoonIcon = settings["showOptionalPhantoonIcon"] as? Bool {
+                                        print("setting showOptionalPhantoonIcon from network")
+                                        viewModel?.showOptionalPhantoonIcon = showOptionalPhantoonIcon
+                                    }
+                                    if let showCanWallJumpIcon = settings["showCanWallJumpIcon"] as? Bool {
+                                        viewModel?.showCanWallJumpIcon = showCanWallJumpIcon
+                                    }
+                                    if let showWallJumpBoots = settings["showWallJumpBoots"] as? Bool {
+                                        viewModel?.showWallJumpBoots = showWallJumpBoots
+                                    }
                                     if let collectibleWallJump = settings["collectibleWallJump"] as? Bool {
                                         viewModel?.collectibleWallJump = collectibleWallJump
                                     }
@@ -184,7 +208,7 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         switch state {
         case .connected:
             print("Connected to peer: \(peerID.displayName)")
-            #if os(macOS)
+            #if os(iOS)
             sendSettings()
             #endif
         case .connecting:
