@@ -49,15 +49,17 @@ struct OptionSelector: View {
             .gesture(
                 TapGesture()
                     .onEnded {
-                        let selection = (seedOption.selection + 1) % seedOption.options.count
-                        seedOption.update(selection)
-                        let message = [
-                            "type": "cmd",
-                            "key": seedOption.key,
-                            "value": seedOption.selection
-                        ] as [String: Any]
-                        
-                        peerConnection.sendMessage(message)
+                        if (!viewModel.lockSettings) {
+                            let selection = (seedOption.selection + 1) % seedOption.options.count
+                            seedOption.update(selection)
+                            let message = [
+                                "type": "cmd",
+                                "key": seedOption.key,
+                                "value": seedOption.selection
+                            ] as [String: Any]
+                            
+                            peerConnection.sendMessage(message)
+                        }
                     }
             )
         #else
@@ -76,18 +78,21 @@ struct OptionSelector: View {
             Spacer()
                 .frame(minHeight: 0, maxHeight: 20)
         }
+        .opacity(viewModel.lockSettings ? viewModel.lockedSettingOpacity : 1)
             .gesture(
                 TapGesture()
                     .onEnded {
-                        let selection = (seedOption.selection + 1) % seedOption.options.count
-                        seedOption.update(selection)
-                        let message = [
-                            "type": "cmd",
-                            "key": seedOption.key,
-                            "value": seedOption.selection
-                        ] as [String: Any]
-                        
-                        peerConnection.sendMessage(message)
+                        if (!viewModel.lockSettings) {
+                            let selection = (seedOption.selection + 1) % seedOption.options.count
+                            seedOption.update(selection)
+                            let message = [
+                                "type": "cmd",
+                                "key": seedOption.key,
+                                "value": seedOption.selection
+                            ] as [String: Any]
+                            
+                            peerConnection.sendMessage(message)
+                        }
                     }
             )
         #endif

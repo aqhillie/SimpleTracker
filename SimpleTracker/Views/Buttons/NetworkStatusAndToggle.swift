@@ -32,7 +32,9 @@ struct NetworkStatusAndToggle: View {
             Image(systemName: viewModel.localMode ? "wifi.slash" : "wifi")
                     .font(.system(size: size))
                     .foregroundColor(peerConnection.hasConnectedPeers ? .green : .white )
+                    .opacity(viewModel.lockSettings ? viewModel.lockedSettingOpacity : 1)
         }
+        .disabled(viewModel.lockSettings)
         #if os(macOS)
         .buttonStyle(PlainButtonStyle())
         .focusable(false)

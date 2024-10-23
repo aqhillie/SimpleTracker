@@ -18,22 +18,33 @@ struct ResetTracker: View {
 
     var body: some View {
         Button(action: {
-            viewModel.resetBosses()
-            viewModel.resetItems()
-            viewModel.canWallJumpItem.collected = viewModel.collectibleWallJump ? 0 : 1
-            viewModel.wallJumpBootsItem.collected = viewModel.collectibleWallJump ? 0 : 1
-            let message = [
-                "type": "cmd",
-                "key": "resetTracker",
-                "value": ""
-            ]
-            peerConnection.sendMessage(message)
+            if (viewModel.lockSettings) {
+                return
+            } else {
+                viewModel.resetBosses()
+                viewModel.resetItems()
+                viewModel.canWallJumpItem.collected = viewModel.collectibleWallJump ? 0 : 1
+                viewModel.wallJumpBootsItem.collected = viewModel.collectibleWallJump ? 0 : 1
+                let message = [
+                    "type": "cmd",
+                    "key": "resetTracker",
+                    "value": ""
+                ]
+                peerConnection.sendMessage(message)
+            }
         }) {
+            #if os(macOS)
             Image(systemName: "arrow.clockwise")
                 .font(.system(size: size)) // Optional: Adjust the size
                 .foregroundColor(.white)  // Optional: Change the color
+            #elseif os(iOS)
+            Image(systemName: viewModel.lockSettings ? "arrow.trianglehead.2.clockwise.rotate.90" : "arrow.clockwise")
+                .font(.system(size: size)) // Optional: Adjust the size
+                .foregroundColor(.white)  // Optional: Change the color
+            #endif
         }
         #if os(macOS)
+        .disabled(viewModel.lockSettings)
         .buttonStyle(PlainButtonStyle())
         .focusable(false)
         #endif

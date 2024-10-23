@@ -29,6 +29,7 @@ class ViewModel {
     let seedOptionsWidth: CGFloat
     let seedOptionTitleFontSize: CGFloat
     let seedOptionSelectionFontSize: CGFloat
+    let lockedSettingOpacity: CGFloat
 
     let wallJumpBootsItem: Item
     let canWallJumpItem: Item
@@ -54,6 +55,8 @@ class ViewModel {
     var items: [[Item]]
     var seedOptions: [SeedOption]
 
+    var lockSettings: Bool = false
+    
     var localMode: Bool {
         didSet {
             UserDefaults.standard.set(localMode, forKey: "localMode")
@@ -130,7 +133,9 @@ class ViewModel {
             Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
         ]
         #endif
-        
+
+        self.lockedSettingOpacity = 0.3
+
         self.localMode = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
         

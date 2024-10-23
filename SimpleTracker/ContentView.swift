@@ -85,6 +85,7 @@ struct TitleBar: View {
             HStack {
                 Spacer()
                 ResetTracker(size: 15)
+                LockSettings(size: 15)
                 ToggleCollectibleWallJump(size: 15)
                 ToggleEye(size: 15)
                 NetworkStatusAndToggle(size: 15)
@@ -97,43 +98,6 @@ struct TitleBar: View {
     }
 }
 #endif
-
-//#if os(macOS)
-//struct SeedName: View {
-//    @State var editing = false;
-//    @Environment(ViewModel.self) private var viewModel
-//
-//        
-//    var body: some View {
-//        @Bindable var appSettings = appSettings
-//        
-//        if (appSettings.showSeedName) {
-//            if (editing) {
-//                TextField("set seed name", text: $appSettings.seedName)
-//                    .background(.black)
-//                    .foregroundColor(.white)
-//                    .multilineTextAlignment(.center)
-//                    .font(.custom("SuperMetroidSNES", size: 28))
-//                    .frame(maxWidth: .infinity, alignment: .top)
-//                    .onSubmit {
-//                        AppSettings.defaults.set(appSettings.seedName, forKey: "seedName")
-//                        $editing.wrappedValue.toggle()
-//                    }
-//            } else {
-//                Text(appSettings.seedName)
-//                    .background(.black)
-//                    .foregroundColor(.white)
-//                    .multilineTextAlignment(.center)
-//                    .font(.custom("SuperMetroidSNES", size: 28))
-//                    .frame(maxWidth: .infinity, alignment: .top)
-//                    .onTapGesture {
-//                        $editing.wrappedValue.toggle()
-//                    }
-//            }
-//        }
-//    }
-//}
-//#endif
 
 struct BossLayout: View {
     let bosses: [Boss]
@@ -352,6 +316,8 @@ struct MobileOptions: View {
                 Spacer()
                 ResetTracker()
                 Spacer()
+                LockSettings()
+                Spacer()
                 ToggleCollectibleWallJump()
                 Spacer()
                 ToggleEye()
@@ -364,6 +330,8 @@ struct MobileOptions: View {
             HStack {
                 Spacer()
                 ResetTracker()
+                Spacer()
+                LockSettings()
                 Spacer()
                 ToggleCollectibleWallJump()
                 Spacer()

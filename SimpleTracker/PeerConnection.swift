@@ -129,10 +129,12 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                         viewModel?.updateItem(from: json)
                     case "cmd":
                         switch(key) {
+                            case "lockSettings":
+                                viewModel?.lockSettings = value as! Bool
                             case "showOptionalPhantoonIcon":
-                            viewModel?.showOptionalPhantoonIcon = value as! Bool
+                                viewModel?.showOptionalPhantoonIcon = value as! Bool
                             case "showCanWallJumpIcon":
-                            viewModel?.showCanWallJumpIcon = value as! Bool
+                                viewModel?.showCanWallJumpIcon = value as! Bool
                             case "showEye":
                                 viewModel?.showEye = value as! Bool
                             case "showWallJumpBoots":

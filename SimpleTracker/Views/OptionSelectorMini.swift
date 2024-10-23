@@ -53,7 +53,9 @@ struct OptionSelectorMini: View {
             .gesture(
                 TapGesture()
                     .onEnded {
-                        selection = (selection + 1) % options.count
+                        if (!viewModel.lockSettings) {
+                            selection = (selection + 1) % options.count
+                        }
                     }
             )
         #else
@@ -72,10 +74,13 @@ struct OptionSelectorMini: View {
             Spacer()
                 .frame(minHeight: 0, maxHeight: 20)
         }
+        .opacity(viewModel.lockSettings ? viewModel.lockedSettingOpacity : 1)
             .gesture(
                 TapGesture()
                     .onEnded {
-                        selection = (selection + 1) % options.count
+                        if (!viewModel.lockSettings) {
+                            selection = (selection + 1) % options.count
+                        }
                     }
             )
         #endif

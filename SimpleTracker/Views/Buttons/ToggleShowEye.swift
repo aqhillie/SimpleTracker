@@ -35,7 +35,9 @@ struct ToggleEye: View {
                 Slash(size: size)
                     .opacity(viewModel.showEye ? 0 : 1)
             }
+            .opacity(viewModel.lockSettings ? viewModel.lockedSettingOpacity : 1)
         }
+        .disabled(viewModel.lockSettings)
         #if os(macOS)
         .buttonStyle(PlainButtonStyle())
         .focusable(false)
