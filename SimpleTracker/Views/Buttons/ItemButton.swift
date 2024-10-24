@@ -45,7 +45,7 @@ struct ItemButton: View {
                             }
                     )
                     .gesture(
-                        LongPressGesture()
+                        LongPressGesture(minimumDuration: viewModel.longPressDelay)
                             .onEnded { _ in
                                 item.decrease()
                                 let message = [

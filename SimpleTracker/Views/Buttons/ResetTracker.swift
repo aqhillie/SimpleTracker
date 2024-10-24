@@ -19,7 +19,9 @@ struct ResetTracker: View {
     var body: some View {
         Button(action: {
             if (viewModel.lockSettings) {
-                return
+                #if os(iOS)
+                peerConnection.syncToDesktop()
+                #endif
             } else {
                 viewModel.resetBosses()
                 viewModel.resetItems()
@@ -47,6 +49,13 @@ struct ResetTracker: View {
         .disabled(viewModel.lockSettings)
         .buttonStyle(PlainButtonStyle())
         .focusable(false)
+        #elseif (iOS)
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: viewModel.longPressDelay)
+                .onEnded { _ in
+                    peerConnection.syncToDesktop()
+                }
+        )
         #endif
     }
 }

@@ -34,6 +34,7 @@ class ViewModel {
     let wallJumpBootsItem: Item
     let canWallJumpItem: Item
     let planetAwakeItem: Item
+    let optionalPhantoon: Item
 
     let thirdItemRow: [Item]
     
@@ -56,6 +57,7 @@ class ViewModel {
     var seedOptions: [SeedOption]
 
     var lockSettings: Bool = false
+    var longPressDelay: Double
     
     var localMode: Bool {
         didSet {
@@ -98,9 +100,6 @@ class ViewModel {
         #if os(iOS)
         self.deviceWidth = UIScreen.main.bounds.width
         self.deviceHeight = UIScreen.main.bounds.height
-        #if DEBUG
-        print(self.deviceHeight)
-        #endif
 
         self.bossSize = self.deviceWidth * 0.18
         self.itemSize = self.deviceWidth * 0.15
@@ -120,7 +119,7 @@ class ViewModel {
         self.bossVerticalSpacing = 30
         self.rootVStackSpacing = 25
         self.rootHStackSpacing = 25
-        self.itemGridHorizontalSpacing = 12
+        self.itemGridHorizontalSpacing = 5
         self.itemGridVerticalSpacing = 6
         self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10
@@ -135,6 +134,7 @@ class ViewModel {
         #endif
 
         self.lockedSettingOpacity = 0.3
+        self.longPressDelay = 0.2
 
         self.localMode = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
@@ -184,6 +184,7 @@ class ViewModel {
         self.wallJumpBootsItem = Item(key: "walljump", name: "Wall Jump Boots")
         self.canWallJumpItem = CanWallJumpItem()
         self.planetAwakeItem = EyeItem()
+        self.optionalPhantoon = PhantoonItem()
 
         wallJumpBootsItem.linkedItem = canWallJumpItem
         canWallJumpItem.linkedItem = wallJumpBootsItem
@@ -206,7 +207,7 @@ class ViewModel {
         self.sixthItemRowOthers = [
             EmptyItem(),
             planetAwakeItem,
-            PhantoonItem(),
+            optionalPhantoon,
             canWallJumpItem,
             EmptyItem()
         ]
@@ -375,7 +376,7 @@ class ViewModel {
         #endif
         for itemRow in items {
             for item in itemRow {
-                if item.key == key && item.collected != value{
+                if item.key == key && item.collected != value {
                     item.collected = value
                     return
                 }

@@ -13,6 +13,12 @@ let appName:String = (Bundle.main.infoDictionary!["CFBundleName"] as? String)!
 let appVersion:String = (Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String)!
 let buildNumber = Bundle.main.infoDictionary!["CFBundleVersion"] as? String
 
+func debug(_ items: Any...) {
+    #if DEBUG
+    print(items)
+    #endif
+}
+
 @main
 struct SimpleTrackerApp: App {
     @State var viewModel = ViewModel()

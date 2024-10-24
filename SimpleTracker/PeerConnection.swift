@@ -75,25 +75,26 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
            let jsonString = String(data: jsonData, encoding: .utf8) {
             
             if mcSession.connectedPeers.isEmpty {
-                print("No connected peers. Message not sent: \(jsonString)")
+                debug("No connected peers. Message not sent: \(jsonString)")
                 return
             }
 
             if let messageData = jsonString.data(using: .utf8) {
                 do {
                     try mcSession.send(messageData, toPeers: mcSession.connectedPeers, with: .reliable)
-                    print("Message sent: \(jsonString)")
+                    debug("Message sent: \(jsonString)")
                 } catch {
-                    print("Error sending message: \(error)")
+                    debug("Error sending message: \(error)")
                 }
             }
         } else {
-            print("Error converting message to JSON")
+            debug("Error converting message to JSON")
         }
     }
     
     #if os(iOS)
-    func sendSettings() {
+    func syncToDesktop() {
+        // sync settings to desktop
         let message = [
             "type": "cmd",
             "key": "syncSettings",
@@ -111,6 +112,43 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
             ]
         ] as [String : Any]
         sendMessage(message)
+
+        if let viewModel {
+            // sync boss statuses to desktop
+            for bosses in viewModel.bosses {
+                for boss in bosses {
+                    let message = [
+                        "type": "boss",
+                        "key": boss.key,
+                        "value": boss.isDead()
+                    ] as [String : Any]
+                    sendMessage(message)
+                }
+            }
+            
+            // sync item statuses to desktop
+            for itemRow in viewModel.items {
+                for item in itemRow {
+                    let message = [
+                        "type": "item",
+                        "key": item.key,
+                        "value": item.collected
+                    ] as [String : Any]
+                    sendMessage(message)
+                }
+            }
+
+            // update sixth row items
+            let message = [
+                "type": "cmd",
+                "key": "updateStragglers",
+                "value": [
+                    "eye": viewModel.planetAwakeItem.collected,
+                    "phantoon": viewModel.optionalPhantoon.collected
+                ]
+            ] as [String : Any]
+            sendMessage(message)
+        }
     }
     #endif
     
@@ -120,7 +158,7 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
             if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
                 // Now you can access your data as needed
                 if let type = json["type"] as? String, let key = json["key"] as? String, let value = json["value"] {
-                    print("Received message: type = \(type) key = \(key), value = \(value)")
+                    debug("Received message: type = \(type) key = \(key), value = \(value)")
 
                     switch(type) {
                     case "boss":
@@ -157,10 +195,20 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                             case "mapLayout":
                                 viewModel?.seedOptions[4].selection = value as! Int
                             #if os(macOS)
+                            case "updateStragglers":
+                                if let viewModel = viewModel {
+                                    let values = value as! [String: Int]
+                                    if let eye = values["eye"] {
+                                        viewModel.planetAwakeItem.collected = eye
+                                    }
+                                    if let phantoon = values["phantoon"] {
+                                        viewModel.optionalPhantoon.collected = phantoon
+                                    }
+                                }
                             case "syncSettings":
                                 if let settings = value as? [String: Any] {
                                     if let showOptionalPhantoonIcon = settings["showOptionalPhantoonIcon"] as? Bool {
-                                        print("setting showOptionalPhantoonIcon from network")
+                                        debug("setting showOptionalPhantoonIcon from network")
                                         viewModel?.showOptionalPhantoonIcon = showOptionalPhantoonIcon
                                     }
                                     if let showCanWallJumpIcon = settings["showCanWallJumpIcon"] as? Bool {
@@ -202,22 +250,22 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                 }
             }
         } catch {
-            print("Error decoding received data: \(error)")
+            debug("Error decoding received data: \(error)")
         }
     }
 
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state {
         case .connected:
-            print("Connected to peer: \(peerID.displayName)")
+            debug("Connected to peer: \(peerID.displayName)")
             #if os(iOS)
-            sendSettings()
+            syncToDesktop()
             #endif
         case .connecting:
-            print("Connecting to peer: \(peerID.displayName)")
+            debug("Connecting to peer: \(peerID.displayName)")
         case .notConnected:
-            print("Disconnected from peer: \(peerID.displayName)")
-            print(hasConnectedPeers)
+            debug("Disconnected from peer: \(peerID.displayName)")
+            debug(hasConnectedPeers)
         @unknown default:
             fatalError("Unknown state for peer: \(peerID.displayName)")
         }
@@ -235,22 +283,22 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     }
 
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-        print("Failed to start advertising: \(error.localizedDescription)")
+        debug("Failed to start advertising: \(error.localizedDescription)")
     }
     
     // Required methods for MCNearbyServiceBrowserDelegate
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        print("Found peer: \(peerID.displayName)")
+        debug("Found peer: \(peerID.displayName)")
         // Invite the peer to join the session
         mcBrowser.invitePeer(peerID, to: mcSession, withContext: nil, timeout: 10)
     }
 
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        print("Lost peer: \(peerID.displayName)")
+        debug("Lost peer: \(peerID.displayName)")
     }
 
     func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
-        print("Failed to start browsing for peers: \(error.localizedDescription)")
+        debug("Failed to start browsing for peers: \(error.localizedDescription)")
     }
 
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {}

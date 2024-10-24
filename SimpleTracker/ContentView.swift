@@ -132,7 +132,7 @@ struct Bosses: View {
         VStack(spacing: viewModel.bossVerticalSpacing) {
             BossLayout(bosses: viewModel.bosses[viewModel.seedOptions[0].selection], size: viewModel.bossSize)
         }
-        .padding(0)
+        .padding(.top, viewModel.bosses[viewModel.seedOptions[0].selection].count > 4 ? 0 : 35)
         #else
         if (g.size.width > g.size.height) {
             VStack {
@@ -153,6 +153,13 @@ struct ItemRows: View {
     @Environment(ViewModel.self) private var viewModel
     let row: [Item]
     let size: CGFloat
+    let firstRow: Bool
+    
+    init(row: [Item], size: CGFloat, firstRow: Bool = false) {
+        self.row = row
+        self.size = size
+        self.firstRow = firstRow
+    }
 
     func isItemActive(item: Item, viewModel: ViewModel) -> Binding<Bool> {
         @Bindable var viewModel = viewModel
@@ -176,13 +183,11 @@ struct ItemRows: View {
     }
 
     var body: some View {
-        #if os(iOS)
-//        Spacer()
-        #endif
-        ForEach(row, id: \.id) { item in
-            ItemButton(item: item, size: size, isActive: isItemActive(item: item, viewModel: viewModel))
-            #if os(iOS)
-//            Spacer()
+        ForEach(0..<5) { index in
+            ItemButton(item: row[index], size: size, isActive: isItemActive(item: row[index], viewModel: viewModel))
+            #if os(macOS)
+                .padding(.top, firstRow && index == row.count - 1 ? 20 : 0)
+                .padding(.leading, index == row.count - 1 ? 15 : 0)
             #endif
         }
     }
@@ -203,14 +208,15 @@ struct ItemGrid: View {
         #if os(macOS)
         let sixthItemRow = viewModel.seedOptions[0].selection == 1 ? viewModel.sixthItemRowBosses : viewModel.sixthItemRowOthers
         VStack(spacing: viewModel.itemGridVerticalSpacing) {
-            ForEach(viewModel.items, id: \.self) { row in
+            ForEach(0..<5) { index in
                 HStack(spacing: viewModel.itemGridHorizontalSpacing) {
-                    ItemRows(row: row, size: viewModel.itemSize)
+                    ItemRows(row: viewModel.items[index], size: viewModel.itemSize, firstRow: index == 0)
                 }
             }
             HStack(spacing: viewModel.itemGridHorizontalSpacing) {
                 ItemRows(row: sixthItemRow, size: viewModel.itemSize)
             }
+            .padding(.top, 20)
         }
         .padding(0)
         #else
