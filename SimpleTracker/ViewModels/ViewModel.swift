@@ -35,10 +35,8 @@ class ViewModel {
     let canWallJumpItem: Item
     let planetAwakeItem: Item
     let optionalPhantoon: Item
-
-    let thirdItemRow: [Item]
     
-#if os(macOS)
+    #if os(macOS)
     var isWindowActive: Bool
     let rootVStackSpacing: CGFloat
     let rootHStackSpacing: CGFloat
@@ -48,8 +46,6 @@ class ViewModel {
     let fifthItemRow: [Item]
     let sixthItemRowBosses: [Item]
     let sixthItemRowOthers: [Item]
-    #else
-    let fifthItemRow: [Item]
     #endif
 
     var bosses: [[Boss]]
@@ -109,7 +105,7 @@ class ViewModel {
         self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10
             
-        #else
+        #elseif os(macOS)
         self.isWindowActive = true
         self.bossSize = 65
         self.itemSize = 60
@@ -119,18 +115,10 @@ class ViewModel {
         self.bossVerticalSpacing = 30
         self.rootVStackSpacing = 25
         self.rootHStackSpacing = 25
-        self.itemGridHorizontalSpacing = 5
-        self.itemGridVerticalSpacing = 6
+        self.itemGridHorizontalSpacing = 7
+        self.itemGridVerticalSpacing = 3
         self.seedOptionVStackSpacing = 20
-        self.seedOptionsSpacing = 10
-        
-        self.thirdItemRow = [
-            Item(key: "wave", name: "Wave Beam"),
-            EmptyItem(),
-            Item(key: "springball", name: "Spring Ball"),
-            Item(key: "speed", name: "Speed Booster"),
-            Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
-        ]
+        self.seedOptionsSpacing = 10        
         #endif
 
         self.lockedSettingOpacity = 0.3
@@ -190,13 +178,6 @@ class ViewModel {
         canWallJumpItem.linkedItem = wallJumpBootsItem
 
         #if os(macOS)
-        self.fifthItemRow = [
-            Item(key: "plasma", name: "Plasma Beam"),
-            Item(key: "xray", name: "XRay Scope"),
-            EmptyItem(),
-            EmptyItem(),
-            Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
-        ]
         self.sixthItemRowBosses = [
             EmptyItem(),
             EmptyItem(),
@@ -211,23 +192,55 @@ class ViewModel {
             canWallJumpItem,
             EmptyItem()
         ]
-        #else
-        self.thirdItemRow = [
-            Item(key: "wave", name: "Wave Beam"),
-            canWallJumpItem,
-            Item(key: "springball", name: "Spring Ball"),
-            Item(key: "speed", name: "Speed Booster"),
-            Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
-        ]
+        #endif
+        
+        #if os(macOS)
         self.fifthItemRow = [
             Item(key: "plasma", name: "Plasma Beam"),
             Item(key: "xray", name: "XRay Scope"),
-            planetAwakeItem,
-            PhantoonItem(),
+            EmptyItem(),
+            EmptyItem(),
             Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
         ]
-        #endif
-        
+
+        self.items = [
+            [
+                Item(key: "charge", name: "Charge Beam"),
+                Item(key: "ice", name: "Ice Beam"),
+                Item(key: "wave", name: "Wave Beam"),
+                Item(key: "spazer", name: "Spazer"),
+                Item(key: "plasma", name: "Plasma Beam")
+            ],
+            [
+                Item(key: "varia", name: "Varia Suit"),
+                Item(key: "gravity", name: "Gravity Suit"),
+                EmptyItem(),
+                Item(key: "grapple", name: "Grapple Beam"),
+                Item(key: "xray", name: "XRay Scope")
+            ],
+            [
+                Item(key: "morph", name: "Morphing Ball"),
+                Item(key: "bomb", name: "Morph Ball Bombs"),
+                Item(key: "springball", name: "Spring Ball"),
+                Item(key: "screw", name: "Screw Attack"),
+                EmptyItem()
+            ],
+            [
+                Item(key: "hijump", name: "HiJump Boots"),
+                Item(key: "space", name: "Space Jump"),
+                Item(key: "speed", name: "Speed Booster"),
+                wallJumpBootsItem,
+                EmptyItem()
+            ],
+            [
+                Item(key: "missile", name: "Missiles", maxValue: 46, multiplier: 5),
+                Item(key: "super", name: "Super Missiles", maxValue: 10, multiplier: 5),
+                Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5),
+                Item(key: "etank", name: "Energy Tanks", maxValue: 14),
+                Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+            ]
+        ]
+        #elseif os(iOS)
         self.items = [
             [
                 Item(key: "charge", name: "Charge Beam"),
@@ -243,7 +256,13 @@ class ViewModel {
                 Item(key: "space", name: "Space Jump"),
                 Item(key: "super", name: "Super Missiles", maxValue: 10, multiplier: 5)
             ],
-            thirdItemRow,
+            [
+                Item(key: "wave", name: "Wave Beam"),
+                canWallJumpItem,
+                Item(key: "springball", name: "Spring Ball"),
+                Item(key: "speed", name: "Speed Booster"),
+                Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
+            ],
             [
                 Item(key: "spazer", name: "Spazer"),
                 Item(key: "grapple", name: "Grapple Beam"),
@@ -251,8 +270,15 @@ class ViewModel {
                 wallJumpBootsItem,
                 Item(key: "etank", name: "Energy Tanks", maxValue: 14)
             ],
-            fifthItemRow
+            [
+                Item(key: "plasma", name: "Plasma Beam"),
+                Item(key: "xray", name: "XRay Scope"),
+                planetAwakeItem,
+                PhantoonItem(),
+                Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+            ]
         ]
+        #endif
         
         self.seedOptions = [
             SeedOption(

@@ -56,6 +56,9 @@ struct ItemButton: View {
                                 peerConnection.sendMessage(message)
                             }
                     )
+                    .onAppear {
+                        print("Icon for item '\(item.key)' appeared")
+                    }
                 if item.isConsumable && item.getCount() > 0 {
                     CountOverlay(count: String(describing: item.getCount()))
                         .frame(alignment: .bottomTrailing)
@@ -65,6 +68,9 @@ struct ItemButton: View {
             Rectangle()
                 .fill(Color.black)
                 .frame(width: size, height: size)
+                .onAppear {
+                    print("Empty rectangle for item '\(item.key) appeared")
+                }
         }
     }
 }

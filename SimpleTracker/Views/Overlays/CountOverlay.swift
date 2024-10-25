@@ -21,5 +21,8 @@ struct CountOverlay: View {
             .frame(alignment: .center)
             .multilineTextAlignment(.trailing)
             .allowsHitTesting(false)
+            .onAppear {
+                print("count overlay updated to \(count)")
+            }
     }
 }

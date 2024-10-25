@@ -20,10 +20,12 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     private var mcAdvertiser: MCNearbyServiceAdvertiser!
     private var mcBrowser: MCNearbyServiceBrowser!
         
-    var viewModel: ViewModel?
+    var viewModel: ViewModel
     var hasConnectedPeers: Bool = false
     
-    override init() {
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+        
         #if os(iOS)
         let deviceName = UIDevice.current.name
         #elseif os(macOS)
@@ -95,60 +97,58 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     #if os(iOS)
     func syncToDesktop() {
         // sync settings to desktop
-        let message = [
+        var message = [
             "type": "cmd",
             "key": "syncSettings",
             "value": [
-                "showOptionalPhantoonIcon": viewModel?.showOptionalPhantoonIcon as Any,
-                "showWallJumpBoots": viewModel?.showWallJumpBoots as Any,
-                "showCanWallJumpIcon": viewModel?.showCanWallJumpIcon as Any,
-                "collectibleWallJump": viewModel?.collectibleWallJump as Any,
-                "showEye": viewModel?.showEye as Any,
-                "objectives": viewModel?.seedOptions[0].selection as Any,
-                "difficulty": viewModel?.seedOptions[1].selection as Any,
-                "itemProgression": viewModel?.seedOptions[2].selection as Any,
-                "qualityOfLife": viewModel?.seedOptions[3].selection as Any,
-                "mapLayout": viewModel?.seedOptions[4].selection as Any
+                "showOptionalPhantoonIcon": viewModel.showOptionalPhantoonIcon as Any,
+                "showWallJumpBoots": viewModel.showWallJumpBoots as Any,
+                "showCanWallJumpIcon": viewModel.showCanWallJumpIcon as Any,
+                "collectibleWallJump": viewModel.collectibleWallJump as Any,
+                "showEye": viewModel.showEye as Any,
+                "objectives": viewModel.seedOptions[0].selection as Any,
+                "difficulty": viewModel.seedOptions[1].selection as Any,
+                "itemProgression": viewModel.seedOptions[2].selection as Any,
+                "qualityOfLife": viewModel.seedOptions[3].selection as Any,
+                "mapLayout": viewModel.seedOptions[4].selection as Any
             ]
         ] as [String : Any]
         sendMessage(message)
 
-        if let viewModel {
-            // sync boss statuses to desktop
-            for bosses in viewModel.bosses {
-                for boss in bosses {
-                    let message = [
-                        "type": "boss",
-                        "key": boss.key,
-                        "value": boss.isDead()
-                    ] as [String : Any]
-                    sendMessage(message)
-                }
+        // sync boss statuses to desktop
+        for bosses in viewModel.bosses {
+            for boss in bosses {
+                let message = [
+                    "type": "boss",
+                    "key": boss.key,
+                    "value": boss.isDead()
+                ] as [String : Any]
+                sendMessage(message)
             }
-            
-            // sync item statuses to desktop
-            for itemRow in viewModel.items {
-                for item in itemRow {
-                    let message = [
-                        "type": "item",
-                        "key": item.key,
-                        "value": item.collected
-                    ] as [String : Any]
-                    sendMessage(message)
-                }
-            }
-
-            // update sixth row items
-            let message = [
-                "type": "cmd",
-                "key": "updateStragglers",
-                "value": [
-                    "eye": viewModel.planetAwakeItem.collected,
-                    "phantoon": viewModel.optionalPhantoon.collected
-                ]
-            ] as [String : Any]
-            sendMessage(message)
         }
+        
+        // sync item statuses to desktop
+        for itemRow in viewModel.items {
+            for item in itemRow {
+                let message = [
+                    "type": "item",
+                    "key": item.key,
+                    "value": item.collected
+                ] as [String : Any]
+                sendMessage(message)
+            }
+        }
+
+        // update sixth row items
+        message = [
+            "type": "cmd",
+            "key": "updateStragglers",
+            "value": [
+                "eye": viewModel.planetAwakeItem.collected,
+                "phantoon": viewModel.optionalPhantoon.collected
+            ]
+        ] as [String : Any]
+        sendMessage(message)
     }
     #endif
     
@@ -162,81 +162,78 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
 
                     switch(type) {
                     case "boss":
-                        viewModel?.updateBoss(from: json)
+                        viewModel.updateBoss(from: json)
                     case "item":
-                        viewModel?.updateItem(from: json)
+                        viewModel.updateItem(from: json)
                     case "cmd":
                         switch(key) {
                             case "lockSettings":
-                                viewModel?.lockSettings = value as! Bool
+                                viewModel.lockSettings = value as! Bool
                             case "showOptionalPhantoonIcon":
-                                viewModel?.showOptionalPhantoonIcon = value as! Bool
+                                viewModel.showOptionalPhantoonIcon = value as! Bool
                             case "showCanWallJumpIcon":
-                                viewModel?.showCanWallJumpIcon = value as! Bool
+                                viewModel.showCanWallJumpIcon = value as! Bool
                             case "showEye":
-                                viewModel?.showEye = value as! Bool
+                                viewModel.showEye = value as! Bool
                             case "showWallJumpBoots":
-                                viewModel?.showWallJumpBoots = value as! Bool
+                                viewModel.showWallJumpBoots = value as! Bool
                             case "collectibleWallJump":
-                                viewModel?.collectibleWallJump = value as! Bool
+                                viewModel.collectibleWallJump = value as! Bool
                             case "resetTracker":
-                                viewModel?.resetBosses()
-                                viewModel?.resetItems()
-                                viewModel?.canWallJumpItem.collected = viewModel?.collectibleWallJump ?? false ? 0 : 1
-                                viewModel?.wallJumpBootsItem.collected = viewModel?.collectibleWallJump ?? false ? 0 : 1
+                                viewModel.resetBosses()
+                                viewModel.resetItems()
+                                viewModel.canWallJumpItem.collected = viewModel.collectibleWallJump ? 0 : 1
+                                viewModel.wallJumpBootsItem.collected = viewModel.collectibleWallJump ? 0 : 1
                             case "objective":
-                                viewModel?.seedOptions[0].selection = value as! Int
+                                viewModel.seedOptions[0].selection = value as! Int
                             case "difficulty":
-                                viewModel?.seedOptions[1].selection = value as! Int
+                                viewModel.seedOptions[1].selection = value as! Int
                             case "itemProgression":
-                                viewModel?.seedOptions[2].selection = value as! Int
+                                viewModel.seedOptions[2].selection = value as! Int
                             case "qualityOfLife":
-                                viewModel?.seedOptions[3].selection = value as! Int
+                                viewModel.seedOptions[3].selection = value as! Int
                             case "mapLayout":
-                                viewModel?.seedOptions[4].selection = value as! Int
+                                viewModel.seedOptions[4].selection = value as! Int
                             #if os(macOS)
                             case "updateStragglers":
-                                if let viewModel = viewModel {
-                                    let values = value as! [String: Int]
-                                    if let eye = values["eye"] {
-                                        viewModel.planetAwakeItem.collected = eye
-                                    }
-                                    if let phantoon = values["phantoon"] {
-                                        viewModel.optionalPhantoon.collected = phantoon
-                                    }
+                                let values = value as! [String: Int]
+                                if let eye = values["eye"] {
+                                    viewModel.planetAwakeItem.collected = eye
+                                }
+                                if let phantoon = values["phantoon"] {
+                                    viewModel.optionalPhantoon.collected = phantoon
                                 }
                             case "syncSettings":
                                 if let settings = value as? [String: Any] {
                                     if let showOptionalPhantoonIcon = settings["showOptionalPhantoonIcon"] as? Bool {
-                                        debug("setting showOptionalPhantoonIcon from network")
-                                        viewModel?.showOptionalPhantoonIcon = showOptionalPhantoonIcon
+                                        viewModel.showOptionalPhantoonIcon = showOptionalPhantoonIcon
                                     }
                                     if let showCanWallJumpIcon = settings["showCanWallJumpIcon"] as? Bool {
-                                        viewModel?.showCanWallJumpIcon = showCanWallJumpIcon
+                                        viewModel.showCanWallJumpIcon = showCanWallJumpIcon
                                     }
                                     if let showWallJumpBoots = settings["showWallJumpBoots"] as? Bool {
-                                        viewModel?.showWallJumpBoots = showWallJumpBoots
+                                        viewModel.showWallJumpBoots = showWallJumpBoots
                                     }
                                     if let collectibleWallJump = settings["collectibleWallJump"] as? Bool {
-                                        viewModel?.collectibleWallJump = collectibleWallJump
+                                        viewModel.collectibleWallJump = collectibleWallJump
                                     }
                                     if let showEye = settings["showEye"] as? Bool {
-                                        viewModel?.showEye = showEye
+                                        viewModel.showEye = showEye
                                     }
                                     if let objectives = settings["objectives"] as? Int {
-                                        viewModel?.seedOptions[0].selection = objectives
+                                        viewModel.seedOptions[0].selection = objectives
                                     }
                                     if let difficulty = settings["difficulty"] as? Int {
-                                        viewModel?.seedOptions[1].selection = difficulty
+                                        viewModel.seedOptions[1].selection = difficulty
                                     }
                                     if let itemProgression = settings["itemProgression"] as? Int {
-                                        viewModel?.seedOptions[2].selection = itemProgression
+                                        viewModel.seedOptions[2].selection = itemProgression
                                     }
                                     if let qualityOfLife = settings["qualityOfLife"] as? Int {
-                                        viewModel?.seedOptions[3].selection = qualityOfLife
+                                        viewModel.seedOptions[3].selection = qualityOfLife
                                     }
                                     if let mapLayout = settings["mapLayout"] as? Int {
-                                        viewModel?.seedOptions[4].selection = mapLayout
+                                        viewModel.seedOptions[4].selection = mapLayout
                                     }
                                 }
                             #endif

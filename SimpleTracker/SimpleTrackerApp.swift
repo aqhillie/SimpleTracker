@@ -9,20 +9,24 @@
 
 import SwiftUI
 
-let appName:String = (Bundle.main.infoDictionary!["CFBundleName"] as? String)!
-let appVersion:String = (Bundle.main.infoDictionary!["CFBundleShortVersionString"] as? String)!
-let buildNumber = Bundle.main.infoDictionary!["CFBundleVersion"] as? String
-
-func debug(_ items: Any...) {
-    #if DEBUG
-    print(items)
-    #endif
-}
-
 @main
 struct SimpleTrackerApp: App {
-    @State var viewModel = ViewModel()
-    @State var peerConnection = PeerConnection()
+    @State var viewModel: ViewModel
+    @State var peerConnection: PeerConnection
+    
+    init() {
+        let viewModel = ViewModel()
+        let peerConnection = PeerConnection(viewModel: viewModel)
+        
+        self.viewModel = viewModel
+        self.peerConnection = peerConnection
+        
+        #if os(macOS)
+        if let fontURL = Bundle.main.url(forResource: "super-metroid-snes", withExtension: "ttf") {
+            CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
+        }
+        #endif
+    }
     
     #if os(macOS)
     let screenSize = NSScreen.main?.frame.size ?? CGSize(width: 1920, height: 1080)
@@ -36,12 +40,6 @@ struct SimpleTrackerApp: App {
     }
     
     #if os(macOS)
-    init() {
-        if let fontURL = Bundle.main.url(forResource: "super-metroid-snes", withExtension: "ttf") {
-            CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
-        }
-    }
-    
     func setupWindow() {
         // Ensure we are using AppKit to access the NSWindow
         if let window = NSApplication.shared.windows.first {
