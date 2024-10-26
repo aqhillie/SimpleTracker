@@ -18,7 +18,12 @@ import UIKit
 class ViewModel {
 
     let defaultActiveStates: [ItemKey: Bool]
-    var collectibleWallJumpMode: Int
+    var collectibleWallJumpMode: Int {
+        didSet {
+            UserDefaults.standard.set(collectibleWallJumpMode, forKey: "collectibleWallJumpMode")
+            updateWallJumpIcons()
+        }
+    }
 
     let bosses: [BossKey: Boss]
     let items: [ItemKey: Item]
@@ -63,7 +68,13 @@ class ViewModel {
     var collectibleWallJump: Bool {
         didSet {
             UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
-            items[safe: .canwalljump].collected = collectibleWallJump ? 0 : 1
+            if (collectibleWallJump) {
+                items[safe: .walljump].collected = 0
+                updateWallJumpIcons()
+            } else {
+                items[safe: .walljump].isActive = false
+                items[safe: .canwalljump].isActive = false
+            }
         }
     }
     
@@ -192,16 +203,8 @@ class ViewModel {
             .etank: Item(key: .etank, name: "Energy Tanks", maxValue: 14),
             .reservetank: Item(key: .reservetank, name: "Reserve Tanks", maxValue: 4)
         ]
-        
-        if (items[safe: .walljump].isActive && items[safe: .canwalljump].isActive) {
-            self.collectibleWallJumpMode = 3
-        } else if (items[safe: .canwalljump].isActive) {
-            self.collectibleWallJumpMode = 2
-        } else if (items[safe: .walljump].isActive) {
-            self.collectibleWallJumpMode = 1
-        } else {
-            self.collectibleWallJumpMode = 0
-        }
+
+        self.collectibleWallJumpMode = UserDefaults.standard.integerWithDefaultValue(forKey: "collectibleWallJumpMode", defaultValue: 1)
         
         // Matrix of game objective > targets
         self.bossMatrix = [
@@ -420,6 +423,7 @@ class ViewModel {
             )
         ]
         
+        updateWallJumpIcons()
     }
     
     func resetBosses() {
@@ -460,6 +464,25 @@ class ViewModel {
         }
         if let isActive = value["isActive"] {
             items[safe: key.toItemKey()].isActive = isActive as! Bool
+        }
+    }
+    
+    func updateWallJumpIcons() {
+        switch (collectibleWallJumpMode) {
+            case 0:
+                items[safe: .walljump].isActive = false
+                items[safe: .canwalljump].isActive = false
+            case 1:
+                items[safe: .walljump].isActive = true
+                items[safe: .canwalljump].isActive = false
+            case 2:
+                items[safe: .walljump].isActive = false
+                items[safe: .canwalljump].isActive = true
+            case 3:
+                items[safe: .walljump].isActive = true
+                items[safe: .canwalljump].isActive = true
+            default:
+                return
         }
     }
     
