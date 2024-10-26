@@ -25,9 +25,8 @@ struct BossButton: View {
     }
     
     var body: some View {
-        let key = boss.getKey()
-        if boss.key != "" {
-            Image(boss.isDead() && deadImage != "" ? deadImage : key)
+        if boss.key != .empty {
+            Image(boss.isDead() && deadImage != "" ? deadImage : boss.getKey().toString())
                 .resizable()
                 .frame(width: size, height: size)
                 .gesture(
@@ -36,7 +35,7 @@ struct BossButton: View {
                             boss.deathToggle()
                             let message = [
                                 "type": "boss",
-                                "key": boss.getKey(),
+                                "key": boss.getKey().toString(),
                                 "value": boss.isDead()
                             ]
                             peerConnection.sendMessage(message)
@@ -47,6 +46,9 @@ struct BossButton: View {
             Rectangle()
                 .fill(Color.black)
                 .frame(width: size, height: size)
+                .onAppear {
+                    print("Empty rectangle for item '\(boss.getKey().toString()) appeared")
+                }
         }
     }
 }

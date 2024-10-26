@@ -73,8 +73,8 @@ struct SeedOptions: View {
                     }
                 }
                 OptionSelectorMini(key: "collectibleWallJump", title: "Collectible Wall Jump", colors: [0x066815, 0x5B0012], options: ["Vanilla", "Collectible"], selection: viewModel.collectibleWallJump ? 1 : 0, setting: $viewModel.collectibleWallJump)
-                OptionSelectorMini(key: "showOptionalPhantoonIcon", title: "Optional Phantoon Icon", colors: [0x808080], options: ["Disabled", "Enabled"], selection: viewModel.showOptionalPhantoonIcon ? 1 : 0, setting: $viewModel.showOptionalPhantoonIcon)
-                OptionSelectorMini(key: "showCanWallJumpIcon", title: "Can Wall Jump Icon", colors: [0x808080], options: ["Disabled", "Enabled"], selection: viewModel.showCanWallJumpIcon ? 1 : 0, setting: $viewModel.showCanWallJumpIcon)
+                OptionSelectorItemToggle(key: .phantoon, title: "Optional Phantoon Icon", color: 0x808080)
+                OptionSelectorItemToggle(key: .canwalljump, title: "Can Wall Jump Icon", color: 0x808080)
             }
         }
         .frame(alignment: .center)

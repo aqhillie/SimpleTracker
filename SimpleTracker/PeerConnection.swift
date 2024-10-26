@@ -9,8 +9,8 @@
 //  Copyright (C) 2024 Warpixel
 //
 
-import Foundation
-import CommonCrypto
+//import Foundation
+//import CommonCrypto
 import MultipeerConnectivity
 
 @Observable
@@ -97,7 +97,7 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     #if os(iOS)
     func syncToDesktop() {
         // sync settings to desktop
-        var message = [
+        let message = [
             "type": "cmd",
             "key": "syncSettings",
             "value": [
@@ -116,39 +116,24 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         sendMessage(message)
 
         // sync boss statuses to desktop
-        for bosses in viewModel.bosses {
-            for boss in bosses {
-                let message = [
-                    "type": "boss",
-                    "key": boss.key,
-                    "value": boss.isDead()
-                ] as [String : Any]
-                sendMessage(message)
-            }
+        for (key, boss) in viewModel.bosses {
+            let message = [
+                "type": "boss",
+                "key": key.toString(),
+                "value": boss.isDead()
+            ] as [String : Any]
+            sendMessage(message)
         }
         
         // sync item statuses to desktop
-        for itemRow in viewModel.items {
-            for item in itemRow {
-                let message = [
-                    "type": "item",
-                    "key": item.key,
-                    "value": item.collected
-                ] as [String : Any]
-                sendMessage(message)
-            }
+        for (key, item) in viewModel.items {
+            let message = [
+                "type": "item",
+                "key": key.toString(),
+                "value": ["amount": item.collected, "isActive": item.isActive]
+            ] as [String : Any]
+            sendMessage(message)
         }
-
-        // update sixth row items
-        message = [
-            "type": "cmd",
-            "key": "updateStragglers",
-            "value": [
-                "eye": viewModel.planetAwakeItem.collected,
-                "phantoon": viewModel.optionalPhantoon.collected
-            ]
-        ] as [String : Any]
-        sendMessage(message)
     }
     #endif
     
@@ -182,8 +167,6 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                             case "resetTracker":
                                 viewModel.resetBosses()
                                 viewModel.resetItems()
-                                viewModel.canWallJumpItem.collected = viewModel.collectibleWallJump ? 0 : 1
-                                viewModel.wallJumpBootsItem.collected = viewModel.collectibleWallJump ? 0 : 1
                             case "objective":
                                 viewModel.seedOptions[0].selection = value as! Int
                             case "difficulty":
@@ -195,14 +178,6 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                             case "mapLayout":
                                 viewModel.seedOptions[4].selection = value as! Int
                             #if os(macOS)
-                            case "updateStragglers":
-                                let values = value as! [String: Int]
-                                if let eye = values["eye"] {
-                                    viewModel.planetAwakeItem.collected = eye
-                                }
-                                if let phantoon = values["phantoon"] {
-                                    viewModel.optionalPhantoon.collected = phantoon
-                                }
                             case "syncSettings":
                                 if let settings = value as? [String: Any] {
                                     if let showOptionalPhantoonIcon = settings["showOptionalPhantoonIcon"] as? Bool {

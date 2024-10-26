@@ -16,19 +16,18 @@ struct ItemButton: View {
     @Environment(PeerConnection.self) private var peerConnection
     @State var item: Item
     var size: CGFloat
-    @Binding var isActive: Bool
+    var isActive: Bool
 
-    init(item: Item, size: CGFloat, isActive: Binding<Bool>) {
+    init(item: Item, size: CGFloat, isActive: Bool) {
         self.item = item
         self.size = size
-        self._isActive = isActive
+        self.isActive = isActive
     }
     
     var body: some View {
-        
-        if isActive && item.key != "" {
+        if isActive && item.key != .empty {
             ZStack (alignment: .bottomTrailing){
-                Image(item.offImage != "" && item.collected == 0 ? item.offImage : item.key)
+                Image(item.offImage != "" && item.collected == 0 ? item.offImage : item.getKey().toString())
                     .resizable()
                     .frame(width: size, height: size)
                     .modifier(Appearance(type: .item, isActive: !item.darkenImage || item.isCollected() ))
@@ -38,20 +37,24 @@ struct ItemButton: View {
                                 item.collect()
                                 let message = [
                                     "type": "item",
-                                    "key": item.key,
-                                    "value": item.collected
+                                    "key": item.getKey().toString(),
+                                    "value": [
+                                        "amount": item.collected
+                                    ]
                                 ]
                                 peerConnection.sendMessage(message)
                             }
                     )
-                    .gesture(
+                    .gesture( 
                         LongPressGesture(minimumDuration: viewModel.longPressDelay)
                             .onEnded { _ in
                                 item.decrease()
                                 let message = [
                                     "type": "item",
-                                    "key": item.key,
-                                    "value": item.collected
+                                    "key": item.getKey().toString(),
+                                    "value": [
+                                        "amount": item.collected
+                                    ]
                                 ]
                                 peerConnection.sendMessage(message)
                             }
@@ -69,7 +72,7 @@ struct ItemButton: View {
                 .fill(Color.black)
                 .frame(width: size, height: size)
                 .onAppear {
-                    print("Empty rectangle for item '\(item.key) appeared")
+                    print("Empty rectangle for item '\(item.getKey().toString()) appeared")
                 }
         }
     }

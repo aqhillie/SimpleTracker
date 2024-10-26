@@ -13,21 +13,22 @@ import SwiftUI
 
 class EmptyBoss: Boss {
     init() {
-        super.init(key: "", name: "")
+        super.init(key: .empty, name: "")
     }
 }
 
 @Observable
 class Boss: Hashable, Identifiable, Equatable {
-    
+    static let emptyBoss = EmptyBoss()
+
     let id = UUID()
     
-    let key: String
+    let key: BossKey
     let name: String
     let deadImage: String
     var _isDead: Bool = false
 
-    init(key: String, name: String, deadImage: String = "") {
+    init(key: BossKey, name: String, deadImage: String = "") {
         self.key = key
         self.name = name
         self.deadImage = deadImage
@@ -37,7 +38,7 @@ class Boss: Hashable, Identifiable, Equatable {
         return _isDead
     }
     
-    internal func getKey() -> String {
+    internal func getKey() -> BossKey {
         return key
     }
     

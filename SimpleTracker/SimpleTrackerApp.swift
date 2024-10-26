@@ -35,8 +35,7 @@ struct SimpleTrackerApp: App {
     func resetTracker() {
         viewModel.resetBosses()
         viewModel.resetItems()
-        viewModel.canWallJumpItem.collected = viewModel.collectibleWallJump ? 0 : 1
-        viewModel.wallJumpBootsItem.collected = viewModel.collectibleWallJump ? 0 : 1
+        viewModel.items[safe: .walljump].collected = viewModel.collectibleWallJump ? 0 : 1
     }
     
     #if os(macOS)
@@ -136,41 +135,47 @@ struct SimpleTrackerApp: App {
                 .keyboardShortcut("R", modifiers: [.command])
             }
             CommandGroup(replacing: .sidebar) {
-                Button("\(viewModel.showWallJumpBoots ? "Hide" : "Show") Wall Jump Boots") {
-                    viewModel.showWallJumpBoots.toggle()
-                    let message = [
-                        "type": "cmd",
-                        "key": "showWallJumpBoots",
-                        "value": viewModel.showWallJumpBoots
-                    ]
-                    peerConnection.sendMessage(message)
-                }
                 Button("\(viewModel.showEye ? "Hide" : "Show") Planet Awake Status") {
-                    viewModel.showEye.toggle()
+                    viewModel.items[safe: .eye].isActive.toggle()
                     let message = [
-                        "type": "cmd",
-                        "key": "showEye",
-                        "value": viewModel.showEye
+                        "type": "item",
+                        "key": "eye",
+                        "value": [
+                            "isActive": viewModel.items[safe: .eye].isActive
+                        ]
                     ]
                     peerConnection.sendMessage(message)
                 }
-                Button("\(viewModel.showOptionalPhantoonIcon ? "Hide" : "Show") Optional Phantoon Icon") {
-                    viewModel.showOptionalPhantoonIcon.toggle()
+                Button("\(viewModel.items[safe: .phantoon].isActive ? "Hide" : "Show") Optional Phantoon Icon") {
+                    viewModel.items[safe: .phantoon].isActive.toggle()
                     let message = [
-                        "type": "cmd",
-                        "key": "showOptionalPhantoonIcon",
-                        "value": viewModel.showOptionalPhantoonIcon
+                        "type": "item",
+                        "key": "phantoon",
+                        "value": [
+                            "isActive": viewModel.items[safe: .phantoon].isActive
+                        ]
                     ]
                     peerConnection.sendMessage(message)
                 }
-                Button("\(viewModel.showCanWallJumpIcon ? "Hide" : "Show") Can Wall Jump Icon") {
-                    viewModel.showCanWallJumpIcon.toggle()
-                    let message = [
-                        "type": "cmd",
-                        "key": "showCanWallJumpIcon",
-                        "value": viewModel.showCanWallJumpIcon
-                    ]
-                    peerConnection.sendMessage(message)
+                Picker("Collectible Wall Jump Mode", selection: Binding(
+                    get: {viewModel.collectibleWallJumpMode},
+                    set: {
+                        viewModel.collectibleWallJumpMode = $0
+//                        let message = [
+//                            "type": "cmd",
+//                            "key": "collectibleWallJump",
+//                            "value": $0
+//                        ]
+//                        pc.sendMessage(message)
+                    })) {
+                    Text("None")
+                        .tag(0)
+                    Text("Wall Jump Boots")
+                        .tag(1)
+                    Text("Can Wall Jump Icon")
+                        .tag(2)
+                    Text("Both")
+                        .tag(3)
                 }
                 Divider()
             }

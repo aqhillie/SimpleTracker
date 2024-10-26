@@ -13,13 +13,13 @@ import SwiftUI
 
 class EmptyItem: Item {
     init() {
-        super.init(key: "", name: "")
+        super.init(key: .empty, name: "")
     }
 }
 
 class EyeItem: Item {
     init(id: UUID = UUID()) {
-        super.init(id: id, key: "eye", name: "Planet Awake", offImage: "eyeoff")
+        super.init(id: id, key: .eye, name: "Planet Awake", offImage: "eyeoff", saveActiveState: true)
         self.collected = 1
     }
     
@@ -30,7 +30,7 @@ class EyeItem: Item {
 
 class PhantoonItem: Item {
     init() {
-        super.init(key: "phantoon", name: "Phantoon", offImage: "phantoondead")
+        super.init(key: .phantoon, name: "Phantoon", offImage: "phantoondead", saveActiveState: true)
         self.collected = 1
     }
     
@@ -41,19 +41,21 @@ class PhantoonItem: Item {
 
 class CanWallJumpItem: Item {
     init() {
-        super.init(key: "canwalljump", name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false)
+        super.init(key: .canwalljump, name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false, saveActiveState: true)
         self.collected = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false) ? 0 : 1
     }
 }
 
 @Observable
 class Item: Hashable, Identifiable, Equatable {
-
+    static let emptyItem = EmptyItem()
+    
     let id: UUID
     
-    let key: String
+    let key: ItemKey
     let name: String
     let offImage: String
+    let saveActiveState: Bool
     let darkenImage: Bool
     var collected: Int {
         didSet {
@@ -65,21 +67,32 @@ class Item: Hashable, Identifiable, Equatable {
     let maxValue: Int
     let multiplier: Int
     let isConsumable: Bool
-    var isActive: Bool
+    var isActive: Bool {
+        didSet {
+            if (saveActiveState) {
+                UserDefaults.standard.set(isActive, forKey: "\(key.toString())_isActive")
+            }
+        }
+    }
     var linkedItem: Item?
     
-    init(id: UUID = UUID(), key: String, name: String, offImage: String = "", darkenImage: Bool = true, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool = true, linkedItem: Item? = nil) {
+    init(id: UUID = UUID(), key: ItemKey, name: String, offImage: String = "", darkenImage: Bool = true, saveActiveState: Bool? = nil, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool? = nil, linkedItem: Item? = nil) {
         self.id = id
         self.key = key
         self.name = name
         self.offImage = offImage
         self.darkenImage = darkenImage
+        self.saveActiveState = saveActiveState ?? false
         self.collected = 0
         self.maxValue = maxValue
         self.multiplier = multiplier
         self.isConsumable = (maxValue == 1) ? false : true
-        self.isActive = isActive
+        self.isActive = isActive ?? UserDefaults.standard.boolWithDefaultValue(forKey: key.toString(), defaultValue: true)
         self.linkedItem = linkedItem
+    }
+    
+    internal func getKey() -> ItemKey {
+        return key
     }
     
     func collect() {

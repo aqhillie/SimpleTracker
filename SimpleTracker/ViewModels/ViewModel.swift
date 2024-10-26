@@ -16,7 +16,16 @@ import UIKit
 
 @Observable
 class ViewModel {
-    
+
+    let defaultActiveStates: [ItemKey: Bool]
+    var collectibleWallJumpMode: Int
+
+    let bosses: [BossKey: Boss]
+    let items: [ItemKey: Item]
+    var bossMatrix: [[Boss]]
+    var itemMatrix: [[Item]]
+    var seedOptions: [SeedOption]
+
     #if os(iOS)
     let deviceWidth: CGFloat
     let deviceHeight: CGFloat
@@ -30,11 +39,6 @@ class ViewModel {
     let seedOptionTitleFontSize: CGFloat
     let seedOptionSelectionFontSize: CGFloat
     let lockedSettingOpacity: CGFloat
-
-    let wallJumpBootsItem: Item
-    let canWallJumpItem: Item
-    let planetAwakeItem: Item
-    let optionalPhantoon: Item
     
     #if os(macOS)
     var isWindowActive: Bool
@@ -43,14 +47,9 @@ class ViewModel {
     let bossVerticalSpacing: CGFloat
     let itemGridHorizontalSpacing: CGFloat
     let itemGridVerticalSpacing: CGFloat
-    let fifthItemRow: [Item]
     let sixthItemRowBosses: [Item]
     let sixthItemRowOthers: [Item]
     #endif
-
-    var bosses: [[Boss]]
-    var items: [[Item]]
-    var seedOptions: [SeedOption]
 
     var lockSettings: Bool = false
     var longPressDelay: Double
@@ -64,7 +63,7 @@ class ViewModel {
     var collectibleWallJump: Bool {
         didSet {
             UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
-            canWallJumpItem.collected = collectibleWallJump ? 0 : 1
+            items[safe: .canwalljump].collected = collectibleWallJump ? 0 : 1
         }
     }
     
@@ -121,6 +120,13 @@ class ViewModel {
         self.seedOptionsSpacing = 10        
         #endif
 
+        self.defaultActiveStates = [
+            .walljump: UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false),
+            .eye: true,
+            .phantoon: true,
+            .canwalljump: false
+        ]
+        
         self.lockedSettingOpacity = 0.3
         self.longPressDelay = 0.2
 
@@ -133,149 +139,203 @@ class ViewModel {
         self.showCanWallJumpIcon = UserDefaults.standard.boolWithDefaultValue(forKey: "showCanWallJumpIcon", defaultValue: false)
         self.showWallJumpBoots = UserDefaults.standard.boolWithDefaultValue(forKey: "showWallJumpBoots", defaultValue: UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false))
 
+        // Single place for all Boss instances
         self.bosses = [
-            [],
-            [
-                Boss(key: "ridley", name: "Ridley", deadImage: "ridleydead"),
-                Boss(key: "phantoon", name: "Phantoon", deadImage: "phantoondead"),
-                Boss(key: "kraid", name: "Kraid", deadImage: "kraiddead"),
-                Boss(key: "draygon", name: "Draygon", deadImage: "draygondead")
-            ],
-            [
-                Boss(key: "bombtorizo", name: "Bomb Torizo", deadImage: "bombtorizodead"),
-                Boss(key: "sporespawn", name: "Spore Spawn", deadImage: "sporespawndead"),
-                Boss(key: "crocomire", name: "Crocomire", deadImage: "crocomiredead"),
-                Boss(key: "botwoon", name: "Botwoon", deadImage: "botwoondead"),
-                Boss(key: "goldentorizo", name: "Golden Torizo", deadImage: "goldentorizodead")
-            ],
-            [
-                Boss(key: "metroids1", name: "Metroids 1", deadImage: "metroids1dead"),
-                Boss(key: "metroids2", name: "Metroids 2", deadImage: "metroids2dead"),
-                Boss(key: "metroids3", name: "Metroids 3", deadImage: "metroids3dead"),
-                Boss(key: "metroids4", name: "Metroids 4", deadImage: "metroids4dead")
-            ],
-            [
-                Boss(key: "chozo1", name: "Chozo Statue 1", deadImage: "chozo1dead"),
-                Boss(key: "chozo2", name: "Chozo Statue 2", deadImage: "chozo2dead"),
-                EmptyBoss(),
-                EmptyBoss()
-            ],
-            [
-                Boss(key: "pirates1", name: "Pirates 1"),
-                Boss(key: "pirates2", name: "Pirates 2"),
-                Boss(key: "pirates3", name: "Pirates 3"),
-                Boss(key: "pirates4", name: "Pirates 4")
-            ],
-            []
+            .ridley: Boss(key: .ridley, name: "Ridley", deadImage: "ridleydead"),
+            .phantoon: Boss(key: .phantoon, name: "Phantoon", deadImage: "phantoondead"),
+            .kraid: Boss(key: .kraid, name: "Kraid", deadImage: "kraiddead"),
+            .draygon: Boss(key: .draygon, name: "Draygon", deadImage: "draygondead"),
+            .bombtorizo: Boss(key: .bombtorizo, name: "Bomb Torizo", deadImage: "bombtorizodead"),
+            .sporespawn: Boss(key: .sporespawn, name: "Spore Spawn", deadImage: "sporespawndead"),
+            .crocomire: Boss(key: .crocomire, name: "Crocomire", deadImage: "crocomiredead"),
+            .botwoon: Boss(key: .botwoon, name: "Botwoon", deadImage: "botwoondead"),
+            .goldentorizo: Boss(key: .goldentorizo, name: "Golden Torizo", deadImage: "goldentorizodead"),
+            .metroids1: Boss(key: .metroids1, name: "Metroids 1", deadImage: "metroids1dead"),
+            .metroids2: Boss(key: .metroids2, name: "Metroids 2", deadImage: "metroids2dead"),
+            .metroids3: Boss(key: .metroids3, name: "Metroids 3", deadImage: "metroids3dead"),
+            .metroids4: Boss(key: .metroids4, name: "Metroids 4", deadImage: "metroids4dead"),
+            .chozo1: Boss(key: .chozo1, name: "Bowling Alley Chozo", deadImage: "chozo1dead"),
+            .chozo2: Boss(key: .chozo2, name: "Chozo Statue 2", deadImage: "chozo2dead"),
+            .pirates1: Boss(key: .pirates1, name: "Pirates 1"),
+            .pirates2: Boss(key: .pirates2, name: "Pirates 2"),
+            .pirates3: Boss(key: .pirates3, name: "Pirates 3"),
+            .pirates4: Boss(key: .pirates4, name: "Pirates 4")
         ]
 
-        self.wallJumpBootsItem = Item(key: "walljump", name: "Wall Jump Boots")
-        self.canWallJumpItem = CanWallJumpItem()
-        self.planetAwakeItem = EyeItem()
-        self.optionalPhantoon = PhantoonItem()
-
-        wallJumpBootsItem.linkedItem = canWallJumpItem
-        canWallJumpItem.linkedItem = wallJumpBootsItem
+        // Single place for all Item instances
+        self.items = [
+            .walljump: Item(key: .walljump, name: "Wall Jump Boots"),
+            .eye: EyeItem(),
+            .canwalljump: CanWallJumpItem(),
+            .phantoon: PhantoonItem(),
+            .charge: Item(key: .charge, name: "Charge Beam"),
+            .ice: Item(key: .ice, name: "Ice Beam"),
+            .spazer: Item(key: .spazer, name: "Spazer"),
+            .plasma: Item(key: .plasma, name: "Plasma Beam"),
+            .varia: Item(key: .varia, name: "Varia Suit"),
+            .gravity: Item(key: .gravity, name: "Gravity Suit"),
+            .grapple: Item(key: .grapple, name: "Grapple Beam"),
+            .xray: Item(key: .xray, name: "XRay Scope"),
+            .bomb: Item(key: .bomb, name: "Morph Ball Bombs"),
+            .springball: Item(key: .springball, name: "Spring Ball"),
+            .screw: Item(key: .screw, name: "Screw Attack"),
+            .hijump: Item(key: .hijump, name: "HiJump Boots"),
+            .space: Item(key: .space, name: "Space Jump"),
+            .speed: Item(key: .speed, name: "Speed Booster"),
+            .missile: Item(key: .missile, name: "Missiles", maxValue: 46, multiplier: 5),
+            .supers: Item(key: .supers, name: "Super Missiles", maxValue: 10, multiplier: 5),
+            .powerbomb: Item(key: .powerbomb, name: "Power Bombs", maxValue: 10, multiplier: 5),
+            .etank: Item(key: .etank, name: "Energy Tanks", maxValue: 14),
+            .reservetank: Item(key: .reservetank, name: "Reserve Tanks", maxValue: 4)
+        ]
+        
+        if (items[safe: .walljump].isActive && items[safe: .canwalljump].isActive) {
+            self.collectibleWallJumpMode = 3
+        } else if (items[safe: .canwalljump].isActive) {
+            self.collectibleWallJumpMode = 2
+        } else if (items[safe: .walljump].isActive) {
+            self.collectibleWallJumpMode = 1
+        } else {
+            self.collectibleWallJumpMode = 0
+        }
+        
+        // Matrix of game objective > targets
+        self.bossMatrix = [
+            // none
+            [],
+            // bosses
+            [
+                bosses[safe: .ridley],
+                bosses[safe: .phantoon],
+                bosses[safe: .kraid],
+                bosses[safe: .draygon]
+            ],
+            // minibosses
+            [
+                bosses[safe: .bombtorizo],
+                bosses[safe: .sporespawn],
+                bosses[safe: .crocomire],
+                bosses[safe: .botwoon],
+                bosses[safe: .goldentorizo]
+            ],
+            // metroids
+            [
+                bosses[safe: .metroids1],
+                bosses[safe: .metroids2],
+                bosses[safe: .metroids3],
+                bosses[safe: .metroids4]
+            ],
+            // chozos
+            [
+                bosses[safe: .chozo1],
+                bosses[safe: .chozo2],
+                Boss.emptyBoss,
+                Boss.emptyBoss
+            ],
+            // pirates
+            [
+                bosses[safe: .pirates1],
+                bosses[safe: .pirates2],
+                bosses[safe: .pirates3],
+                bosses[safe: .pirates4]
+            ],
+            // random
+            []
+        ]
+        
+        items[safe: .walljump].linkedItem = items[safe: .canwalljump]
+        items[safe: .canwalljump].linkedItem = items[safe: .walljump]
 
         #if os(macOS)
         self.sixthItemRowBosses = [
-            EmptyItem(),
-            EmptyItem(),
-            planetAwakeItem,
-            canWallJumpItem,
-            EmptyItem()
+            Item.emptyItem,
+            Item.emptyItem,
+            items[safe: .eye],
+            items[safe: .canwalljump],
+            Item.emptyItem
         ]
-        self.sixthItemRowOthers = [
-            EmptyItem(),
-            planetAwakeItem,
-            optionalPhantoon,
-            canWallJumpItem,
-            EmptyItem()
-        ]
-        #endif
         
-        #if os(macOS)
-        self.fifthItemRow = [
-            Item(key: "plasma", name: "Plasma Beam"),
-            Item(key: "xray", name: "XRay Scope"),
-            EmptyItem(),
-            EmptyItem(),
-            Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+        self.sixthItemRowOthers = [
+            Item.emptyItem,
+            items[safe: .eye],
+            items[safe: .phantoon],
+            items[safe: .canwalljump],
+            Item.emptyItem
         ]
 
-        self.items = [
+        self.itemMatrix = [
             [
-                Item(key: "charge", name: "Charge Beam"),
-                Item(key: "ice", name: "Ice Beam"),
-                Item(key: "wave", name: "Wave Beam"),
-                Item(key: "spazer", name: "Spazer"),
-                Item(key: "plasma", name: "Plasma Beam")
+                items[safe: .charge],
+                items[safe: .ice],
+                items[safe: .wave],
+                items[safe: .spazer],
+                items[safe: .plasma]
             ],
             [
-                Item(key: "varia", name: "Varia Suit"),
-                Item(key: "gravity", name: "Gravity Suit"),
-                EmptyItem(),
-                Item(key: "grapple", name: "Grapple Beam"),
-                Item(key: "xray", name: "XRay Scope")
+                items[safe: .varia],
+                items[safe: .gravity],
+                Item.emptyItem,
+                items[safe: .grapple],
+                items[safe: .xray]
             ],
             [
-                Item(key: "morph", name: "Morphing Ball"),
-                Item(key: "bomb", name: "Morph Ball Bombs"),
-                Item(key: "springball", name: "Spring Ball"),
-                Item(key: "screw", name: "Screw Attack"),
-                EmptyItem()
+                items[safe: .morph],
+                items[safe: .bomb],
+                items[safe: .springball],
+                items[safe: .screw],
+                Item.emptyItem
             ],
             [
-                Item(key: "hijump", name: "HiJump Boots"),
-                Item(key: "space", name: "Space Jump"),
-                Item(key: "speed", name: "Speed Booster"),
-                wallJumpBootsItem,
-                EmptyItem()
+                items[safe: .hijump],
+                items[safe: .space],
+                items[safe: .speed],
+                items[safe: .walljump],
+                Item.emptyItem
             ],
             [
-                Item(key: "missile", name: "Missiles", maxValue: 46, multiplier: 5),
-                Item(key: "super", name: "Super Missiles", maxValue: 10, multiplier: 5),
-                Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5),
-                Item(key: "etank", name: "Energy Tanks", maxValue: 14),
-                Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+                items[safe: .missile],
+                items[safe: .supers],
+                items[safe: .powerbomb],
+                items[safe: .etank],
+                items[safe: .reservetank]
             ]
         ]
         #elseif os(iOS)
-        self.items = [
+        self.itemMatrix = [
             [
-                Item(key: "charge", name: "Charge Beam"),
-                Item(key: "varia", name: "Varia Suit"),
-                Item(key: "morph", name: "Morphing Ball"),
-                Item(key: "hijump", name: "HiJump Boots"),
-                Item(key: "missile", name: "Missiles", maxValue: 46, multiplier: 5)
+                items[safe: .charge],
+                items[safe: .varia],
+                items[safe: .morph],
+                items[safe: .hijump],
+                items[safe: .missile]
             ],
             [
-                Item(key: "ice", name: "Ice Beam"),
-                Item(key: "gravity", name: "Gravity Suit"),
-                Item(key: "bomb", name: "Morph Ball Bombs"),
-                Item(key: "space", name: "Space Jump"),
-                Item(key: "super", name: "Super Missiles", maxValue: 10, multiplier: 5)
+                items[safe: .ice],
+                items[safe: .gravity],
+                items[safe: .bomb],
+                items[safe: .space],
+                items[safe: .supers]
             ],
             [
-                Item(key: "wave", name: "Wave Beam"),
-                canWallJumpItem,
-                Item(key: "springball", name: "Spring Ball"),
-                Item(key: "speed", name: "Speed Booster"),
-                Item(key: "powerbomb", name: "Power Bombs", maxValue: 10, multiplier: 5)
+                items[safe: .wave],
+                items[safe: .canwalljump],
+                items[safe: .springball],
+                items[safe: .speed],
+                items[safe: .powerbomb]
             ],
             [
-                Item(key: "spazer", name: "Spazer"),
-                Item(key: "grapple", name: "Grapple Beam"),
-                Item(key: "screw", name: "Screw Attack"),
-                wallJumpBootsItem,
-                Item(key: "etank", name: "Energy Tanks", maxValue: 14)
+                items[safe: .spazer],
+                items[safe: .grapple],
+                items[safe: .screw],
+                items[safe: .walljump],
+                items[safe: .etank]
             ],
             [
-                Item(key: "plasma", name: "Plasma Beam"),
-                Item(key: "xray", name: "XRay Scope"),
-                planetAwakeItem,
-                PhantoonItem(),
-                Item(key: "reservetank", name: "Reserve Tanks", maxValue: 4)
+                items[safe: .plasma],
+                items[safe: .xray],
+                items[safe: .eye],
+                items[safe: .phantoon],
+                items[safe: .reservetank]
             ]
         ]
         #endif
@@ -354,15 +414,13 @@ class ViewModel {
     }
     
     func resetBosses() {
-        for objectiveBosses in bosses {
-            for boss in objectiveBosses {
-                boss.reset()
-            }
+        for key in bosses.keys {
+            bosses[safe: key].reset()
         }
     }
     
     func resetItems() {
-        for itemRow in items {
+        for itemRow in itemMatrix {
             for item in itemRow {
                 item.reset()
             }
@@ -378,35 +436,21 @@ class ViewModel {
         guard let key = message["key"] as? String,
               let value = message["value"] as? Bool else { return }
         
-        for objectiveBosses in bosses {
-            for boss in objectiveBosses {
-                if boss.key == key {
-                    boss._isDead = value
-                    return
-                }
-            }
-        }
+        bosses[safe: key.toBossKey()]._isDead = value
     }
     
     func updateItem(from message: [String: Any]) {
+        print("in update item")
         guard let key = message["key"] as? String,
-              let value = message["value"] as? Int else { return }
+              let value = message["value"] as? [String: Any] else { return }
 
-        #if os(macOS)
-        for item in sixthItemRowOthers {
-            if item.key == key && item.collected != value{
-                item.collected = value
-                return
-            }
+        print("passed the guard")
+        
+        if let amount = value["amount"] {
+            items[safe: key.toItemKey()].collected = amount as! Int
         }
-        #endif
-        for itemRow in items {
-            for item in itemRow {
-                if item.key == key && item.collected != value {
-                    item.collected = value
-                    return
-                }
-            }
+        if let isActive = value["isActive"] {
+            items[safe: key.toItemKey()].isActive = isActive as! Bool
         }
     }
     

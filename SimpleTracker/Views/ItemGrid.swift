@@ -23,30 +23,9 @@ struct ItemGroups: View {
         self.paddingLeft = paddingLeft
     }
 
-    func isItemActive(item: Item, viewModel: ViewModel) -> Binding<Bool> {
-        @Bindable var viewModel = viewModel
-
-        switch(item.key) {
-            case "canwalljump":
-                return $viewModel.showCanWallJumpIcon
-            case "walljump":
-                return $viewModel.showWallJumpBoots
-            case "eye":
-                return $viewModel.showEye
-            case "phantoon":
-                let showPhantoon = viewModel.seedOptions[0].selection != 1 && viewModel.showOptionalPhantoonIcon
-                return Binding(
-                    get: { showPhantoon },
-                    set: { _ in } // No-op setter, since we can't bind to a combined expression
-                )
-            default:
-                return .constant(true)
-        }
-    }
-
     var body: some View {
         ForEach(0..<5) { index in
-            ItemButton(item: group[index], size: size, isActive: isItemActive(item: group[index], viewModel: viewModel))
+            ItemButton(item: group[index], size: size, isActive: group[index].isActive)
             #if os(macOS)
                 .padding(.top, paddingTop)
                 .padding(.leading, paddingLeft)
@@ -72,9 +51,7 @@ struct ItemGrid: View {
             HStack(spacing: viewModel.itemGridHorizontalSpacing) {
                 ForEach(0..<5) { index in
                     VStack(spacing: viewModel.itemGridVerticalSpacing) {
-                        //                .padding(.top, firstRow && index == row.count - 1 ? 10 : 0)
-                        //                .padding(.leading, index == row.count - 1 ? 15 : 0)
-                        ItemGroups(group: viewModel.items[index], size: viewModel.itemSize)
+                        ItemGroups(group: viewModel.itemMatrix[index], size: viewModel.itemSize)
                     }
                     .padding(.top, index == 4 ? 25 : 0)
                     .padding(.leading, index == 4 ? 15 : 0)
@@ -90,10 +67,10 @@ struct ItemGrid: View {
             }
             .padding(.top, 20)
         }
-        #else
+        #elseif os(iOS)
         VStack {
             Spacer()
-            ForEach(viewModel.items, id: \.self) { row in
+            ForEach(viewModel.itemMatrix, id: \.self) { row in
                 HStack {
                     ItemGroups(group: row, size: viewModel.itemSize)
                 }
