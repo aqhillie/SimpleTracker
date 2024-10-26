@@ -73,10 +73,10 @@ struct ToggleCollectibleWallJumpMode: View {
             }
             .frame(width: size, height: size)
             .clipShape(Rectangle())
-            .opacity(viewModel.broadcastMode || !viewModel.collectibleWallJump ? viewModel.lockedSettingOpacity : 1)
+            .opacity(viewModel.lockSettings || !viewModel.collectibleWallJump ? viewModel.lockedSettingOpacity : 1)
         }
         .help("Toggle Collectible Wall Jump related icons: None, Wall Jump Boots, Can Wall Jump Icon, Both. (Collectible Wall Jump must be set to Collectible)")
-        .disabled(viewModel.broadcastMode || !viewModel.collectibleWallJump)
+        .disabled(viewModel.lockSettings || !viewModel.collectibleWallJump)
         #if os(macOS)
         .buttonStyle(PlainButtonStyle())
         .focusable(false)

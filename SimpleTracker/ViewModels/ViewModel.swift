@@ -77,31 +77,7 @@ class ViewModel {
             }
         }
     }
-    
-    var showEye: Bool {
-        didSet {
-            UserDefaults.standard.set(showEye, forKey: "showEye")
-        }
-    }
-
-    var showOptionalPhantoonIcon: Bool {
-        didSet {
-            UserDefaults.standard.set(showOptionalPhantoonIcon, forKey: "showOptionalPhantoonIcon")
-        }
-    }
-
-    var showCanWallJumpIcon: Bool {
-        didSet {
-            UserDefaults.standard.set(showCanWallJumpIcon, forKey: "showCanWallJumpIcon")
-        }
-    }
-
-    var showWallJumpBoots: Bool {
-        didSet {
-            UserDefaults.standard.set(showWallJumpBoots, forKey: "showWallJumpBoots")
-        }
-    }
-    
+        
     init() {
         #if os(iOS)
         self.deviceWidth = UIScreen.main.bounds.width
@@ -144,12 +120,6 @@ class ViewModel {
         self.localMode = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
         
-        // Variables to turn icons on/off (purely cosmetic not game settings)
-        self.showEye = UserDefaults.standard.boolWithDefaultValue(forKey: "showEye", defaultValue: false)
-        self.showOptionalPhantoonIcon = UserDefaults.standard.boolWithDefaultValue(forKey: "showOptionalPhantoonIcon", defaultValue: false)
-        self.showCanWallJumpIcon = UserDefaults.standard.boolWithDefaultValue(forKey: "showCanWallJumpIcon", defaultValue: false)
-        self.showWallJumpBoots = UserDefaults.standard.boolWithDefaultValue(forKey: "showWallJumpBoots", defaultValue: UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false))
-
         // Single place for all Boss instances
         self.bosses = [
             .ridley: Boss(key: .ridley, name: "Ridley", deadImage: "ridleydead"),

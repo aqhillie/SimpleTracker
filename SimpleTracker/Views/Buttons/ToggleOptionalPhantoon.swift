@@ -37,10 +37,10 @@ struct ToggleOptionalPhantoon: View {
                 Slash(size: size)
                     .opacity(viewModel.items[safe: .phantoon].isActive ? 0 : 1)
             }
-            .opacity(viewModel.broadcastMode ? viewModel.lockedSettingOpacity : 1)
+            .opacity(viewModel.lockSettings ? viewModel.lockedSettingOpacity : 1)
         }
         .help("Toggle Optional Phantoon Icon")
-        .disabled(viewModel.broadcastMode)
+        .disabled(viewModel.lockSettings)
         #if os(macOS)
         .buttonStyle(PlainButtonStyle())
         .focusable(false)

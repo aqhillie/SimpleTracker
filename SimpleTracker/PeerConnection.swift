@@ -101,11 +101,6 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
             "type": "cmd",
             "key": "syncSettings",
             "value": [
-                "showOptionalPhantoonIcon": viewModel.showOptionalPhantoonIcon as Any,
-                "showWallJumpBoots": viewModel.showWallJumpBoots as Any,
-                "showCanWallJumpIcon": viewModel.showCanWallJumpIcon as Any,
-                "collectibleWallJump": viewModel.collectibleWallJump as Any,
-                "showEye": viewModel.showEye as Any,
                 "objectives": viewModel.seedOptions[0].selection as Any,
                 "difficulty": viewModel.seedOptions[1].selection as Any,
                 "itemProgression": viewModel.seedOptions[2].selection as Any,
@@ -154,14 +149,6 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                         switch(key) {
                             case "lockSettings":
                                 viewModel.lockSettings = value as! Bool
-                            case "showOptionalPhantoonIcon":
-                                viewModel.showOptionalPhantoonIcon = value as! Bool
-                            case "showCanWallJumpIcon":
-                                viewModel.showCanWallJumpIcon = value as! Bool
-                            case "showEye":
-                                viewModel.showEye = value as! Bool
-                            case "showWallJumpBoots":
-                                viewModel.showWallJumpBoots = value as! Bool
                             case "collectibleWallJump":
                                 viewModel.collectibleWallJump = value as! Bool
                             case "resetTracker":
@@ -180,21 +167,6 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                             #if os(macOS)
                             case "syncSettings":
                                 if let settings = value as? [String: Any] {
-                                    if let showOptionalPhantoonIcon = settings["showOptionalPhantoonIcon"] as? Bool {
-                                        viewModel.showOptionalPhantoonIcon = showOptionalPhantoonIcon
-                                    }
-                                    if let showCanWallJumpIcon = settings["showCanWallJumpIcon"] as? Bool {
-                                        viewModel.showCanWallJumpIcon = showCanWallJumpIcon
-                                    }
-                                    if let showWallJumpBoots = settings["showWallJumpBoots"] as? Bool {
-                                        viewModel.showWallJumpBoots = showWallJumpBoots
-                                    }
-                                    if let collectibleWallJump = settings["collectibleWallJump"] as? Bool {
-                                        viewModel.collectibleWallJump = collectibleWallJump
-                                    }
-                                    if let showEye = settings["showEye"] as? Bool {
-                                        viewModel.showEye = showEye
-                                    }
                                     if let objectives = settings["objectives"] as? Int {
                                         viewModel.seedOptions[0].selection = objectives
                                     }

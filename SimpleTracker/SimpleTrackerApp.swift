@@ -135,7 +135,7 @@ struct SimpleTrackerApp: App {
                 .keyboardShortcut("R", modifiers: [.command])
             }
             CommandGroup(replacing: .sidebar) {
-                Button("\(viewModel.showEye ? "Hide" : "Show") Planet Awake Status") {
+                Button("\(viewModel.items[safe: .eye].isActive ? "Hide" : "Show") Planet Awake Status") {
                     viewModel.items[safe: .eye].isActive.toggle()
                     let message = [
                         "type": "item",
