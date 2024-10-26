@@ -28,29 +28,10 @@ enum BossKey: String {
     case crocomire
     case goldentorizo
     case sporespawn
-    
-//    static let dict: [String: BossKey] = [
-//        "empty": .empty,
-//        "draygon": .draygon,
-//        "ridley": .ridley,
-//        "kraid": .kraid,
-//        "phantoon": .phantoon,
-//        "metroids1": .metroids1,
-//        "metroids2": .metroids2,
-//        "metroids3": .metroids3,
-//        "metroids4": .metroids4,
-//        "chozo1": .chozo1,
-//        "chozo2": .chozo2,
-//        "pirates1": .pirates1,
-//        "pirates2": .pirates2,
-//        "pirates3": .pirates3,
-//        "pirates4": .pirates4,
-//        "bombtorizo": .bombtorizo,
-//        "botwoon": .botwoon,
-//        "crocomire": .crocomire,
-//        "goldentorizo": .goldentorizo,
-//        "sporespawn": .sporespawn
-//    ]
+    case random1
+    case random2
+    case random3
+    case random4
 
     func toString() -> String {
         return self.rawValue // Returns the raw string value of the enum case

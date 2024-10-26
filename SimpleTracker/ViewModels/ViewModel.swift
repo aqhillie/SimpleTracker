@@ -159,7 +159,11 @@ class ViewModel {
             .pirates1: Boss(key: .pirates1, name: "Pirates 1"),
             .pirates2: Boss(key: .pirates2, name: "Pirates 2"),
             .pirates3: Boss(key: .pirates3, name: "Pirates 3"),
-            .pirates4: Boss(key: .pirates4, name: "Pirates 4")
+            .pirates4: Boss(key: .pirates4, name: "Pirates 4"),
+            .random1: Boss(key: .random1, name: "Random 1"),
+            .random2: Boss(key: .random2, name: "Random 2"),
+            .random3: Boss(key: .random3, name: "Random 3"),
+            .random4: Boss(key: .random4, name: "Random 4"),
         ]
 
         // Single place for all Item instances
@@ -240,7 +244,12 @@ class ViewModel {
                 bosses[safe: .pirates4]
             ],
             // random
-            []
+            [
+                bosses[safe: .random1],
+                bosses[safe: .random2],
+                bosses[safe: .random3],
+                bosses[safe: .random4]
+            ]
         ]
         
         items[safe: .walljump].linkedItem = items[safe: .canwalljump]
