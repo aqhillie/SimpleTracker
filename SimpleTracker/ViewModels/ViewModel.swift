@@ -108,9 +108,11 @@ class ViewModel {
         #endif
 
         self.defaultActiveStates = [
-            .walljump: UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false),
             .eye: true,
             .phantoon: true,
+            // these two items are linked, so no need to set .canwalljump to the same UserDefaults setting,
+            // coz setting one will set the other.
+            .walljump: UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false),
             .canwalljump: false
         ]
         
