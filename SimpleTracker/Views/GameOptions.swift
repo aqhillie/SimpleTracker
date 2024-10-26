@@ -63,6 +63,7 @@ struct SeedOptions: View {
                     OptionSelector(seedOption: seedOption)
                 }
             }
+            OptionSelectorMini(key: "collectibleWallJump", title: "Collectible Wall Jump", colors: [0x066815, 0x5B0012], options: ["Vanilla", "Collectible"], selection: viewModel.collectibleWallJump ? 1 : 0, setting: $viewModel.collectibleWallJump)
         }
         #else
         ScrollView {

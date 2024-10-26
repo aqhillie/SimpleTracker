@@ -448,6 +448,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.warpixel.simpletracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -488,6 +489,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.warpixel.simpletracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";

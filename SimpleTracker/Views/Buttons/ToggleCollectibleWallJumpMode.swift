@@ -19,12 +19,6 @@ struct ToggleCollectibleWallJumpMode: View {
     var body: some View {
         Button(action: {
             viewModel.collectibleWallJumpMode = (viewModel.collectibleWallJumpMode + 1) % 4
-//            let message = [
-//                "type": "cmd",
-//                "key": "showWallJumpBoots",
-//                "value": viewModel.showWallJumpBoots
-//            ]
-//            peerConnection.sendMessage(message)
         }) {
             ZStack {
                 switch(viewModel.collectibleWallJumpMode) {
@@ -79,9 +73,10 @@ struct ToggleCollectibleWallJumpMode: View {
             }
             .frame(width: size, height: size)
             .clipShape(Rectangle())
-            .opacity(viewModel.lockSettings || !viewModel.collectibleWallJump ? viewModel.lockedSettingOpacity : 1)
+            .opacity(viewModel.broadcastMode || !viewModel.collectibleWallJump ? viewModel.lockedSettingOpacity : 1)
         }
-        .disabled(viewModel.lockSettings || !viewModel.collectibleWallJump)
+        .help("Toggle Collectible Wall Jump related icons: None, Wall Jump Boots, Can Wall Jump Icon, Both. (Collectible Wall Jump must be set to Collectible)")
+        .disabled(viewModel.broadcastMode || !viewModel.collectibleWallJump)
         #if os(macOS)
         .buttonStyle(PlainButtonStyle())
         .focusable(false)

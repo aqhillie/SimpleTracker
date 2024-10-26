@@ -86,8 +86,9 @@ struct TitleBar: View {
                 Spacer()
                 ResetTracker(size: 15)
                 LockSettings(size: 15)
-                ToggleCollectibleWallJumpMode(size: 15)
                 ToggleEye(size: 15)
+                ToggleOptionalPhantoon(size: 15)
+                ToggleCollectibleWallJumpMode(size: 15)
                 NetworkStatusAndToggle(size: 15)
             }
             .opacity(viewModel.isWindowActive ? 1 : 0.3)
