@@ -27,6 +27,7 @@ struct ContentView: View {
                         .minimumScaleFactor(0.1)
                     ItemGrid()
                     GameOptions()
+                        .frame(height: 440)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -78,15 +79,15 @@ struct TitleBar: View {
 
     var body: some View {
         @Bindable var viewModel = viewModel
-        ZStack(alignment: .top) {
+        ZStack(alignment: .center) {
             Text("SimpleTracker")
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .opacity($viewModel.isWindowActive.wrappedValue ? 1 : 0.3)
             HStack {
                 Spacer()
-                ResetTracker(size: 15)
                 LockSettings(size: 15)
+                ResetTracker(size: 15)
                 ToggleEye(size: 15)
                 ToggleOptionalPhantoon(size: 15)
                 ToggleCollectibleWallJumpMode(size: 15)

@@ -50,7 +50,7 @@ struct OptionSelector: View {
             .gesture(
                 TapGesture()
                     .onEnded {
-                        if (!viewModel.lockSettings) {
+                        if (!viewModel.broadcastMode) {
                             selection = (selection + 1) % options.count
                             let message = [
                                 "type": "cmd",
@@ -78,11 +78,11 @@ struct OptionSelector: View {
             Spacer()
                 .frame(minHeight: 0, maxHeight: 20)
         }
-        .opacity(viewModel.lockSettings ? viewModel.lockedSettingOpacity : 1)
+        .opacity(viewModel.broadcastMode ? viewModel.lockedSettingOpacity : 1)
             .gesture(
                 TapGesture()
                     .onEnded {
-                        if (!viewModel.lockSettings) {
+                        if (!viewModel.broadcastMode) {
                             selection = (selection + 1) % options.count
                             let message = [
                                 "type": "cmd",

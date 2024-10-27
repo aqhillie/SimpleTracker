@@ -42,7 +42,7 @@ struct OptionSelectorItemToggle: View {
             .gesture(
                 TapGesture()
                     .onEnded {
-                        if (!viewModel.lockSettings) {
+                        if (!viewModel.broadcastMode) {
                             selection.toggle()
                             viewModel.items[safe: key].isActive = selection
                         }
@@ -70,11 +70,11 @@ struct OptionSelectorItemToggle: View {
 //                    loaded = true
 //                }
         }
-        .opacity(viewModel.lockSettings ? viewModel.lockedSettingOpacity : 1)
+        .opacity(viewModel.broadcastMode ? viewModel.lockedSettingOpacity : 1)
             .gesture(
                 TapGesture()
                     .onEnded {
-                        if (!viewModel.lockSettings) {
+                        if (!viewModel.broadcastMode) {
                             selection.toggle()
                             viewModel.items[safe: key].isActive = selection
                             let message = [

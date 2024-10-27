@@ -13,5 +13,7 @@ enum SeedOptionDataType {
     case itemProgression
     case qualityOfLife
     case mapLayout
+    case doors
+    case startLocation
     case collectibleWallJump
 }

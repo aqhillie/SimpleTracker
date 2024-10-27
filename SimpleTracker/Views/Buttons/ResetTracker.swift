@@ -18,43 +18,25 @@ struct ResetTracker: View {
 
     var body: some View {
         Button(action: {
-            if (viewModel.lockSettings) {
-                #if os(iOS)
-                peerConnection.syncToDesktop()
-                #endif
-            } else {
-                viewModel.resetBosses()
-                viewModel.resetItems()
-                viewModel.items[safe: .walljump].collected = viewModel.collectibleWallJump ? 0 : 1
-                let message = [
-                    "type": "cmd",
-                    "key": "resetTracker",
-                    "value": ""
-                ]
-                peerConnection.sendMessage(message)
-            }
+            viewModel.resetBosses()
+            viewModel.resetItems()
+            viewModel.items[safe: .walljump].collected = viewModel.collectibleWallJump ? 0 : 1
+            let message = [
+                "type": "cmd",
+                "key": "resetTracker",
+                "value": ""
+            ]
+            peerConnection.sendMessage(message)
         }) {
-            #if os(macOS)
             Image(systemName: "arrow.clockwise")
                 .font(.system(size: size)) // Optional: Adjust the size
                 .foregroundColor(.white)  // Optional: Change the color
-            #elseif os(iOS)
-            Image(systemName: viewModel.lockSettings ? "arrow.trianglehead.2.clockwise.rotate.90" : "arrow.clockwise")
-                .font(.system(size: size)) // Optional: Adjust the size
-                .foregroundColor(.white)  // Optional: Change the color
-            #endif
         }
+        .disabled(viewModel.broadcastMode)
+        .opacity(viewModel.broadcastMode ? viewModel.lockedSettingOpacity : 1)
         #if os(macOS)
-        .disabled(viewModel.lockSettings)
         .buttonStyle(PlainButtonStyle())
         .focusable(false)
-        #elseif (iOS)
-        .simultaneousGesture(
-            LongPressGesture(minimumDuration: viewModel.longPressDelay)
-                .onEnded { _ in
-                    peerConnection.syncToDesktop()
-                }
-        )
         #endif
     }
 }

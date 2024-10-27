@@ -22,9 +22,9 @@ struct MobileOptions: View {
         if (orientation == .portrait) {
             VStack {
                 Spacer()
-                ResetTracker()
-                Spacer()
                 LockSettings()
+                Spacer()
+                ResetTracker()
                 Spacer()
                 ToggleCollectibleWallJumpMode()
                 Spacer()
@@ -37,9 +37,9 @@ struct MobileOptions: View {
         } else {
             HStack {
                 Spacer()
-                ResetTracker()
-                Spacer()
                 LockSettings()
+                Spacer()
+                ResetTracker()
                 Spacer()
                 ToggleCollectibleWallJumpMode()
                 Spacer()

@@ -106,6 +106,8 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                 "itemProgression": viewModel.itemProgression as Any,
                 "qualityOfLife": viewModel.qualityOfLife as Any,
                 "mapLayout": viewModel.mapLayout as Any,
+                "doors": viewModel.doors as Any,
+                "startLocation": viewModel.startLocation as Any,
                 "collectibleWallJump": viewModel.collectibleWallJump as Any,
                 "collectibleWallJumpMode": viewModel.collectibleWallJumpMode as Any
             ]
@@ -153,9 +155,9 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                         }
                     case "cmd":
                         switch(key) {
-                            case "lockSettings":
+                            case "broadcastMode":
                                 DispatchQueue.main.async {
-                                    self.viewModel.lockSettings = value as! Bool
+                                    self.viewModel.broadcastMode = value as! Bool
                                 }
                             case "resetTracker":
                                 DispatchQueue.main.async {
@@ -181,6 +183,14 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                             case "mapLayout":
                                 DispatchQueue.main.async {
                                     self.viewModel.mapLayout = value as! Int
+                                }
+                            case "doors":
+                                DispatchQueue.main.async {
+                                    self.viewModel.doors = value as! Int
+                                }
+                            case "startLocation":
+                                DispatchQueue.main.async {
+                                    self.viewModel.startLocation = value as! Int
                                 }
                             case "collectibleWallJump":
                                 DispatchQueue.main.async {
@@ -216,6 +226,16 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                                     if let mapLayout = settings["mapLayout"] as? Int {
                                         DispatchQueue.main.async {
                                             self.viewModel.mapLayout = mapLayout
+                                        }
+                                    }
+                                    if let doors = settings["doors"] as? Int {
+                                        DispatchQueue.main.async {
+                                            self.viewModel.doors = doors
+                                        }
+                                    }
+                                    if let startLocation = settings["startLocation"] as? Int {
+                                        DispatchQueue.main.async {
+                                            self.viewModel.startLocation = startLocation
                                         }
                                     }
                                     if let collectibleWallJump = settings["collectibleWallJump"] as? Bool {

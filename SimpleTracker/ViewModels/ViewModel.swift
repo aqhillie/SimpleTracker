@@ -35,6 +35,8 @@ class ViewModel {
     var itemProgression: Int
     var qualityOfLife: Int
     var mapLayout: Int
+    var doors: Int
+    var startLocation: Int
     var collectibleWallJump: Bool {
         didSet {
             UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
@@ -76,7 +78,7 @@ class ViewModel {
     let sixthItemRowOthers: [Item]
     #endif
 
-    var lockSettings: Bool = false
+    var broadcastMode: Bool = false
     
     var localMode: Bool {
         didSet {
@@ -94,7 +96,7 @@ class ViewModel {
         self.seedOptionsWidth = 280
         self.seedOptionTitleFontSize = 18
         self.seedOptionSelectionFontSize = 22
-        self.seedOptionVStackSpacing = 20
+        self.seedOptionVStackSpacing = 10
         self.seedOptionsSpacing = 10
         #elseif os(macOS)
         self.isWindowActive = true
@@ -128,6 +130,8 @@ class ViewModel {
         self.itemProgression = UserDefaults.standard.integerWithDefaultValue(forKey: "itemProgression", defaultValue: 0)
         self.qualityOfLife = UserDefaults.standard.integerWithDefaultValue(forKey: "qualityOfLife", defaultValue: 2)
         self.mapLayout = UserDefaults.standard.integerWithDefaultValue(forKey: "mapLayout", defaultValue: 1)
+        self.doors = UserDefaults.standard.integerWithDefaultValue(forKey: "doors", defaultValue: 1)
+        self.startLocation = UserDefaults.standard.integerWithDefaultValue(forKey: "startLocation", defaultValue: 0)
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
 
         // seed option data
@@ -137,6 +141,8 @@ class ViewModel {
             .itemProgression: SeedOption(title: "Item Progression", options: ["Normal", "Tricky", "Challenge", "Desolate"], colors: [0x066815, 0xCBCA02, 0xC20003, 0xC706C9]),
             .qualityOfLife: SeedOption(title: "Quality of Life", options: ["Off", "Low", "Default", "Max"], colors: [0x5B0012, 0xC20003, 0xCBCA02, 0x066815]),
             .mapLayout: SeedOption(title: "Map Layout", options: ["Vanilla", "Tame", "Wild"], colors: [0x066815, 0xCBCA02, 0xC20003]),
+            .doors: SeedOption(title: "Doors", options: ["Blue", "Ammo", "Beam"], colors: [0x066815, 0xCBCA02, 0xC20003]),
+            .startLocation: SeedOption(title: "Start Location", options: ["Ship", "Random", "Escape"], colors: [0x066815, 0xC20003, 0x404040]),
             .collectibleWallJump: SeedOption(title: "Collectible Wall Jump", options: ["Vanilla", "Collectible"], colors: [0x066815, 0x5B0012])
         ]
         
@@ -184,6 +190,7 @@ class ViewModel {
             .gravity: Item(key: .gravity, name: "Gravity Suit"),
             .grapple: Item(key: .grapple, name: "Grapple Beam"),
             .xray: Item(key: .xray, name: "XRay Scope"),
+            .morph: Item(key: .morph, name: "Morph Ball"),
             .bomb: Item(key: .bomb, name: "Morph Ball Bombs"),
             .springball: Item(key: .springball, name: "Spring Ball"),
             .screw: Item(key: .screw, name: "Screw Attack"),
