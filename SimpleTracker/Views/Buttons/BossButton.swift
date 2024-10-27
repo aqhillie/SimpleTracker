@@ -28,6 +28,7 @@ struct BossButton: View {
         if boss.key != .empty {
             Image(boss.isDead() && deadImage != "" ? deadImage : boss.getKey().toString())
                 .resizable()
+                .interpolation(.none)
                 .frame(width: size, height: size)
                 .gesture(
                     TapGesture()
@@ -39,6 +40,9 @@ struct BossButton: View {
                                 "value": boss.isDead()
                             ]
                             peerConnection.sendMessage(message)
+                            
+                            let seedData = SeedData.create(from: viewModel)
+                            seedData.save()
                         }
                 )
                 .modifier(Appearance(type: .boss, isActive: boss.isDead()))

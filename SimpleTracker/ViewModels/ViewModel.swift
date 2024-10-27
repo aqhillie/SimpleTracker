@@ -39,7 +39,6 @@ class ViewModel {
     var startLocation: Int
     var collectibleWallJump: Bool {
         didSet {
-            UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
             if (collectibleWallJump) {
                 items[safe: .walljump].collected = 0
                 updateWallJumpIcons()
@@ -120,19 +119,19 @@ class ViewModel {
             .phantoon: true,
             // these two items are linked, so no need to set .canwalljump to the same UserDefaults setting,
             // coz setting one will set the other.
-            .walljump: UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false),
+            .walljump: false,
             .canwalljump: false
         ]
 
         // Map Rando Seed Options
-        self.objective = UserDefaults.standard.integerWithDefaultValue(forKey: "objective", defaultValue: 1)
-        self.difficulty = UserDefaults.standard.integerWithDefaultValue(forKey: "difficulty", defaultValue: 0)
-        self.itemProgression = UserDefaults.standard.integerWithDefaultValue(forKey: "itemProgression", defaultValue: 0)
-        self.qualityOfLife = UserDefaults.standard.integerWithDefaultValue(forKey: "qualityOfLife", defaultValue: 2)
-        self.mapLayout = UserDefaults.standard.integerWithDefaultValue(forKey: "mapLayout", defaultValue: 1)
-        self.doors = UserDefaults.standard.integerWithDefaultValue(forKey: "doors", defaultValue: 1)
-        self.startLocation = UserDefaults.standard.integerWithDefaultValue(forKey: "startLocation", defaultValue: 0)
-        self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
+        self.objective = 1
+        self.difficulty = 0
+        self.itemProgression = 0
+        self.qualityOfLife = 2
+        self.mapLayout = 1
+        self.doors = 1
+        self.startLocation = 0
+        self.collectibleWallJump = false
 
         // seed option data
         self.seedOptionData = [
@@ -413,6 +412,11 @@ class ViewModel {
             default:
                 return
         }
+    }
+    
+    func saveSeed() {
+        let seedData = SeedData.create(from: self)
+        seedData.save()
     }
     
     func resetUserDefaults() {

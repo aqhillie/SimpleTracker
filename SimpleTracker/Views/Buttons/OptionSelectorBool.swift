@@ -50,6 +50,9 @@ struct OptionSelectorBool: View {
                                 "value": selection
                             ]
                             peerConnection.sendMessage(message)
+                            
+                            let seedData = SeedData.create(from: viewModel)
+                            seedData.save()
                         }
                     }
             )
@@ -81,6 +84,9 @@ struct OptionSelectorBool: View {
                                 "value": selection
                             ]
                             peerConnection.sendMessage(message)
+                            
+                            let seedData = SeedData.create(from: viewModel)
+                            seedData.save()
                         }
                     }
             )

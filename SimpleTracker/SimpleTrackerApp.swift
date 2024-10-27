@@ -21,6 +21,8 @@ struct SimpleTrackerApp: App {
         self.viewModel = viewModel
         self.peerConnection = peerConnection
         
+        SeedData.loadSeed(into: viewModel)
+        
         #if os(macOS)
         if let fontURL = Bundle.main.url(forResource: "super-metroid-snes", withExtension: "ttf") {
             CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)

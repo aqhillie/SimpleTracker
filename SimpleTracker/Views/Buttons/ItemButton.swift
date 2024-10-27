@@ -29,6 +29,7 @@ struct ItemButton: View {
             ZStack (alignment: .bottomTrailing){
                 Image(item.offImage != "" && item.collected == 0 ? item.offImage : item.getKey().toString())
                     .resizable()
+                    .interpolation(.none)
                     .frame(width: size, height: size)
                     .modifier(Appearance(type: .item, isActive: !item.darkenImage || item.isCollected() ))
                     .gesture(
@@ -43,6 +44,9 @@ struct ItemButton: View {
                                     ]
                                 ]
                                 peerConnection.sendMessage(message)
+                                
+                                let seedData = SeedData.create(from: viewModel)
+                                seedData.save()
                             }
                     )
                     .gesture( 
@@ -57,6 +61,9 @@ struct ItemButton: View {
                                     ]
                                 ]
                                 peerConnection.sendMessage(message)
+                                
+                                let seedData = SeedData.create(from: viewModel)
+                                seedData.save()
                             }
                     )
                     .onAppear {

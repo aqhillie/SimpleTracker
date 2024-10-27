@@ -59,6 +59,9 @@ struct OptionSelector: View {
                             ] as [String: Any]
                             
                             peerConnection.sendMessage(message)
+                            
+                            let seedData = SeedData.create(from: viewModel)
+                            seedData.save()
                         }
                     }
             )
@@ -91,6 +94,9 @@ struct OptionSelector: View {
                             ] as [String: Any]
                             
                             peerConnection.sendMessage(message)
+                            
+                            let seedData = SeedData.create(from: viewModel)
+                            seedData.save()
                         }
                     }
             )

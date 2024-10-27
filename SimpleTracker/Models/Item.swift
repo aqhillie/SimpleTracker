@@ -41,8 +41,7 @@ class PhantoonItem: Item {
 
 class CanWallJumpItem: Item {
     init() {
-        super.init(key: .canwalljump, name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false, saveActiveState: true)
-        self.collected = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false) ? 0 : 1
+        super.init(key: .canwalljump, name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false, saveActiveState: true, isRealItem: false)
     }
 }
 
@@ -74,9 +73,10 @@ class Item: Hashable, Identifiable, Equatable {
             }
         }
     }
+    let isRealItem: Bool
     var linkedItem: Item?
     
-    init(id: UUID = UUID(), key: ItemKey, name: String, offImage: String = "", darkenImage: Bool = true, saveActiveState: Bool? = nil, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool? = nil, linkedItem: Item? = nil) {
+    init(id: UUID = UUID(), key: ItemKey, name: String, offImage: String = "", darkenImage: Bool = true, saveActiveState: Bool? = nil, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool? = nil, isRealItem: Bool = true, linkedItem: Item? = nil) {
         self.id = id
         self.key = key
         self.name = name
@@ -88,6 +88,7 @@ class Item: Hashable, Identifiable, Equatable {
         self.multiplier = multiplier
         self.isConsumable = (maxValue == 1) ? false : true
         self.isActive = isActive ?? UserDefaults.standard.boolWithDefaultValue(forKey: key.toString(), defaultValue: true)
+        self.isRealItem = isRealItem
         self.linkedItem = linkedItem
     }
     
