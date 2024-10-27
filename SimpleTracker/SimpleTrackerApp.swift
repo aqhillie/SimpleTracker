@@ -21,7 +21,9 @@ struct SimpleTrackerApp: App {
         self.viewModel = viewModel
         self.peerConnection = peerConnection
         
-        SeedData.loadSeed(into: viewModel)
+        if (SeedData.checkSeed()) {
+            SeedData.loadSeed(into: viewModel)
+        }
         
         #if os(macOS)
         if let fontURL = Bundle.main.url(forResource: "super-metroid-snes", withExtension: "ttf") {
@@ -38,6 +40,15 @@ struct SimpleTrackerApp: App {
         viewModel.resetBosses()
         viewModel.resetItems()
         viewModel.items[safe: .walljump].collected = viewModel.collectibleWallJump ? 0 : 1
+        let message = [
+            "type": "cmd",
+            "key": "resetTracker",
+            "value": ""
+        ]
+        peerConnection.sendMessage(message)
+
+        let seedData = SeedData.create(from: viewModel)
+        seedData.save()
     }
     
     #if os(macOS)

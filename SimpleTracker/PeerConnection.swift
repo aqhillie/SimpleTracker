@@ -97,39 +97,14 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     #if os(iOS)
     func syncToDesktop() {
         // sync settings to desktop
-        let message = [
-            "type": "cmd",
-            "key": "syncSettings",
-            "value": [
-                "objectives": viewModel.objective as Any,
-                "difficulty": viewModel.difficulty as Any,
-                "itemProgression": viewModel.itemProgression as Any,
-                "qualityOfLife": viewModel.qualityOfLife as Any,
-                "mapLayout": viewModel.mapLayout as Any,
-                "doors": viewModel.doors as Any,
-                "startLocation": viewModel.startLocation as Any,
-                "collectibleWallJump": viewModel.collectibleWallJump as Any,
-                "collectibleWallJumpMode": viewModel.collectibleWallJumpMode as Any
-            ]
-        ] as [String : Any]
-        sendMessage(message)
-
-        // sync boss statuses to desktop
-        for (key, boss) in viewModel.bosses {
-            let message = [
-                "type": "boss",
-                "key": key.toString(),
-                "value": boss.isDead()
-            ] as [String : Any]
-            sendMessage(message)
-        }
+        let seedData = SeedData.create(from: self.viewModel)
+        let stringifiedSeedData = seedData.toJSON()
         
-        // sync item statuses to desktop
-        for (key, item) in viewModel.items {
+        if let stringifiedSeedData {
             let message = [
-                "type": "item",
-                "key": key.toString(),
-                "value": ["amount": item.collected, "isActive": item.isActive]
+                "type": "cmd",
+                "key": "incomingSeedFileData",
+                "value": stringifiedSeedData
             ] as [String : Any]
             sendMessage(message)
         }
@@ -148,13 +123,76 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                     case "boss":
                         DispatchQueue.main.async {
                             self.viewModel.updateBoss(from: json)
+                            let seedData = SeedData.create(from: self.viewModel)
+                            seedData.save()
                         }
                     case "item":
                         DispatchQueue.main.async {
                             self.viewModel.updateItem(from: json)
+                            let seedData = SeedData.create(from: self.viewModel)
+                            seedData.save()
                         }
                     case "cmd":
                         switch(key) {
+                            case "incomingSeedFileData":
+                                DispatchQueue.main.async {
+                                    if let seedData = (value as! String).toSeedData() {
+                                        self.viewModel.resetBosses()
+                                        self.viewModel.resetItems()
+
+                                        for key in seedData.defeatedBosses {
+                                            self.viewModel.bosses[safe: key.toBossKey()]._isDead = true
+                                        }
+                                        
+                                        for (key, count) in seedData.collectedItems {
+                                            self.viewModel.items[safe: key.toItemKey()].collected = count
+                                        }
+
+                                        guard let objective = seedData.settings["objective"],
+                                              let difficulty = seedData.settings["difficulty"],
+                                              let itemProgression = seedData.settings["itemProgression"],
+                                              let qualityOfLife = seedData.settings["qualityOfLife"],
+                                              let mapLayout = seedData.settings["mapLayout"],
+                                              let doors = seedData.settings["doors"],
+                                              let startLocation = seedData.settings["startLocation"],
+                                              let collectibleWallJump: Bool = seedData.settings["collectibleWallJump"] == 1 ? true: false else {
+                                            debug("Guard on incoming seed file settings dictionary failure.")
+                                            return
+                                        }
+                                        
+                                        self.viewModel.objective = objective
+                                        self.viewModel.difficulty = difficulty
+                                        self.viewModel.itemProgression = itemProgression
+                                        self.viewModel.qualityOfLife = qualityOfLife
+                                        self.viewModel.mapLayout = mapLayout
+                                        self.viewModel.doors = doors
+                                        self.viewModel.startLocation = startLocation
+                                        self.viewModel.collectibleWallJump = collectibleWallJump
+                                        
+                                        let seedData = SeedData.create(from: self.viewModel)
+                                        seedData.save()
+                                    } else {
+                                        debug("Failed to read incoming seed file data.")
+                                    }
+                                }
+                            case "seedFileRequest":
+                                DispatchQueue.main.async {
+                                    if (SeedData.checkSeed()) {
+                                        guard let seedData = SeedData.createFromFile(), let stringifiedSeedFile = seedData.toJSON() else {
+                                                debug("Failed to get seed data.")
+                                            return
+                                        }
+                                        
+                                        let message = [
+                                            "type": "cmd",
+                                            "key": "incomingSeedFileData",
+                                            "value": stringifiedSeedFile
+                                        ]
+                                        self.sendMessage(message)
+                                    } else {
+                                        debug("Peer requested seed file but none exists. :(")
+                                    }
+                                }
                             case "broadcastMode":
                                 DispatchQueue.main.async {
                                     self.viewModel.broadcastMode = value as! Bool
@@ -163,22 +201,37 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                                 DispatchQueue.main.async {
                                     self.viewModel.resetBosses()
                                     self.viewModel.resetItems()
+                                    
+                                    let seedData = SeedData.create(from: self.viewModel)
+                                    seedData.save()
                                 }
                             case "objective":
                                 DispatchQueue.main.async {
                                     self.viewModel.objective = value as! Int
+                                    
+                                    let seedData = SeedData.create(from: self.viewModel)
+                                    seedData.save()
                                 }
                             case "difficulty":
                                 DispatchQueue.main.async {
                                     self.viewModel.difficulty = value as! Int
+                                    
+                                    let seedData = SeedData.create(from: self.viewModel)
+                                    seedData.save()
                                 }
                             case "itemProgression":
                                 DispatchQueue.main.async {
                                     self.viewModel.itemProgression = value as! Int
+                                    
+                                    let seedData = SeedData.create(from: self.viewModel)
+                                    seedData.save()
                                 }
                             case "qualityOfLife":
                                 DispatchQueue.main.async {
                                     self.viewModel.qualityOfLife = value as! Int
+                                    
+                                    let seedData = SeedData.create(from: self.viewModel)
+                                    seedData.save()
                                 }
                             case "mapLayout":
                                 DispatchQueue.main.async {
@@ -187,72 +240,30 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                             case "doors":
                                 DispatchQueue.main.async {
                                     self.viewModel.doors = value as! Int
+                                    
+                                    let seedData = SeedData.create(from: self.viewModel)
+                                    seedData.save()
                                 }
                             case "startLocation":
                                 DispatchQueue.main.async {
                                     self.viewModel.startLocation = value as! Int
+                                    
+                                    let seedData = SeedData.create(from: self.viewModel)
+                                    seedData.save()
                                 }
                             case "collectibleWallJump":
                                 DispatchQueue.main.async {
                                     self.viewModel.collectibleWallJump = value as! Bool
+                                    
+                                    let seedData = SeedData.create(from: self.viewModel)
+                                    seedData.save()
                                 }
                             case "collectibleWallJumpMode":
                                 DispatchQueue.main.async {
                                     self.viewModel.collectibleWallJumpMode = value as! Int
                                 }
-                            #if os(macOS)
-                            case "syncSettings":
-                                if let settings = value as? [String: Any] {
-                                    if let objectives = settings["objectives"] as? Int {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.objective = objectives
-                                        }
-                                    }
-                                    if let difficulty = settings["difficulty"] as? Int {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.difficulty = difficulty
-                                        }
-                                    }
-                                    if let itemProgression = settings["itemProgression"] as? Int {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.itemProgression = itemProgression
-                                        }
-                                    }
-                                    if let qualityOfLife = settings["qualityOfLife"] as? Int {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.qualityOfLife = qualityOfLife
-                                        }
-                                    }
-                                    if let mapLayout = settings["mapLayout"] as? Int {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.mapLayout = mapLayout
-                                        }
-                                    }
-                                    if let doors = settings["doors"] as? Int {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.doors = doors
-                                        }
-                                    }
-                                    if let startLocation = settings["startLocation"] as? Int {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.startLocation = startLocation
-                                        }
-                                    }
-                                    if let collectibleWallJump = settings["collectibleWallJump"] as? Bool {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.collectibleWallJump = collectibleWallJump
-                                        }
-                                    }
-                                    if let collectibleWallJumpMode = settings["collectibleWallJumpMode"] as? Int {
-                                        DispatchQueue.main.async {
-                                            self.viewModel.collectibleWallJumpMode = collectibleWallJumpMode
-                                        }
-                                    }
-                                }
-                            #endif
                             default:
                                 return
-                            
                         }
                     default:
                         return
@@ -268,8 +279,27 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
         switch state {
         case .connected:
             debug("Connected to peer: \(peerID.displayName)")
+            #if os(macOS)
+            if (!SeedData.checkSeed()) {
+                let message = [
+                    "type": "cmd",
+                    "key": "seedFileRequest",
+                    "value": ""
+                ]
+                self.sendMessage(message)
+            }
+            #endif
             #if os(iOS)
-            syncToDesktop()
+            if (!SeedData.checkSeed()) {
+                let message = [
+                    "type": "cmd",
+                    "key": "seedFileRequest",
+                    "value": ""
+                ]
+                self.sendMessage(message)
+            } else {
+                syncToDesktop()
+            }
             #endif
         case .connecting:
             debug("Connecting to peer: \(peerID.displayName)")

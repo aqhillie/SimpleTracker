@@ -26,7 +26,7 @@ class SeedData: Codable {
         self.collectedItems = collectedItems
         self.settings = settings
     }
-
+    
     static func create(from viewModel: ViewModel, name: String = "main") -> SeedData {
         var defeatedBosses: Set<String> = Set([])
         var collectedItems: [String: Int] = [:]
@@ -59,7 +59,36 @@ class SeedData: Codable {
         
         return SeedData(name: name, defeatedBosses: defeatedBosses, collectedItems: collectedItems, settings: settings)
     }
+
+    static func createFromFile(name: String = "main") -> SeedData? {
+        let fileURL = URL.documentsDirectory.appending(path: "\(name).json")
+        
+        do {
+            let jsonData = try Data(contentsOf: fileURL)
+            let seedData: SeedData = try JSONDecoder().decode(SeedData.self, from: jsonData)
+            debug("Successfully loaded seed data from \(fileURL.path)")
+            return seedData
+        } catch {
+            debug("Failed to read seed data: \(error)")
+            return nil
+        }
+    }
     
+    static func checkSeed(name: String = "main") -> Bool {
+        let fileURL = URL.documentsDirectory.appending(path: "\(name).json")
+        return FileManager.default.fileExists(atPath: fileURL.path)
+    }
+    
+    func toJSON() -> String? {
+        do {
+            let jsonData = try JSONEncoder().encode(self)
+            return String(data: jsonData, encoding: .utf8)
+        } catch {
+            debug("Failed to get JSON from seedData.")
+            return nil
+        }
+    }
+
     // save seed file
     func save() {
         let fileURL = URL.documentsDirectory.appending(path: "\(self.name).json")
@@ -72,7 +101,7 @@ class SeedData: Codable {
             debug("Failed to write seed data: \(error)")
         }
     }
-    
+        
     // Load seed file into passed in ViewModel
     static func loadSeed(name: String = "main", into viewModel: ViewModel) {
         let fileURL = URL.documentsDirectory.appending(path: "\(name).json")

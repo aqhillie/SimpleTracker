@@ -88,10 +88,10 @@ struct SeedOptions: View {
     }
 
     private func stopAutoScrolling() {
-        if var scrollTimer = scrollTimer {
+        if let scrollTimer = scrollTimer {
             scrollTimer.invalidate()
         }
-        if var pauseTimer = pauseTimer {
+        if let pauseTimer = pauseTimer {
             pauseTimer.invalidate()
         }
     }
