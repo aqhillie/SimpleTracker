@@ -40,18 +40,18 @@ struct Bosses: View {
     var body: some View {
         #if os(macOS)
         VStack(spacing: viewModel.bossVerticalSpacing) {
-            BossLayout(bosses: viewModel.bossMatrix[viewModel.seedOptions[0].selection], size: viewModel.bossSize)
+            BossLayout(bosses: viewModel.bossMatrix[viewModel.objective], size: viewModel.bossSize)
         }
-        .padding(.top, viewModel.bossMatrix[viewModel.seedOptions[0].selection].count > 4 ? 0 : 35)
+        .padding(.top, viewModel.bossMatrix[viewModel.objective].count > 4 ? 0 : 35)
         #else
         if (g.size.width > g.size.height) {
             VStack {
-                BossLayout(bosses: viewModel.bossMatrix[viewModel.seedOptions[0].selection], size: viewModel.bossSize)
+                BossLayout(bosses: viewModel.bossMatrix[viewModel.objective], size: viewModel.bossSize)
             }
             .padding(0)
         } else {
             HStack {
-                BossLayout(bosses: viewModel.bossMatrix[viewModel.seedOptions[0].selection], size: viewModel.bossSize)
+                BossLayout(bosses: viewModel.bossMatrix[viewModel.objective], size: viewModel.bossSize)
             }
             .padding(0)
         }

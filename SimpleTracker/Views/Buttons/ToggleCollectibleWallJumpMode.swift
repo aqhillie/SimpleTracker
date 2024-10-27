@@ -19,6 +19,12 @@ struct ToggleCollectibleWallJumpMode: View {
     var body: some View {
         Button(action: {
             viewModel.collectibleWallJumpMode = (viewModel.collectibleWallJumpMode + 1) % 4
+            let message = [
+                "type": "cmd",
+                "key": "collectibleWallJumpMode",
+                "value": viewModel.collectibleWallJumpMode
+            ]
+            peerConnection.sendMessage(message)
         }) {
             ZStack {
                 switch(viewModel.collectibleWallJumpMode) {

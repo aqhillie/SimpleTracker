@@ -71,31 +71,42 @@ struct SimpleTrackerApp: App {
         let pc: PeerConnection
 
         var body: some View {
-            ForEach(viewModel.seedOptions, id: \.key) { seedOption in
-                Picker(seedOption.title, selection: Binding(
-                    get: { seedOption.selection },
-                    set: { seedOption.update($0) })) {
-                    ForEach(Array(seedOption.options.enumerated()), id: \.offset) { index, option in
-                        Text(option)
-                            .tag(index)
-                    }
+            @Bindable var viewModel = viewModel
+            Picker(viewModel.seedOptionData[safe: .objectives].title, selection: $viewModel.objective) {
+                ForEach(Array(viewModel.seedOptionData[safe: .objectives].options.enumerated()), id: \.offset) { index, option in
+                    Text(option)
+                        .tag(index)
                 }
             }
-            Picker("Collectible Wall Jump", selection: Binding(
-                get: {viewModel.collectibleWallJump},
-                set: {
-                    viewModel.collectibleWallJump = $0
-                    let message = [
-                        "type": "cmd",
-                        "key": "collectibleWallJump",
-                        "value": $0
-                    ]
-                    pc.sendMessage(message)
-                })) {
-                Text("Vanilla")
-                    .tag(false)
-                Text("Collectible")
-                    .tag(true)
+            Picker(viewModel.seedOptionData[safe: .difficulty].title, selection: $viewModel.difficulty) {
+                ForEach(Array(viewModel.seedOptionData[safe: .difficulty].options.enumerated()), id: \.offset) { index, option in
+                    Text(option)
+                        .tag(index)
+                }
+            }
+            Picker(viewModel.seedOptionData[safe: .itemProgression].title, selection: $viewModel.itemProgression) {
+                ForEach(Array(viewModel.seedOptionData[safe: .itemProgression].options.enumerated()), id: \.offset) { index, option in
+                    Text(option)
+                        .tag(index)
+                }
+            }
+            Picker(viewModel.seedOptionData[safe: .qualityOfLife].title, selection: $viewModel.qualityOfLife) {
+                ForEach(Array(viewModel.seedOptionData[safe: .qualityOfLife].options.enumerated()), id: \.offset) { index, option in
+                    Text(option)
+                        .tag(index)
+                }
+            }
+            Picker(viewModel.seedOptionData[safe: .mapLayout].title, selection: $viewModel.mapLayout) {
+                ForEach(Array(viewModel.seedOptionData[safe: .mapLayout].options.enumerated()), id: \.offset) { index, option in
+                    Text(option)
+                        .tag(index)
+                }
+            }
+            Picker(viewModel.seedOptionData[safe: .collectibleWallJump].title, selection: $viewModel.collectibleWallJump) {
+                ForEach(Array(viewModel.seedOptionData[safe: .collectibleWallJump].options.enumerated()), id: \.offset) { index, option in
+                    Text(option)
+                        .tag(index % 2 == 0 ? false : true)
+                }
             }
         }
     }
@@ -157,17 +168,7 @@ struct SimpleTrackerApp: App {
                     ]
                     peerConnection.sendMessage(message)
                 }
-                Picker("Collectible Wall Jump Mode", selection: Binding(
-                    get: {viewModel.collectibleWallJumpMode},
-                    set: {
-                        viewModel.collectibleWallJumpMode = $0
-//                        let message = [
-//                            "type": "cmd",
-//                            "key": "collectibleWallJump",
-//                            "value": $0
-//                        ]
-//                        pc.sendMessage(message)
-                    })) {
+                Picker("Collectible Wall Jump Mode", selection: $viewModel.collectibleWallJumpMode) {
                     Text("None")
                         .tag(0)
                     Text("Wall Jump Boots")

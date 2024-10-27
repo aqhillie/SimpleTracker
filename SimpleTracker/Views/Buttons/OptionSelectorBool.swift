@@ -9,25 +9,14 @@
 
 import SwiftUI
 
-struct OptionSelectorMini: View {
+struct OptionSelectorBool: View {
     @Environment(ViewModel.self) private var viewModel
     @Environment(PeerConnection.self) private var peerConnection
     let key: String
     let title: String
-    let colors: [UInt]
     let options: [String]
-    @State var selection: Int {
-        didSet {
-            setting = selection == 1 ? true : false
-            let message = [
-                "type": "cmd",
-                "key": key,
-                "value": setting
-            ] as [String : Any]
-            peerConnection.sendMessage(message)
-        }
-    }
-    @Binding var setting: Bool
+    let colors: [UInt]
+    @Binding var selection: Bool
         
     private func getColor(idx: Int, colors: [UInt]) -> UInt {
         if idx > colors.count - 1 {
@@ -36,7 +25,7 @@ struct OptionSelectorMini: View {
             return colors[idx]
         }
     }
-    
+        
     var body: some View {
         #if os(macOS)
         VStack(spacing: viewModel.seedOptionsSpacing) {
@@ -44,17 +33,23 @@ struct OptionSelectorMini: View {
                 .background(.black)
                 .foregroundColor(.white)
                 .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
-            Text(options[selection].uppercased())
+            Text(options[selection ? 1 : 0].uppercased())
                 .frame(width: viewModel.seedOptionsWidth, alignment: .center)
                 .background(.black)
-                .foregroundColor(Color(getColor(idx: selection, colors: colors)))
+                .foregroundColor(Color(getColor(idx: selection ? 1 : 0, colors: colors)))
                 .font(.custom("SuperMetroidSNES", size: viewModel.seedOptionSelectionFontSize))
         }
             .gesture(
                 TapGesture()
                     .onEnded {
                         if (!viewModel.lockSettings) {
-                            selection = (selection + 1) % options.count
+                            selection.toggle()
+                            let message = [
+                                "type": "cmd",
+                                "key": key,
+                                "value": selection
+                            ]
+                            peerConnection.sendMessage(message)
                         }
                     }
             )
@@ -66,10 +61,10 @@ struct OptionSelectorMini: View {
                 .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
             Spacer()
                 .frame(minHeight: 2, maxHeight: 5)
-            Text(options[selection].uppercased())
+            Text(options[selection ? 1 : 0].uppercased())
                 .frame(width: viewModel.seedOptionsWidth, alignment: .center)
                 .background(.black)
-                .foregroundColor(Color(getColor(idx: selection, colors: colors)))
+                .foregroundColor(Color(getColor(idx: selection ? 1 : 0, colors: colors)))
                 .font(.custom("SuperMetroidSNES", size: viewModel.seedOptionSelectionFontSize))
             Spacer()
                 .frame(minHeight: 0, maxHeight: 20)
@@ -79,7 +74,13 @@ struct OptionSelectorMini: View {
                 TapGesture()
                     .onEnded {
                         if (!viewModel.lockSettings) {
-                            selection = (selection + 1) % options.count
+                            selection.toggle()
+                            let message = [
+                                "type": "cmd",
+                                "key": key,
+                                "value": selection
+                            ]
+                            peerConnection.sendMessage(message)
                         }
                     }
             )

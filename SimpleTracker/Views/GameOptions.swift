@@ -58,22 +58,22 @@ struct SeedOptions: View {
         
         #if os(macOS)
         VStack(spacing: viewModel.seedOptionVStackSpacing) {
-            ForEach(viewModel.seedOptions, id: \.key) { seedOption in
-                if (seedOption.visible) {
-                    OptionSelector(seedOption: seedOption)
-                }
-            }
-            OptionSelectorMini(key: "collectibleWallJump", title: "Collectible Wall Jump", colors: [0x066815, 0x5B0012], options: ["Vanilla", "Collectible"], selection: viewModel.collectibleWallJump ? 1 : 0, setting: $viewModel.collectibleWallJump)
+            OptionSelector(key: "objective", title: "Objectives", options: viewModel.seedOptionData[safe: .objectives].options, selection: $viewModel.objective)
+            OptionSelector(key: "difficulty", title: "Difficulty", options: viewModel.seedOptionData[safe: .difficulty].options, colors: viewModel.seedOptionData[safe: .difficulty].colors, selection: $viewModel.difficulty)
+            OptionSelector(key: "itemProgression", title: "Item Progression", options: viewModel.seedOptionData[safe: .itemProgression].options, colors: viewModel.seedOptionData[safe: .itemProgression].colors,  selection: $viewModel.itemProgression)
+            OptionSelector(key: "qualityOfLife", title: "Quality of Life", options: viewModel.seedOptionData[safe: .qualityOfLife].options, colors: viewModel.seedOptionData[safe: .qualityOfLife].colors, selection: $viewModel.qualityOfLife)
+            OptionSelector(key: "mapLayout", title: "Map Layout", options: viewModel.seedOptionData[safe: .mapLayout].options, colors: viewModel.seedOptionData[safe: .mapLayout].colors,  selection: $viewModel.mapLayout)
+            OptionSelectorBool(key: "collectibleWallJump", title: "Collectible Wall Jump", options: viewModel.seedOptionData[safe: .collectibleWallJump].options, colors: viewModel.seedOptionData[safe: .collectibleWallJump].colors, selection: $viewModel.collectibleWallJump)
         }
         #else
         ScrollView {
             VStack(spacing: 10) {
-                ForEach(viewModel.seedOptions, id: \.key) { seedOption in
-                    if (seedOption.visible) {
-                        OptionSelector(seedOption: seedOption)
-                    }
-                }
-                OptionSelectorMini(key: "collectibleWallJump", title: "Collectible Wall Jump", colors: [0x066815, 0x5B0012], options: ["Vanilla", "Collectible"], selection: viewModel.collectibleWallJump ? 1 : 0, setting: $viewModel.collectibleWallJump)
+                OptionSelector(key: "objective", title: "Objectives", options: viewModel.seedOptionData[safe: .objectives].options, selection: $viewModel.objective)
+                OptionSelector(key: "difficulty", title: "Difficulty", options: viewModel.seedOptionData[safe: .difficulty].options, colors: viewModel.seedOptionData[safe: .difficulty].colors, selection: $viewModel.difficulty)
+                OptionSelector(key: "itemProgression", title: "Item Progression", options: viewModel.seedOptionData[safe: .itemProgression].options, colors: viewModel.seedOptionData[safe: .itemProgression].colors,  selection: $viewModel.itemProgression)
+                OptionSelector(key: "qualityOfLife", title: "Quality of Life", options: viewModel.seedOptionData[safe: .qualityOfLife].options, colors: viewModel.seedOptionData[safe: .qualityOfLife].colors, selection: $viewModel.qualityOfLife)
+                OptionSelector(key: "mapLayout", title: "Map Layout", options: viewModel.seedOptionData[safe: .mapLayout].options, colors: viewModel.seedOptionData[safe: .mapLayout].colors,  selection: $viewModel.mapLayout)
+                OptionSelectorBool(key: "collectibleWallJump", title: "Collectible Wall Jump", options: viewModel.seedOptionData[safe: .collectibleWallJump].options, colors: viewModel.seedOptionData[safe: .collectibleWallJump].colors, selection: $viewModel.collectibleWallJump)
                 OptionSelectorItemToggle(key: .phantoon, title: "Optional Phantoon Icon", color: 0x808080)
             }
         }

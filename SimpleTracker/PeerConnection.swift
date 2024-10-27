@@ -101,11 +101,13 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
             "type": "cmd",
             "key": "syncSettings",
             "value": [
-                "objectives": viewModel.seedOptions[0].selection as Any,
-                "difficulty": viewModel.seedOptions[1].selection as Any,
-                "itemProgression": viewModel.seedOptions[2].selection as Any,
-                "qualityOfLife": viewModel.seedOptions[3].selection as Any,
-                "mapLayout": viewModel.seedOptions[4].selection as Any
+                "objectives": viewModel.objective as Any,
+                "difficulty": viewModel.difficulty as Any,
+                "itemProgression": viewModel.itemProgression as Any,
+                "qualityOfLife": viewModel.qualityOfLife as Any,
+                "mapLayout": viewModel.mapLayout as Any,
+                "collectibleWallJump": viewModel.collectibleWallJump as Any,
+                "collectibleWallJumpMode": viewModel.collectibleWallJumpMode as Any
             ]
         ] as [String : Any]
         sendMessage(message)
@@ -142,45 +144,89 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
 
                     switch(type) {
                     case "boss":
-                        viewModel.updateBoss(from: json)
+                        DispatchQueue.main.async {
+                            self.viewModel.updateBoss(from: json)
+                        }
                     case "item":
-                        viewModel.updateItem(from: json)
+                        DispatchQueue.main.async {
+                            self.viewModel.updateItem(from: json)
+                        }
                     case "cmd":
                         switch(key) {
                             case "lockSettings":
-                                viewModel.lockSettings = value as! Bool
-                            case "collectibleWallJump":
-                                viewModel.collectibleWallJump = value as! Bool
+                                DispatchQueue.main.async {
+                                    self.viewModel.lockSettings = value as! Bool
+                                }
                             case "resetTracker":
-                                viewModel.resetBosses()
-                                viewModel.resetItems()
+                                DispatchQueue.main.async {
+                                    self.viewModel.resetBosses()
+                                    self.viewModel.resetItems()
+                                }
                             case "objective":
-                                viewModel.seedOptions[0].selection = value as! Int
+                                DispatchQueue.main.async {
+                                    self.viewModel.objective = value as! Int
+                                }
                             case "difficulty":
-                                viewModel.seedOptions[1].selection = value as! Int
+                                DispatchQueue.main.async {
+                                    self.viewModel.difficulty = value as! Int
+                                }
                             case "itemProgression":
-                                viewModel.seedOptions[2].selection = value as! Int
+                                DispatchQueue.main.async {
+                                    self.viewModel.itemProgression = value as! Int
+                                }
                             case "qualityOfLife":
-                                viewModel.seedOptions[3].selection = value as! Int
+                                DispatchQueue.main.async {
+                                    self.viewModel.qualityOfLife = value as! Int
+                                }
                             case "mapLayout":
-                                viewModel.seedOptions[4].selection = value as! Int
+                                DispatchQueue.main.async {
+                                    self.viewModel.mapLayout = value as! Int
+                                }
+                            case "collectibleWallJump":
+                                DispatchQueue.main.async {
+                                    self.viewModel.collectibleWallJump = value as! Bool
+                                }
+                            case "collectibleWallJumpMode":
+                                DispatchQueue.main.async {
+                                    self.viewModel.collectibleWallJumpMode = value as! Int
+                                }
                             #if os(macOS)
                             case "syncSettings":
                                 if let settings = value as? [String: Any] {
                                     if let objectives = settings["objectives"] as? Int {
-                                        viewModel.seedOptions[0].selection = objectives
+                                        DispatchQueue.main.async {
+                                            self.viewModel.objective = objectives
+                                        }
                                     }
                                     if let difficulty = settings["difficulty"] as? Int {
-                                        viewModel.seedOptions[1].selection = difficulty
+                                        DispatchQueue.main.async {
+                                            self.viewModel.difficulty = difficulty
+                                        }
                                     }
                                     if let itemProgression = settings["itemProgression"] as? Int {
-                                        viewModel.seedOptions[2].selection = itemProgression
+                                        DispatchQueue.main.async {
+                                            self.viewModel.itemProgression = itemProgression
+                                        }
                                     }
                                     if let qualityOfLife = settings["qualityOfLife"] as? Int {
-                                        viewModel.seedOptions[3].selection = qualityOfLife
+                                        DispatchQueue.main.async {
+                                            self.viewModel.qualityOfLife = qualityOfLife
+                                        }
                                     }
                                     if let mapLayout = settings["mapLayout"] as? Int {
-                                        viewModel.seedOptions[4].selection = mapLayout
+                                        DispatchQueue.main.async {
+                                            self.viewModel.mapLayout = mapLayout
+                                        }
+                                    }
+                                    if let collectibleWallJump = settings["collectibleWallJump"] as? Bool {
+                                        DispatchQueue.main.async {
+                                            self.viewModel.collectibleWallJump = collectibleWallJump
+                                        }
+                                    }
+                                    if let collectibleWallJumpMode = settings["collectibleWallJumpMode"] as? Int {
+                                        DispatchQueue.main.async {
+                                            self.viewModel.collectibleWallJumpMode = collectibleWallJumpMode
+                                        }
                                     }
                                 }
                             #endif

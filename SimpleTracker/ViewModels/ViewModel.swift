@@ -29,8 +29,28 @@ class ViewModel {
     let items: [ItemKey: Item]
     var bossMatrix: [[Boss]]
     var itemMatrix: [[Item]]
-    var seedOptions: [SeedOption]
-
+    
+    var objective: Int
+    var difficulty: Int
+    var itemProgression: Int
+    var qualityOfLife: Int
+    var mapLayout: Int
+    var collectibleWallJump: Bool {
+        didSet {
+            UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
+            if (collectibleWallJump) {
+                items[safe: .walljump].collected = 0
+                updateWallJumpIcons()
+            } else {
+                items[safe: .walljump].isActive = false
+                items[safe: .canwalljump].isActive = false
+            }
+        }
+    }
+    
+    
+    let seedOptionData: [SeedOptionDataType: SeedOption]
+    
     #if os(iOS)
     let deviceWidth: CGFloat
     let deviceHeight: CGFloat
@@ -57,27 +77,13 @@ class ViewModel {
     #endif
 
     var lockSettings: Bool = false
-    var longPressDelay: Double
     
     var localMode: Bool {
         didSet {
             UserDefaults.standard.set(localMode, forKey: "localMode")
         }
     }
-  
-    var collectibleWallJump: Bool {
-        didSet {
-            UserDefaults.standard.set(collectibleWallJump, forKey: "collectibleWallJump")
-            if (collectibleWallJump) {
-                items[safe: .walljump].collected = 0
-                updateWallJumpIcons()
-            } else {
-                items[safe: .walljump].isActive = false
-                items[safe: .canwalljump].isActive = false
-            }
-        }
-    }
-        
+          
     init() {
         #if os(iOS)
         self.deviceWidth = UIScreen.main.bounds.width
@@ -90,14 +96,13 @@ class ViewModel {
         self.seedOptionSelectionFontSize = 22
         self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10
-            
         #elseif os(macOS)
         self.isWindowActive = true
         self.bossSize = 65
         self.itemSize = 60
-        self.seedOptionsWidth = 320
+        self.seedOptionsWidth = 350
         self.seedOptionTitleFontSize = 18
-        self.seedOptionSelectionFontSize = 28
+        self.seedOptionSelectionFontSize = 26
         self.bossVerticalSpacing = 30
         self.rootVStackSpacing = 25
         self.rootHStackSpacing = 25
@@ -106,6 +111,7 @@ class ViewModel {
         self.seedOptionVStackSpacing = 20
         self.seedOptionsSpacing = 10        
         #endif
+        self.lockedSettingOpacity = 0.3
 
         self.defaultActiveStates = [
             .eye: true,
@@ -115,12 +121,27 @@ class ViewModel {
             .walljump: UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false),
             .canwalljump: false
         ]
-        
-        self.lockedSettingOpacity = 0.3
-        self.longPressDelay = 0.2
 
-        self.localMode = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
+        // Map Rando Seed Options
+        self.objective = UserDefaults.standard.integerWithDefaultValue(forKey: "objective", defaultValue: 1)
+        self.difficulty = UserDefaults.standard.integerWithDefaultValue(forKey: "difficulty", defaultValue: 0)
+        self.itemProgression = UserDefaults.standard.integerWithDefaultValue(forKey: "itemProgression", defaultValue: 0)
+        self.qualityOfLife = UserDefaults.standard.integerWithDefaultValue(forKey: "qualityOfLife", defaultValue: 2)
+        self.mapLayout = UserDefaults.standard.integerWithDefaultValue(forKey: "mapLayout", defaultValue: 1)
         self.collectibleWallJump = UserDefaults.standard.boolWithDefaultValue(forKey: "collectibleWallJump", defaultValue: false)
+
+        // seed option data
+        self.seedOptionData = [
+            .objectives: SeedOption(title: "Objectives", options: ["None", "Bosses", "Minibosses", "Metroids", "Chozos",  "Pirates", "Random"]),
+            .difficulty: SeedOption(title: "Difficulty", options: ["Basic", "Medium", "Hard", "Very Hard", "Expert", "Extreme", "Insane"], colors: [0x066815, 0xCBCA02, 0xC20003, 0x5B0012, 0x0766C0, 0x0400C3, 0xC706C9]),
+            .itemProgression: SeedOption(title: "Item Progression", options: ["Normal", "Tricky", "Challenge", "Desolate"], colors: [0x066815, 0xCBCA02, 0xC20003, 0xC706C9]),
+            .qualityOfLife: SeedOption(title: "Quality of Life", options: ["Off", "Low", "Default", "Max"], colors: [0x5B0012, 0xC20003, 0xCBCA02, 0x066815]),
+            .mapLayout: SeedOption(title: "Map Layout", options: ["Vanilla", "Tame", "Wild"], colors: [0x066815, 0xCBCA02, 0xC20003]),
+            .collectibleWallJump: SeedOption(title: "Collectible Wall Jump", options: ["Vanilla", "Collectible"], colors: [0x066815, 0x5B0012])
+        ]
+        
+        // misc settings
+        self.localMode = UserDefaults.standard.boolWithDefaultValue(forKey: "localMode", defaultValue: false)
         
         // Single place for all Boss instances
         self.bosses = [
@@ -323,77 +344,6 @@ class ViewModel {
             ]
         ]
         #endif
-        
-        self.seedOptions = [
-            SeedOption(
-                key: "objective",
-                title: "Objectives",
-                options: ["None",
-                          "Bosses",
-                          "Minibosses",
-                          "Metroids",
-                          "Chozos",
-                          "Pirates",
-                          "Random"],
-                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "objective", defaultValue: 1)
-            ),
-            SeedOption(
-                key: "difficulty",
-                title: "Difficulty",
-                options: ["Basic",
-                          "Medium",
-                          "Hard",
-                          "Very Hard",
-                          "Expert",
-                          "Extreme",
-                          "Insane"],
-                colors: [0x066815,
-                         0xCBCA02,
-                         0xC20003,
-                         0x5B0012,
-                         0x0766C0,
-                         0x0400C3,
-                         0xC706C9],
-                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "difficulty", defaultValue: 0)
-            ),
-            SeedOption(
-                key: "itemProgression",
-                title: "Item Progression",
-                options: ["Normal",
-                          "Tricky",
-                          "Challenge",
-                          "Desolate"],
-                colors: [0x066815,
-                         0xCBCA02,
-                         0xC20003,
-                         0xC706C9],
-                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "itemProgression", defaultValue: 0)
-            ),
-            SeedOption(
-                key: "qualityOfLife",
-                title: "Quality of Life",
-                options: ["Off",
-                          "Low",
-                          "Default",
-                          "Max"],
-                colors: [0x5B0012,
-                         0xC20003,
-                         0xCBCA02,
-                         0x066815],
-                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "qualityOfLife", defaultValue: 2)
-           ),
-            SeedOption(
-                key: "mapLayout",
-                title: "Map Layout",
-                options: ["Vanilla",
-                          "Tame",
-                          "Wild"],
-                colors: [0x066815,
-                         0xCBCA02,
-                         0xC20003],
-                selection: UserDefaults.standard.integerWithDefaultValue(forKey: "mapLayout", defaultValue: 1)
-            )
-        ]
         
         updateWallJumpIcons()
     }

@@ -77,11 +77,12 @@ struct TitleBar: View {
     @Environment(ViewModel.self) private var viewModel
 
     var body: some View {
+        @Bindable var viewModel = viewModel
         ZStack(alignment: .top) {
             Text("SimpleTracker")
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .center)
-                .opacity(viewModel.isWindowActive ? 1 : 0.3)
+                .opacity($viewModel.isWindowActive.wrappedValue ? 1 : 0.3)
             HStack {
                 Spacer()
                 ResetTracker(size: 15)

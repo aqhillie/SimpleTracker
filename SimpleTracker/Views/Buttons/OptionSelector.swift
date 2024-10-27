@@ -12,20 +12,21 @@ import SwiftUI
 struct OptionSelector: View {
     @Environment(ViewModel.self) private var viewModel
     @Environment(PeerConnection.self) private var peerConnection
-    @State var seedOption: SeedOption
-//    let g: GeometryProxy
+    let key: String
+    let title: String
+    let options: [String]
+    let colors: [UInt]
+    @Binding var selection: Int
     
-    #if os(macOS)
-    init (seedOption: SeedOption) {
-        self.seedOption = seedOption
+    init (key: String, title: String, options: [String], colors: [UInt] = [0x808080], selection: Binding<Int>) {
+        self.key = key
+        self.title = title
+        self.options = options
+        self.colors = colors
+        self._selection = selection
     }
-    #else
-    init (seedOption: SeedOption) {
-        self.seedOption = seedOption
-    }
-    #endif
     
-    private func getColor(idx: Int, colors: [UInt]) -> UInt {
+    private func getColor(idx: Int) -> UInt {
         if idx > colors.count - 1 {
             return colors[colors.count - 1]
         } else {
@@ -36,44 +37,43 @@ struct OptionSelector: View {
     var body: some View {
         #if os(macOS)
         VStack(spacing: viewModel.seedOptionsSpacing) {
-            Text(seedOption.title.uppercased())
+            Text(title.uppercased())
                 .background(.black)
                 .foregroundColor(.white)
                 .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
-            Text(seedOption.options[seedOption.selection].uppercased())
+            Text(options[selection].uppercased())
                 .frame(width: viewModel.seedOptionsWidth, alignment: .center)
                 .background(.black)
-                .foregroundColor(Color(getColor(idx: seedOption.selection, colors: seedOption.colors)))
+                .foregroundColor(Color(getColor(idx: selection)))
                 .font(.custom("SuperMetroidSNES", size: viewModel.seedOptionSelectionFontSize))
         }
             .gesture(
                 TapGesture()
                     .onEnded {
                         if (!viewModel.lockSettings) {
-                            let selection = (seedOption.selection + 1) % seedOption.options.count
-                            seedOption.update(selection)
+                            selection = (selection + 1) % options.count
                             let message = [
                                 "type": "cmd",
-                                "key": seedOption.key,
-                                "value": seedOption.selection
+                                "key": key,
+                                "value": selection
                             ] as [String: Any]
                             
                             peerConnection.sendMessage(message)
                         }
                     }
             )
-        #else
+        #elseif os(iOS)
         VStack {
-            Text(seedOption.title.uppercased())
+            Text(title.uppercased())
                 .background(.black)
                 .foregroundColor(.white)
                 .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
             Spacer()
                 .frame(minHeight: 2, maxHeight: 5)
-            Text(seedOption.options[seedOption.selection].uppercased())
+            Text(options[selection].uppercased())
                 .frame(width: viewModel.seedOptionsWidth, alignment: .center)
                 .background(.black)
-                .foregroundColor(Color(getColor(idx: seedOption.selection, colors: seedOption.colors)))
+                .foregroundColor(Color(getColor(idx: selection)))
                 .font(.custom("SuperMetroidSNES", size: viewModel.seedOptionSelectionFontSize))
             Spacer()
                 .frame(minHeight: 0, maxHeight: 20)
@@ -83,12 +83,11 @@ struct OptionSelector: View {
                 TapGesture()
                     .onEnded {
                         if (!viewModel.lockSettings) {
-                            let selection = (seedOption.selection + 1) % seedOption.options.count
-                            seedOption.update(selection)
+                            selection = (selection + 1) % options.count
                             let message = [
                                 "type": "cmd",
-                                "key": seedOption.key,
-                                "value": seedOption.selection
+                                "key": key,
+                                "value": selection
                             ] as [String: Any]
                             
                             peerConnection.sendMessage(message)

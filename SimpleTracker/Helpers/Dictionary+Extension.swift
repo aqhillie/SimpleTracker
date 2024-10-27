@@ -24,3 +24,9 @@ extension Dictionary where Key == ItemKey, Value == Bool {
         return self[key] ?? true
     }
 }
+
+extension Dictionary where Key == SeedOptionDataType, Value == SeedOption {
+    subscript(safe key: Key) -> Value {
+        return self[key] ?? SeedOption.empty
+    }
+}

@@ -59,7 +59,7 @@ struct ItemGrid: View {
             }
             .padding(0)
             HStack(spacing: viewModel.itemGridHorizontalSpacing) {
-                if (viewModel.seedOptions[0].selection == 1) {
+                if (viewModel.objective == 1) {
                     ItemGroups(group: viewModel.sixthItemRowBosses, size: viewModel.itemSize)
                 } else {
                     ItemGroups(group: viewModel.sixthItemRowOthers, size: viewModel.itemSize)
