@@ -39,7 +39,7 @@ class SeedData: Codable {
         }
         
         for (key, item) in viewModel.items {
-            if (key == .phantoon && item.collected == 0) {
+            if ([.phantoon, .eye].contains(key) && item.collected == 0) {
                 collectedItems[key.toString()] = item.collected
             } else if (item.isRealItem && item.collected > 0) {
                 collectedItems[key.toString()] = item.collected
