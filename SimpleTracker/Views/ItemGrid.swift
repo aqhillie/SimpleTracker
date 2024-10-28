@@ -25,8 +25,19 @@ struct ItemGroups: View {
 
     var body: some View {
         ForEach(0..<5) { index in
+            #if os(iOS)
+            if (group[index].key != .phantoon || viewModel.objective != 1) {
+                ItemButton(item: group[index], size: size, isActive: group[index].isActive)
+            } else {
+                Rectangle()
+                    .fill(Color.black)
+                    .frame(width: size, height: size)
+                    .onAppear {
+                        debug("Empty rectangle for Phantoon special case appeared.")
+                    }
+            }
+            #else
             ItemButton(item: group[index], size: size, isActive: group[index].isActive)
-            #if os(macOS)
                 .padding(.top, paddingTop)
                 .padding(.leading, paddingLeft)
             #endif
