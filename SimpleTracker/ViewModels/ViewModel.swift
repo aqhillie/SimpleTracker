@@ -330,23 +330,23 @@ class ViewModel {
             ],
             [
                 items[safe: .wave],
-                items[safe: .canwalljump],
+                items[safe: .grapple],
                 items[safe: .springball],
                 items[safe: .speed],
                 items[safe: .powerbomb]
             ],
             [
                 items[safe: .spazer],
-                items[safe: .grapple],
+                items[safe: .xray],
                 items[safe: .screw],
                 items[safe: .walljump],
                 items[safe: .etank]
             ],
             [
                 items[safe: .plasma],
-                items[safe: .xray],
                 items[safe: .eye],
                 items[safe: .phantoon],
+                items[safe: .canwalljump],
                 items[safe: .reservetank]
             ]
         ]
