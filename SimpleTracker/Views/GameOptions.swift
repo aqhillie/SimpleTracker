@@ -117,9 +117,6 @@ struct SeedOptions: View {
                         #if os(macOS)
                         .padding(.bottom, 10)
                         #endif
-                    #if os(iOS)
-                    OptionSelectorItemToggle(key: .phantoon, title: "Optional Phantoon Icon", color: 0x808080)
-                    #endif
                 }
                 #if os(macOS)
                 .offset(y: yOffset)
