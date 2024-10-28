@@ -183,6 +183,7 @@ class ViewModel {
             .phantoon: PhantoonItem(),
             .charge: Item(key: .charge, name: "Charge Beam"),
             .ice: Item(key: .ice, name: "Ice Beam"),
+            .wave: Item(key: .wave, name: "Wave Beam"),
             .spazer: Item(key: .spazer, name: "Spazer"),
             .plasma: Item(key: .plasma, name: "Plasma Beam"),
             .varia: Item(key: .varia, name: "Varia Suit"),
