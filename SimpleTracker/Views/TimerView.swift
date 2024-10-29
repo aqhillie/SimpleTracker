@@ -7,11 +7,12 @@
 //  Copyright (C) 2024 Warpixel
 //
 
+#if os(macOS)
 import SwiftUI
 
 struct LetterBox: View {
     let width: CGFloat?
-    var letter: String = "0"
+    var letter: String
     let size: CGFloat
     let mini: Bool
     
@@ -26,11 +27,33 @@ struct LetterBox: View {
         ZStack {
             Text(letter)
                 .font(.custom("BigNoodleTitling", size: size))
-//                .baselineOffset(-100)
-                .border(.red)
+                .foregroundStyle(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.lightCyan, Color.medCyan]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
         }
             .clipShape(Rectangle())
             .frame(width: width, alignment: .center)
+    }
+}
+
+struct FixedWidthWord: View {
+    let charArray: [Character]
+    let size: CGFloat
+    
+    init(_ str: String, size: CGFloat) {
+        self.charArray = Array(str)
+        self.size = size
+    }
+    
+    var body: some View {
+        ForEach(Array(charArray.enumerated()), id: \.offset) { index, char in
+            LetterBox(String(char), size: size)
+                .id(index)
+        }
     }
 }
 
@@ -45,9 +68,16 @@ struct Hundreds: View {
     
     var body: some View {
         Text(value)
+            .frame(width: 60, alignment: .leading)
             .baselineOffset(6)
             .font(.custom("BigNoodleTitling", size: size))
-            .border(.red)
+            .foregroundStyle(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.lightCyan, Color.medCyan]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
     }
 }
 
@@ -56,20 +86,17 @@ struct TimerView: View {
     let fontSize: CGFloat = 72
 
     var body: some View {
-        HStack(alignment: .bottom) {
+        HStack(alignment: .bottom, spacing: 1) {
             Spacer()
-            LetterBox("0", size: fontSize)
-                .border(.red)
-            LetterBox("0", size: fontSize)
-                .border(.red)
+            if(viewModel.getIntHours() >= 1) {
+                FixedWidthWord(viewModel.getHours(), size: fontSize)
+                LetterBox(":", size: fontSize, fixed: false)
+            }
+            FixedWidthWord(viewModel.getMinutes(), size: fontSize)
             LetterBox(":", size: fontSize, fixed: false)
-                .border(.red)
-            LetterBox("0", size: fontSize)
-                .border(.red)
-            LetterBox("0", size: fontSize)
-                .border(.red)
-            Hundreds("00", size: fontSize / 2)
+            FixedWidthWord(viewModel.getSeconds(), size: fontSize)
+            Hundreds(viewModel.getHundredths(), size: fontSize / 2)
         }
-        .border(.red)
     }
 }
+#endif

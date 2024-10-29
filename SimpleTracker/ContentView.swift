@@ -20,8 +20,10 @@ struct ContentView: View {
             VStack(spacing: viewModel.rootVStackSpacing) {
                 Spacer()
                     .frame(height: 30)
-                TimerView()
-                    .environment(timerViewModel)
+                if (timerViewModel.isVisible) {
+                    TimerView()
+                        .environment(timerViewModel)
+                }
 //                SeedName()
                 HStack(alignment: .top, spacing: viewModel.rootHStackSpacing) {
                     Spacer()

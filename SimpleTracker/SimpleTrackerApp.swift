@@ -17,7 +17,6 @@ struct SimpleTrackerApp: App {
     @State var timerViewModel: TimerViewModel = TimerViewModel()
     #endif
 
-    
     init() {
         let viewModel = ViewModel()
         let peerConnection = PeerConnection(viewModel: viewModel)
@@ -166,6 +165,12 @@ struct SimpleTrackerApp: App {
                 .keyboardShortcut("R", modifiers: [.command])
             }
             CommandGroup(replacing: .sidebar) {
+                Button("\(timerViewModel.isVisible ? "Hide" : "Show") Timer") {
+                    timerViewModel.isVisible.toggle()
+                    UserDefaults.standard.set(timerViewModel.isVisible, forKey: "timerVisibility")
+                    resizeWindowToFitContent()
+                }
+                Divider()
                 Button("\(viewModel.items[safe: .eye].isActive ? "Hide" : "Show") Planet Awake Status") {
                     viewModel.items[safe: .eye].isActive.toggle()
                     let message = [

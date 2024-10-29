@@ -7,6 +7,7 @@
 //  Copyright (C) 2024 Warpixel
 //
 
+#if os(macOS)
 import SwiftUI
 
 @Observable
@@ -15,11 +16,8 @@ class TimerViewModel {
     var elapsedTime: TimeInterval = 0
     var timer: Timer?
     var isRunning: Bool = false
-    
-    var timeString: String {
-        return getTimeString(from: elapsedTime)
-    }
-            
+    var isVisible: Bool = UserDefaults.standard.boolWithDefaultValue(forKey: "timerVisibility", defaultValue: false)
+               
     func startTimer() {
         startTime = Date()
         isRunning = true
@@ -45,12 +43,29 @@ class TimerViewModel {
         elapsedTime = Date().timeIntervalSince(startTime)
     }
     
-    func getTimeString(from timeInterval: TimeInterval) -> String {
-        let hours = Int(timeInterval) / 3600
-        let minutes = Int(timeInterval) / 60
-        let seconds = Int(timeInterval) % 60
-        let hundredths = Int((timeInterval.truncatingRemainder(dividingBy: 1)) * 100)
-        let str = String(format: "%02d:%02d.%02d", minutes, seconds, hundredths)
-        return str.replacingOccurrences(of: "0", with: "O")
+    func getIntHours() -> Int {
+        return Int(elapsedTime) / 3600
+    }
+    
+    func getHours() -> String {
+        let hours = Int(elapsedTime) / 3600
+        return String(format: "%02d", hours)
+    }
+
+    func getMinutes() -> String {
+        let hours = Int(elapsedTime) / 3600
+        let minutes = (Int(elapsedTime) / 60) - (hours * 60)
+        return String(format: "%02d", minutes)
+    }
+
+    func getSeconds() -> String {
+        let seconds = Int(elapsedTime) % 60
+        return String(format: "%02d", seconds)
+    }
+
+    func getHundredths() -> String {
+        let hundredths = Int((elapsedTime.truncatingRemainder(dividingBy: 1)) * 100)
+        return String(format: "%02d", hundredths)
     }
 }
+#endif
