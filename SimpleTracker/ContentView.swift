@@ -11,6 +11,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(ViewModel.self) private var viewModel
+    @Environment(TimerViewModel.self) private var timerViewModel
 
     var body: some View {
         #if os(macOS)
@@ -19,6 +20,8 @@ struct ContentView: View {
             VStack(spacing: viewModel.rootVStackSpacing) {
                 Spacer()
                     .frame(height: 30)
+                TimerView()
+                    .environment(timerViewModel)
 //                SeedName()
                 HStack(alignment: .top, spacing: viewModel.rootHStackSpacing) {
                     Spacer()
@@ -76,6 +79,7 @@ struct ContentView: View {
 #if os(macOS)
 struct TitleBar: View {
     @Environment(ViewModel.self) private var viewModel
+    @Environment(TimerViewModel.self) private var timerViewModel
 
     var body: some View {
         @Bindable var viewModel = viewModel
@@ -88,6 +92,8 @@ struct TitleBar: View {
                 Spacer()
                 LockSettings(size: 15)
                 ResetTracker(size: 15)
+                TimerButton(size: 15)
+                    .environment(timerViewModel)
                 ToggleEye(size: 15)
                 ToggleOptionalPhantoon(size: 15)
                 ToggleCollectibleWallJumpMode(size: 15)

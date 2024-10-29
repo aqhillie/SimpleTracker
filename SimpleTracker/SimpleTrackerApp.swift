@@ -13,6 +13,10 @@ import SwiftUI
 struct SimpleTrackerApp: App {
     @State var viewModel: ViewModel
     @State var peerConnection: PeerConnection
+    #if os(macOS)
+    @State var timerViewModel: TimerViewModel = TimerViewModel()
+    #endif
+
     
     init() {
         let viewModel = ViewModel()
@@ -129,6 +133,9 @@ struct SimpleTrackerApp: App {
             ContentView()
                 .environment(viewModel)
                 .environment(peerConnection)
+                #if os(macOS)
+                .environment(timerViewModel)
+                #endif
                 .onAppear {
                     #if os(macOS)
                     setupWindow()
