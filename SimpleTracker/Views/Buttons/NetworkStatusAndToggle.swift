@@ -9,6 +9,9 @@ import SwiftUI
 
 struct NetworkStatusAndToggle: View {
     @Environment(ViewModel.self) private var viewModel
+    #if os(iOS)
+    @Environment(TimerViewModel.self) private var timerViewModel
+    #endif
     @Environment(PeerConnection.self) private var peerConnection
     
     let size: CGFloat
@@ -26,6 +29,9 @@ struct NetworkStatusAndToggle: View {
                 peerConnection.stopAdvertisingPeer()
                 peerConnection.stopBrowsingForPeers()
                 peerConnection.disconnectPeer()
+                #if os(iOS)
+                timerViewModel.isVisible = false
+                #endif
             }
             viewModel.localMode.toggle()
         }) {

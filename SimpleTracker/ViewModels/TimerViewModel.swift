@@ -13,6 +13,7 @@ import SwiftUI
 class TimerViewModel {
     #if os(macOS)
     var startTime: Date?
+    var stopTime: Date?
     var elapsedTime: TimeInterval = 0
     var timer: Timer?
     var isRunning: Bool = false
@@ -25,7 +26,10 @@ class TimerViewModel {
 
     #if os(macOS)
     func startTimer() {
-        if startTime == nil {
+        if let stopTime, let startTime {
+            let elapsedTime = stopTime.timeIntervalSince(startTime)
+            self.startTime = Date().addingTimeInterval(-elapsedTime)
+        } else {
             startTime = Date()
         }
         isRunning = true
@@ -38,6 +42,7 @@ class TimerViewModel {
     func stopTimer() {
         timer?.invalidate()
         timer = nil
+        stopTime = Date()
         isRunning = false
     }
     
@@ -45,6 +50,7 @@ class TimerViewModel {
         stopTimer()
         elapsedTime = 0
         startTime = nil
+        stopTime = nil
     }
 
     private func updateElapsedTime() {
