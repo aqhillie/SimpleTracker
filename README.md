@@ -6,7 +6,7 @@ It is based on an unknown pack for EmoTracker that a lot of SM speed runners and
 
 I couldn't find it anywhere so I pieced it together from screenshots and other random trackers I found in various places.
 
-Update: I was finally able to find the pack. It was written by chicdead26 and I have since implemented all the features (I believe) of the pack.
+Update: I was finally able to find the pack. It was written by **chicdead26** and I have since implemented all the features (I believe) of the pack.
 
 ## Features
 
