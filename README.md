@@ -37,3 +37,7 @@ The desktop app is fully controllable from iPhone, including starting, stopping 
 All the icons that are available on the titlebar of the desktop app show up to the right of seed settings on the iPhone app in portrait mode, and above them in landscape mode.
 
 Unlike the dekstop app, the timer button is unavailable in local mode (networking turned off) since there is no actual timer on the iPhone app. There's simply no room for it on the UI, and it's mostly just for recording or streaming from OBS anyway.
+
+## JSON Seeds
+
+SimpleTracker has the infrastructure for multiple seed support. Right now there's only one seed that is the main one that gets stored, but in the future you will be able to save and load and keep track of multiple different seeds.
