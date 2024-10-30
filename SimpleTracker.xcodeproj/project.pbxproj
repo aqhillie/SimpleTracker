@@ -37,11 +37,15 @@
 				Info.plist,
 				Scripts/buildupdate.sh,
 			);
+			platformFiltersByRelativePath = {
+				Fonts/big_noodle_titling.ttf = (macos, );
+			};
 			target = FAA0EECD2CB3805F008D6B24 /* SimpleTracker */;
 		};
 		FAB328162CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Fonts/big_noodle_titling.ttf,
 				"Fonts/super-metroid-snes.ttf",
 			);
 			target = FAA0EEDE2CB38061008D6B24 /* SimpleTrackerTests */;
@@ -49,6 +53,7 @@
 		FAB328172CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Fonts/big_noodle_titling.ttf,
 				"Fonts/super-metroid-snes.ttf",
 			);
 			target = FAA0EEE82CB38061008D6B24 /* SimpleTrackerUITests */;

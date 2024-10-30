@@ -21,10 +21,13 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     private var mcBrowser: MCNearbyServiceBrowser!
         
     var viewModel: ViewModel
+    var timerViewModel: TimerViewModel
+    
     var hasConnectedPeers: Bool = false
     
-    init(viewModel: ViewModel) {
+    init(viewModel: ViewModel, timerViewModel: TimerViewModel) {
         self.viewModel = viewModel
+        self.timerViewModel = timerViewModel
         
         #if os(iOS)
         let deviceName = UIDevice.current.name
@@ -112,6 +115,7 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
     #endif
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+//        debug("in didReceive")
         do {
             // Convert the received data into a dictionary
             if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
@@ -134,6 +138,42 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                         }
                     case "cmd":
                         switch(key) {
+                            #if os(macOS)
+                            case "toggleTimer":
+                                DispatchQueue.main.async {
+                                    if self.timerViewModel.isRunning {
+                                        self.timerViewModel.stopTimer()
+                                    } else {
+                                        self.timerViewModel.startTimer()
+                                    }
+                                }
+                            case "resetTimer":
+                                DispatchQueue.main.async {
+                                    if self.timerViewModel.isRunning {
+                                        self.timerViewModel.stopTimer()
+                                    }
+                                    self.timerViewModel.resetTimer()
+                                }
+                            case "timerStatusRequest":
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    var message = [
+                                        "type": "cmd",
+                                        "key": "timerVisibility",
+                                        "value": self.timerViewModel.isVisible
+                                    ]
+                                    self.sendMessage(message)
+                                }
+                            #endif
+                            #if os(iOS)
+                            case "timerVisibility":
+                                DispatchQueue.main.async {
+                                    self.timerViewModel.isVisible = value as! Bool
+                                }
+                            case "timerRunning":
+                                DispatchQueue.main.async {
+                                    self.timerViewModel.isRunning = value as! Bool
+                                }
+                            #endif
                             case "incomingSeedFileData":
                                 DispatchQueue.main.async {
                                     if let seedData = (value as! String).toSeedData() {
@@ -176,7 +216,7 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                                     }
                                 }
                             case "seedFileRequest":
-                                DispatchQueue.main.async {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                     if (SeedData.checkSeed()) {
                                         guard let seedData = SeedData.createFromFile(), let stringifiedSeedFile = seedData.toJSON() else {
                                                 debug("Failed to get seed data.")
@@ -299,6 +339,14 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                 self.sendMessage(message)
             } else {
                 syncToDesktop()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                let message = [
+                    "type": "cmd",
+                    "key": "timerStatusRequest",
+                    "value": ""
+                ]
+                self.sendMessage(message)
             }
             #endif
         case .connecting:
