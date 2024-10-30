@@ -12,13 +12,17 @@ import SwiftUI
 @main
 struct SimpleTrackerApp: App {
     @State var viewModel: ViewModel
+    @State var timerViewModel: TimerViewModel
     @State var peerConnection: PeerConnection
-    
+
     init() {
         let viewModel = ViewModel()
-        let peerConnection = PeerConnection(viewModel: viewModel)
+        let timerViewModel = TimerViewModel()
+        let peerConnection = PeerConnection(viewModel: viewModel, timerViewModel: timerViewModel)
         
         self.viewModel = viewModel
+        self.timerViewModel = timerViewModel
+        
         self.peerConnection = peerConnection
         
         if (SeedData.checkSeed()) {
@@ -27,6 +31,9 @@ struct SimpleTrackerApp: App {
         
         #if os(macOS)
         if let fontURL = Bundle.main.url(forResource: "super-metroid-snes", withExtension: "ttf") {
+            CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
+        }
+        if let fontURL = Bundle.main.url(forResource: "big_noodle_titling", withExtension: "ttf") {
             CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
         }
         #endif
@@ -129,6 +136,7 @@ struct SimpleTrackerApp: App {
             ContentView()
                 .environment(viewModel)
                 .environment(peerConnection)
+                .environment(timerViewModel)
                 .onAppear {
                     #if os(macOS)
                     setupWindow()
@@ -159,6 +167,21 @@ struct SimpleTrackerApp: App {
                 .keyboardShortcut("R", modifiers: [.command])
             }
             CommandGroup(replacing: .sidebar) {
+                Button("\(timerViewModel.isVisible ? "Hide" : "Show") Timer") {
+                    if (timerViewModel.isVisible) {
+                        timerViewModel.resetTimer()
+                    }
+                    timerViewModel.isVisible.toggle()
+                    UserDefaults.standard.set(timerViewModel.isVisible, forKey: "timerVisibility")
+                    let message = [
+                        "type": "cmd",
+                        "key": "timerVisibility",
+                        "value": timerViewModel.isVisible
+                    ]
+                    peerConnection.sendMessage(message)
+                    resizeWindowToFitContent()
+                }
+                Divider()
                 Button("\(viewModel.items[safe: .eye].isActive ? "Hide" : "Show") Planet Awake Status") {
                     viewModel.items[safe: .eye].isActive.toggle()
                     let message = [

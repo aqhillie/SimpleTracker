@@ -12,6 +12,8 @@ import SwiftUI
 extension Color {
     static let titleActive = Color(0x373737)
     static let titleInactive = Color(0x2C2C2C)
+    static let lightCyan = Color(0x6CE2E8)
+    static let medCyan = Color(0x21C3D0)
     
     init(_ hex: UInt) {
         self.init(

@@ -12,6 +12,7 @@ import SwiftUI
 
 struct MobileOptions: View {
     @Environment(ViewModel.self) private var viewModel
+    @Environment(TimerViewModel.self) private var timerViewModel
     let orientation: Orientation
     
     init(orientation: Orientation = .portrait) {
@@ -25,6 +26,8 @@ struct MobileOptions: View {
                 LockSettings()
                 Spacer()
                 ResetTracker()
+                Spacer()
+                TimerButton()
                 Spacer()
                 ToggleEye()
                 Spacer()
