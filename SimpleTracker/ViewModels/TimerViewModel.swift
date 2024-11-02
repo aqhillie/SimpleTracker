@@ -70,18 +70,24 @@ class TimerViewModel {
     
     func getHours() -> String {
         let hours = Int(elapsedTime) / 3600
-        return String(format: "%02d", hours)
+        return String(hours)
     }
 
+    func getIntMinutes() -> Int {
+        return Int(elapsedTime) / 60
+    }
+    
     func getMinutes() -> String {
+        let format = getIntHours() > 0 ? "%02d" : "%d"
         let hours = Int(elapsedTime) / 3600
         let minutes = (Int(elapsedTime) / 60) - (hours * 60)
-        return String(format: "%02d", minutes)
+        return String(format: format, minutes)
     }
 
     func getSeconds() -> String {
+        let format = getIntMinutes() > 0 ? "%02d" : "%d"
         let seconds = Int(elapsedTime) % 60
-        return String(format: "%02d", seconds)
+        return String(format: format, seconds)
     }
 
     func getHundredths() -> String {

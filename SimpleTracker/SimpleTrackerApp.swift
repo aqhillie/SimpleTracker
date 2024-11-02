@@ -25,9 +25,11 @@ struct SimpleTrackerApp: App {
         
         self.peerConnection = peerConnection
         
+        #if os(macOS)
         if (TimerData.exists()) {
             TimerData.loadTimer(into: timerViewModel)
         }
+        #endif
         
         if (SeedData.checkSeed()) {
             SeedData.loadSeed(into: viewModel)

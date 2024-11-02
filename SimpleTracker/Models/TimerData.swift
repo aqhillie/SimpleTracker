@@ -32,11 +32,19 @@ class TimerData: Codable {
         
         do {
             let jsonData = try Data(contentsOf: fileURL)
-            let timerData: TimerData = try JSONDecoder().decode(TimerData.self, from: jsonData)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .custom { decoder -> Date in
+                let dateString = try decoder.singleValueContainer().decode(String.self)
+                guard let date = Self.iso8601WithMilliseconds.date(from: dateString) else {
+                    throw DecodingError.dataCorruptedError(in: try decoder.singleValueContainer(), debugDescription: "Invalid date format")
+                }
+                return date
+            }
+            let timerData: TimerData = try decoder.decode(TimerData.self, from: jsonData)
             debug("Successfully loaded timer data from \(fileURL.path)")
             return timerData
         } catch {
-            debug("Failed to read seed data: \(error)")
+            debug("Failed to read timer data: \(error)")
             return nil
         }
     }
@@ -48,7 +56,13 @@ class TimerData: Codable {
     
     func toJSON() -> String? {
         do {
-            let jsonData = try JSONEncoder().encode(self)
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .custom { date, encoder in
+                let dateString = Self.iso8601WithMilliseconds.string(from: date)
+                var container = encoder.singleValueContainer()
+                try container.encode(dateString)
+            }
+            let jsonData = try encoder.encode(self)
             return String(data: jsonData, encoding: .utf8)
         } catch {
             debug("Failed to get JSON from timerData.")
@@ -61,28 +75,44 @@ class TimerData: Codable {
         let fileURL = URL.documentsDirectory.appending(path: "timer.json")
 
         do {
-            let jsonData = try JSONEncoder().encode(self)
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .custom { date, encoder in
+                let dateString = Self.iso8601WithMilliseconds.string(from: date)
+                var container = encoder.singleValueContainer()
+                try container.encode(dateString)
+            }
+            let jsonData = try encoder.encode(self)
             try jsonData.write(to: fileURL, options: [.atomic])
-            debug("Successfully saved seed data to \(fileURL.path)")
+            debug("Successfully saved timer data to \(fileURL.path)")
         } catch {
             debug("Failed to write timer data: \(error)")
         }
     }
         
-    // Load seed file into passed in ViewModel
+    // Load timer file into passed in ViewModel
     static func loadTimer(into viewModel: TimerViewModel) {
         let fileURL = URL.documentsDirectory.appending(path: "timer.json")
         
         do {
             let jsonData = try Data(contentsOf: fileURL)
-            let timerData: TimerData = try JSONDecoder().decode(TimerData.self, from: jsonData)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .custom { decoder -> Date in
+                let dateString = try decoder.singleValueContainer().decode(String.self)
+                guard let date = Self.iso8601WithMilliseconds.date(from: dateString) else {
+                    throw DecodingError.dataCorruptedError(in: try decoder.singleValueContainer(), debugDescription: "Invalid date format")
+                }
+                return date
+            }
+            let timerData: TimerData = try decoder.decode(TimerData.self, from: jsonData)
             debug("Successfully loaded timer data from \(fileURL.path)")
             
-            viewModel.startTime = timerData.startTime
-            viewModel.stopTime = timerData.stopTime
+            if let startTime = timerData.startTime, let stopTime = timerData.stopTime {
+                viewModel.startTime = startTime
+                viewModel.stopTime = stopTime
+                viewModel.elapsedTime = stopTime.timeIntervalSince(startTime)
+            }
         } catch {
             debug("Failed to read timer data: \(error)")
         }
-    }
-}
+    }}
 #endif
