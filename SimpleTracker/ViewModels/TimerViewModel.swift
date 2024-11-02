@@ -37,6 +37,8 @@ class TimerViewModel {
         timer = Timer.scheduledTimer(withTimeInterval: 0.01666667, repeats: true) { _ in
             self.updateElapsedTime()
         }
+        
+        self.save()
     }
     
     func stopTimer() {
@@ -44,13 +46,17 @@ class TimerViewModel {
         timer = nil
         stopTime = Date()
         isRunning = false
+        self.save()
     }
     
     func resetTimer() {
-        stopTimer()
+        timer?.invalidate()
+        timer = nil
+        isRunning = false
         elapsedTime = 0
         startTime = nil
         stopTime = nil
+        self.save()
     }
 
     private func updateElapsedTime() {
@@ -81,6 +87,11 @@ class TimerViewModel {
     func getHundredths() -> String {
         let hundredths = Int((elapsedTime.truncatingRemainder(dividingBy: 1)) * 100)
         return String(format: "%02d", hundredths)
+    }
+    
+    func save() {
+        let timerData = TimerData.create(from: self)
+        timerData.save()
     }
     #endif
 }

@@ -156,7 +156,7 @@ class PeerConnection: NSObject, MCSessionDelegate, MCNearbyServiceAdvertiserDele
                                 }
                             case "timerStatusRequest":
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    var message = [
+                                    let message = [
                                         "type": "cmd",
                                         "key": "timerVisibility",
                                         "value": self.timerViewModel.isVisible
