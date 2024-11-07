@@ -11,5 +11,5 @@
 // https://help.apple.com/xcode/#/dev745c5c974
 
 MAJOR_VERSION = 0
-MINOR_VERSION = 3
-BUILD_NUMBER = 4
+MINOR_VERSION = 9
+BUILD_NUMBER = 174

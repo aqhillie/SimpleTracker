@@ -13,34 +13,62 @@ import SwiftUI
 
 struct ItemButton: View {
     @Environment(ViewModel.self) private var viewModel
+    @Environment(PeerConnection.self) private var peerConnection
     @State var item: Item
-    @Binding var isActive: Bool
+    var size: CGFloat
+    var isActive: Bool
 
-    init(item: Item, isActive: Binding<Bool>) {
+    init(item: Item, size: CGFloat, isActive: Bool) {
         self.item = item
-        self._isActive = isActive
+        self.size = size
+        self.isActive = isActive
     }
     
     var body: some View {
-        
-        if isActive && item.key != "" {
+        if isActive && item.key != .empty {
             ZStack (alignment: .bottomTrailing){
-                Image(item.key)
+                Image(item.offImage != "" && item.collected == 0 ? item.offImage : item.getKey().toString())
                     .resizable()
-                    .frame(width: viewModel.itemSize, height: viewModel.itemSize)
-                    .modifier(Appearance(type: .item, isActive: item.isCollected() ))
+                    .interpolation(.none)
+                    .frame(width: size, height: size)
+                    .modifier(Appearance(type: .item, isActive: !item.darkenImage || item.isCollected() ))
                     .gesture(
                         TapGesture()
                             .onEnded {
                                 item.collect()
+                                let message = [
+                                    "type": "item",
+                                    "key": item.getKey().toString(),
+                                    "value": [
+                                        "amount": item.collected
+                                    ]
+                                ]
+                                peerConnection.sendMessage(message)
+                                
+                                let seedData = SeedData.create(from: viewModel)
+                                seedData.save()
                             }
                     )
-                    .gesture(
+                    .gesture( 
                         LongPressGesture()
                             .onEnded { _ in
                                 item.decrease()
+                                let message = [
+                                    "type": "item",
+                                    "key": item.getKey().toString(),
+                                    "value": [
+                                        "amount": item.collected
+                                    ]
+                                ]
+                                peerConnection.sendMessage(message)
+                                
+                                let seedData = SeedData.create(from: viewModel)
+                                seedData.save()
                             }
                     )
+                    .onAppear {
+                        print("Icon for item '\(item.key)' appeared")
+                    }
                 if item.isConsumable && item.getCount() > 0 {
                     CountOverlay(count: String(describing: item.getCount()))
                         .frame(alignment: .bottomTrailing)
@@ -49,7 +77,10 @@ struct ItemButton: View {
         } else {
             Rectangle()
                 .fill(Color.black)
-                .frame(width: viewModel.itemSize, height: viewModel.itemSize)
+                .frame(width: size, height: size)
+                .onAppear {
+                    print("Empty rectangle for item '\(item.getKey().toString()) appeared")
+                }
         }
     }
 }

@@ -34,13 +34,18 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Config.xcconfig,
+				Info.plist,
 				Scripts/buildupdate.sh,
 			);
+			platformFiltersByRelativePath = {
+				Fonts/big_noodle_titling.ttf = (macos, );
+			};
 			target = FAA0EECD2CB3805F008D6B24 /* SimpleTracker */;
 		};
 		FAB328162CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Fonts/big_noodle_titling.ttf,
 				"Fonts/super-metroid-snes.ttf",
 			);
 			target = FAA0EEDE2CB38061008D6B24 /* SimpleTrackerTests */;
@@ -48,6 +53,7 @@
 		FAB328172CB44D50009E41E8 /* Exceptions for "SimpleTracker" folder in "SimpleTrackerUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Fonts/big_noodle_titling.ttf,
 				"Fonts/super-metroid-snes.ttf",
 			);
 			target = FAA0EEE82CB38061008D6B24 /* SimpleTrackerUITests */;
@@ -424,26 +430,30 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = SimpleTracker/SimpleTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = "";
-				DEVELOPMENT_ASSET_PATHS = "SimpleTracker/Preview\\ Content";
+				CURRENT_PROJECT_VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 67CZ3ZPAE4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SimpleTracker/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "SimpleTracker for Map Rando";
+				INFOPLIST_KEY_CFBundleDisplayName = SimpleTracker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024 Warpixel";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "SimpleTracker is a Super Metroid Item Tracker for Map Rando based on the Emotracker pack by chicdead26.\\n\\n© 2024 fiftyshadesofurban";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Your app requires access to the local network for peer discovery.";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "Your app requires access to nearby interactions for peer communication.";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationLandscapeLeft;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.warpixel.simpletracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -461,26 +471,30 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = SimpleTracker/SimpleTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = "";
-				DEVELOPMENT_ASSET_PATHS = "SimpleTracker/Preview\\ Content";
+				CURRENT_PROJECT_VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}";
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 67CZ3ZPAE4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SimpleTracker/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "SimpleTracker for Map Rando";
+				INFOPLIST_KEY_CFBundleDisplayName = SimpleTracker;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
-				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024 Warpixel";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "SimpleTracker is a Super Metroid Item Tracker for Map Rando based on the Emotracker pack by chicdead26.\\n\\n© 2024 fiftyshadesofurban";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Your app requires access to the local network for peer discovery.";
+				INFOPLIST_KEY_NSNearbyInteractionUsageDescription = "Your app requires access to nearby interactions for peer communication.";
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationLandscapeLeft;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MARKETING_VERSION = "${MAJOR_VERSION}.${MINOR_VERSION}.${BUILD_NUMBER}";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.warpixel.simpletracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";

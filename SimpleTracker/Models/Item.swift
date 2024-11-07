@@ -13,31 +13,87 @@ import SwiftUI
 
 class EmptyItem: Item {
     init() {
-        super.init(key: "", name: "")
+        super.init(key: .empty, name: "")
+    }
+}
+
+class EyeItem: Item {
+    init(id: UUID = UUID()) {
+        super.init(id: id, key: .eye, name: "Planet Awake", offImage: "eyeoff", saveActiveState: true)
+        self.collected = 1
+    }
+    
+    override func reset() {
+        collected = 1
+    }
+}
+
+class PhantoonItem: Item {
+    init() {
+        super.init(key: .phantoon, name: "Phantoon", offImage: "phantoondead", saveActiveState: true)
+        self.collected = 1
+    }
+    
+    override func reset() {
+        collected = 1
+    }
+}
+
+class CanWallJumpItem: Item {
+    init() {
+        super.init(key: .canwalljump, name: "Can Wall Jump", offImage: "cannotwalljump", darkenImage: false, saveActiveState: true, isRealItem: false)
     }
 }
 
 @Observable
 class Item: Hashable, Identifiable, Equatable {
-
-    let id = UUID()
+    static let emptyItem = EmptyItem()
     
-    let key: String
+    let id: UUID
+    
+    let key: ItemKey
     let name: String
-    var collected: Int
+    let offImage: String
+    let saveActiveState: Bool
+    let darkenImage: Bool
+    var collected: Int {
+        didSet {
+            if (collected != oldValue) {
+                linkedItem?.collected = collected
+            }
+       }
+    }
     let maxValue: Int
     let multiplier: Int
     let isConsumable: Bool
-    var isActive: Bool
+    var isActive: Bool {
+        didSet {
+            if (saveActiveState) {
+                UserDefaults.standard.set(isActive, forKey: "\(key.toString())_isActive")
+            }
+        }
+    }
+    let isRealItem: Bool
+    var linkedItem: Item?
     
-    init(key: String, name: String, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool = true) {
+    init(id: UUID = UUID(), key: ItemKey, name: String, offImage: String = "", darkenImage: Bool = true, saveActiveState: Bool? = nil, maxValue: Int = 1, multiplier: Int = 1, isActive: Bool? = nil, isRealItem: Bool = true, linkedItem: Item? = nil) {
+        self.id = id
         self.key = key
         self.name = name
+        self.offImage = offImage
+        self.darkenImage = darkenImage
+        self.saveActiveState = saveActiveState ?? false
         self.collected = 0
         self.maxValue = maxValue
         self.multiplier = multiplier
         self.isConsumable = (maxValue == 1) ? false : true
-        self.isActive = isActive
+        self.isActive = isActive ?? UserDefaults.standard.boolWithDefaultValue(forKey: key.toString(), defaultValue: true)
+        self.isRealItem = isRealItem
+        self.linkedItem = linkedItem
+    }
+    
+    internal func getKey() -> ItemKey {
+        return key
     }
     
     func collect() {

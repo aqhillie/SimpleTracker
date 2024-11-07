@@ -17,10 +17,11 @@ struct Appearance: ViewModifier {
         if type == .boss {
             content
                 .saturation(isActive ? 0 : 1)
+                .opacity(isActive ? 0.6 : 1)
         } else {
             content
                 .saturation(isActive ? 1 : 0)
-                .opacity(isActive ? 1 : 0.33)
+                .opacity(isActive ? 1 : 0.4)
         }
     }
 }

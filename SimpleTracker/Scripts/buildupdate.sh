@@ -8,10 +8,12 @@
 # Copyright (C) 2024 Warpixel
 #
 
-cd "$SRCROOT/$PRODUCT_NAME"
+cd "$SRCROOT/$PROJECT_NAME"
+
+awk -F "=" '/BUILD_NUMBER/ {print $2}' Config.xcconfig | tr -d ' '
 
 old_build_number=$(awk -F "=" '/BUILD_NUMBER/ {print $2}' Config.xcconfig | tr -d ' ')
-new_build_numer=$((old_build_number + 1))
+new_build_number=$((old_build_number + 1))
 
 # update BUILD_NUMBER with new build number while backing up Config.xcconfig
 # then delete the backup after it completes

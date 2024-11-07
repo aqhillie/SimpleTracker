@@ -11,129 +11,101 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(ViewModel.self) private var viewModel
-    @State private var title = "Crazytown"
+    @Environment(TimerViewModel.self) private var timerViewModel
 
     var body: some View {
+        #if os(macOS)
+        ZStack(alignment: .top) {
+            Color.black.edgesIgnoringSafeArea(.all)
+            VStack(spacing: viewModel.rootVStackSpacing) {
+                Spacer()
+                    .frame(height: 30)
+                if (timerViewModel.isVisible) {
+                    TimerView()
+                        .environment(timerViewModel)
+                }
+//                SeedName()
+                HStack(alignment: .top, spacing: viewModel.rootHStackSpacing) {
+                    Spacer()
+                        .frame(width: 37 - viewModel.rootHStackSpacing)
+                    Bosses()
+                        .minimumScaleFactor(0.1)
+                    ItemGrid()
+                    GameOptions()
+                        .frame(height: 440)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            TitleBar()
+        }
+        .edgesIgnoringSafeArea(.top)
+        .padding(0)
+//        .navigationTitle("\(title) - SimpleTracker")
+        #else
+        GeometryReader { g in
             ZStack {
                 Color.black.edgesIgnoringSafeArea(.all)
-                VStack(spacing: viewModel.rootVStackSpacing) {
-//                    #if os(macOS)
-//                                    SeedName()
-//                    #endif
-                    HStack(spacing: viewModel.rootHStackSpacing) {
-                        Bosses()
-                        ItemGrid()
-                        SeedOptions()
+                if (g.size.width > g.size.height) {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Bosses(g: g)
+                                .minimumScaleFactor(0.1)
+                            Spacer()
+                            ItemGrid(g: g)
+                            Spacer()
+                            GameOptions(g: g)
+                            Spacer()
+                        }
+                    }
+                } else {
+                    HStack {
+                        VStack {
+                            Spacer()
+                            Bosses(g: g)
+                            Spacer()
+                            ItemGrid(g: g)
+                            Spacer()
+                            GameOptions(g: g)
+                            Spacer()
+                        }
                     }
                 }
-                .edgesIgnoringSafeArea(.all)
             }
             .padding(0)
-            #if os(macOS)
-            .navigationTitle("\(title) - SimpleTracker")
-            #endif
-    }
-}
-
-//#if os(macOS)
-//struct SeedName: View {
-//    @State var editing = false;
-//    @Environment(ViewModel.self) private var viewModel
-//
-//        
-//    var body: some View {
-//        @Bindable var appSettings = appSettings
-//        
-//        if (appSettings.showSeedName) {
-//            if (editing) {
-//                TextField("set seed name", text: $appSettings.seedName)
-//                    .background(.black)
-//                    .foregroundColor(.white)
-//                    .multilineTextAlignment(.center)
-//                    .font(.custom("SuperMetroidSNES", size: 28))
-//                    .frame(maxWidth: .infinity, alignment: .top)
-//                    .onSubmit {
-//                        AppSettings.defaults.set(appSettings.seedName, forKey: "seedName")
-//                        $editing.wrappedValue.toggle()
-//                    }
-//            } else {
-//                Text(appSettings.seedName)
-//                    .background(.black)
-//                    .foregroundColor(.white)
-//                    .multilineTextAlignment(.center)
-//                    .font(.custom("SuperMetroidSNES", size: 28))
-//                    .frame(maxWidth: .infinity, alignment: .top)
-//                    .onTapGesture {
-//                        $editing.wrappedValue.toggle()
-//                    }
-//            }
-//        }
-//    }
-//}
-//#endif
-
-struct Bosses: View {
-    @Environment(ViewModel.self) private var viewModel
-    
-    var body: some View {
-        VStack(spacing: viewModel.bossVerticalSpacing) {
-            ForEach(viewModel.bosses, id: \.id) { boss in
-                BossButton(for: boss)
-            }
         }
-        .padding(0)
+        #endif
     }
 }
 
-//struct ItemOrElse: View {
-//    @Environment(ViewModel.self) private var viewModel
-//    let item: Item?
-//    
-//    var body: some View {
-//    }
-//}
-
-struct ItemGrid: View {
+#if os(macOS)
+struct TitleBar: View {
     @Environment(ViewModel.self) private var viewModel
-    
-    func isItemActive(item: Item, viewModel: ViewModel) -> Binding<Bool> {
+    @Environment(TimerViewModel.self) private var timerViewModel
+
+    var body: some View {
         @Bindable var viewModel = viewModel
-
-        switch(item.key) {
-            case "walljump":
-                return $viewModel.collectibleWallJump
-            default:
-            return .constant(true)
-        }
-    }
-    
-    var body: some View {
-        VStack(spacing: viewModel.itemGridVerticalSpacing) {
-            ForEach(viewModel.items, id: \.self) { row in
-                HStack(spacing: viewModel.itemGridHorizontalSpacing) {
-                    ForEach(row, id: \.id) { item in
-                        ItemButton(item: item, isActive: isItemActive(item: item, viewModel: viewModel))
-                    }
-                }
+        ZStack(alignment: .center) {
+            Text("SimpleTracker")
+                .font(.headline)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .opacity($viewModel.isWindowActive.wrappedValue ? 1 : 0.3)
+            HStack {
+                Spacer()
+                LockSettings(size: 15)
+                ResetTracker(size: 15)
+                TimerButton(size: 15)
+                    .environment(timerViewModel)
+                ToggleEye(size: 15)
+                ToggleOptionalPhantoon(size: 15)
+                ToggleCollectibleWallJumpMode(size: 15)
+                NetworkStatusAndToggle(size: 15)
             }
+            .opacity(viewModel.isWindowActive ? 1 : 0.3)
         }
-        .padding(0)
+        .frame(height: 30)
+        .padding(.horizontal, 10)
+        .background(viewModel.isWindowActive ? Color.titleActive : Color.titleInactive)
     }
 }
-
-
-struct SeedOptions: View {
-    @Environment(ViewModel.self) private var viewModel
-    
-    var body: some View {
-        VStack(spacing: viewModel.seedOptionVStackSpacing) {
-            ForEach(viewModel.seedOptions, id: \.key) { seedOption in
-                if (seedOption.visible) {
-                    OptionSelector(seedOption: seedOption)
-                }
-            }
-        }
-        .background(Color.black)
-    }
-}
-
+#endif

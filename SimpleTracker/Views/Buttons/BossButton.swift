@@ -12,24 +12,47 @@
 import SwiftUI
 
 struct BossButton: View {
-    @State var boss: Boss
     @Environment(ViewModel.self) private var viewModel
+    @Environment(PeerConnection.self) private var peerConnection
+    @State var boss: Boss
+    let size: CGFloat
+    let deadImage: String
     
-    init (for boss: Boss) {
+    init (for boss: Boss, size: CGFloat) {
         self.boss = boss
+        self.size = size
+        self.deadImage = boss.deadImage
     }
     
     var body: some View {
-        let key = boss.getKey()
-        Image(boss.isDead() ? "dead" + key : key)
-            .resizable()
-            .frame(width: viewModel.bossSize, height: viewModel.bossSize)
-            .gesture(
-                TapGesture()
-                    .onEnded {
-                        boss.deathToggle()
-                    }
-            )
-            .modifier(Appearance(type: .boss, isActive: boss.isDead()))
+        if boss.key != .empty {
+            Image(boss.isDead() && deadImage != "" ? deadImage : boss.getKey().toString())
+                .resizable()
+                .interpolation(.none)
+                .frame(width: size, height: size)
+                .gesture(
+                    TapGesture()
+                        .onEnded {
+                            boss.deathToggle()
+                            let message = [
+                                "type": "boss",
+                                "key": boss.getKey().toString(),
+                                "value": boss.isDead()
+                            ]
+                            peerConnection.sendMessage(message)
+                            
+                            let seedData = SeedData.create(from: viewModel)
+                            seedData.save()
+                        }
+                )
+                .modifier(Appearance(type: .boss, isActive: boss.isDead()))
+        } else {
+            Rectangle()
+                .fill(Color.black)
+                .frame(width: size, height: size)
+                .onAppear {
+                    print("Empty rectangle for item '\(boss.getKey().toString()) appeared")
+                }
+        }
     }
 }

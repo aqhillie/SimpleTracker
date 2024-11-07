@@ -11,30 +11,39 @@
 
 import SwiftUI
 
+class EmptyBoss: Boss {
+    init() {
+        super.init(key: .empty, name: "")
+    }
+}
+
 @Observable
 class Boss: Hashable, Identifiable, Equatable {
-    
+    static let emptyBoss = EmptyBoss()
+
     let id = UUID()
     
-    private let key: String
-    private let name: String?
-    private var _isDead: Bool = false
+    let key: BossKey
+    let name: String
+    let deadImage: String
+    var _isDead: Bool = false
 
-    init(key: String, name: String) {
+    init(key: BossKey, name: String, deadImage: String = "") {
         self.key = key
         self.name = name
+        self.deadImage = deadImage
     }
     
     internal func isDead() -> Bool {
         return _isDead
     }
     
-    internal func getKey() -> String {
+    internal func getKey() -> BossKey {
         return key
     }
     
     internal func getName() -> String {
-        return name ?? ""
+        return name
     }
     
     internal func deathToggle() {
@@ -44,7 +53,7 @@ class Boss: Hashable, Identifiable, Equatable {
     internal func reset() {
         self._isDead = false
     }
-    
+        
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
     }
