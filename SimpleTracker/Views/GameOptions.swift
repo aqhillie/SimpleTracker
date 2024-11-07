@@ -99,8 +99,6 @@ struct SeedOptions: View {
     
     var body: some View {
         @Bindable var viewModel = viewModel
-        
-//        GeometryReader { geometry in
             ScrollView(showsIndicators: viewModel.broadcastMode ? false : true) {
                 VStack(spacing: viewModel.seedOptionVStackSpacing) {
                     OptionSelector(key: "objective", title: "Objectives", options: viewModel.seedOptionData[safe: .objectives].options, selection: $viewModel.objective)
@@ -121,7 +119,6 @@ struct SeedOptions: View {
                 #if os(macOS)
                 .offset(y: yOffset)
                 .onAppear {
-//                    startAutoScrolling(geometry: geometry)
                     if (viewModel.broadcastMode) {
                         pauseScrolling()
                     }
@@ -147,6 +144,5 @@ struct SeedOptions: View {
             #if os(iOS)
             .frame(alignment: .center)
             #endif
-//        }
     }
 }
