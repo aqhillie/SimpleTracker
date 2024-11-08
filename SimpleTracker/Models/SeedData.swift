@@ -54,7 +54,7 @@ class SeedData: Codable {
             "mapLayout": viewModel.mapLayout,
             "doors": viewModel.doors,
             "startLocation": viewModel.startLocation,
-            "collectibleWallJumnp": viewModel.collectibleWallJump ? 1 : 0
+            "collectibleWallJump": viewModel.collectibleWallJump ? 1 : 0
         ]
         
         return SeedData(name: name, defeatedBosses: defeatedBosses, collectedItems: collectedItems, settings: settings)
