@@ -102,7 +102,7 @@ class ViewModel {
         self.bossSize = 65
         self.itemSize = 60
         self.seedOptionsWidth = 350
-        self.seedOptionTitleFontSize = 18
+        self.seedOptionTitleFontSize = 14
         self.seedOptionSelectionFontSize = 26
         self.bossVerticalSpacing = 30
         self.rootVStackSpacing = 25
@@ -110,7 +110,7 @@ class ViewModel {
         self.itemGridHorizontalSpacing = 7
         self.itemGridVerticalSpacing = 3
         self.seedOptionVStackSpacing = 20
-        self.seedOptionsSpacing = 10        
+        self.seedOptionsSpacing = 20
         #endif
         self.lockedSettingOpacity = 0.3
 

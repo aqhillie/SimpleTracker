@@ -25,22 +25,18 @@ struct GameOptions: View {
                 Spacer()
                 #if os(iOS)
                 MobileOptions(orientation: .landscape)
-                    .minimumScaleFactor(0.1)
                 Spacer()
                 #endif
                 SeedOptions()
-                    .minimumScaleFactor(0.1)
                 Spacer()
             }
             .background(Color.black)
         } else {
             HStack {
                 SeedOptions()
-                    .minimumScaleFactor(0.1)
                 #if os(iOS)
                 Spacer()
                 MobileOptions()
-                    .minimumScaleFactor(0.1)
                 Spacer()
                 #endif
             }
@@ -66,8 +62,7 @@ struct SeedOptions: View {
     }
     
     private func startAutoScrolling() {
-//        let scrollHeight = geometry.size.height
-        let scrollHeight = 210.0
+        let scrollHeight = 203.0
         scrollTimer = Timer.scheduledTimer(withTimeInterval: 0.04, repeats: true) { _ in
             withAnimation(.linear(duration: 0.04)) {
                 if isScrollingDown {

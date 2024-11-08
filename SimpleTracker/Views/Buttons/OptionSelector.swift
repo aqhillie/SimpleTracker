@@ -36,7 +36,7 @@ struct OptionSelector: View {
     
     var body: some View {
         #if os(macOS)
-        VStack(spacing: viewModel.seedOptionSpacing) {
+        VStack(spacing: viewModel.seedOptionsSpacing) {
             Text(title.uppercased())
                 .background(.black)
                 .foregroundColor(Color(0xE8E8E8))
