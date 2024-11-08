@@ -67,7 +67,7 @@ struct SeedOptions: View {
     
     private func startAutoScrolling() {
 //        let scrollHeight = geometry.size.height
-        let scrollHeight = 150.0
+        let scrollHeight = 210.0
         scrollTimer = Timer.scheduledTimer(withTimeInterval: 0.04, repeats: true) { _ in
             withAnimation(.linear(duration: 0.04)) {
                 if isScrollingDown {
@@ -102,9 +102,6 @@ struct SeedOptions: View {
             ScrollView(showsIndicators: viewModel.broadcastMode ? false : true) {
                 VStack(spacing: viewModel.seedOptionVStackSpacing) {
                     OptionSelector(key: "objective", title: "Objectives", options: viewModel.seedOptionData[safe: .objectives].options, selection: $viewModel.objective)
-                        #if os(macOS)
-                        .padding(.top, 10)
-                        #endif
                     OptionSelector(key: "difficulty", title: "Difficulty", options: viewModel.seedOptionData[safe: .difficulty].options, colors: viewModel.seedOptionData[safe: .difficulty].colors, selection: $viewModel.difficulty)
                     OptionSelector(key: "itemProgression", title: "Item Progression", options: viewModel.seedOptionData[safe: .itemProgression].options, colors: viewModel.seedOptionData[safe: .itemProgression].colors,  selection: $viewModel.itemProgression)
                     OptionSelector(key: "qualityOfLife", title: "Quality of Life", options: viewModel.seedOptionData[safe: .qualityOfLife].options, colors: viewModel.seedOptionData[safe: .qualityOfLife].colors, selection: $viewModel.qualityOfLife)
@@ -112,11 +109,9 @@ struct SeedOptions: View {
                     OptionSelector(key: "doors", title: "Doors", options: viewModel.seedOptionData[safe: .doors].options, colors: viewModel.seedOptionData[safe: .doors].colors,  selection: $viewModel.doors)
                     OptionSelector(key: "startLocation", title: "Start Location", options: viewModel.seedOptionData[safe: .startLocation].options, colors: viewModel.seedOptionData[safe: .startLocation].colors,  selection: $viewModel.startLocation)
                     OptionSelectorBool(key: "collectibleWallJump", title: "Wall Jump", options: viewModel.seedOptionData[safe: .collectibleWallJump].options, colors: viewModel.seedOptionData[safe: .collectibleWallJump].colors, selection: $viewModel.collectibleWallJump)
-                        #if os(macOS)
-                        .padding(.bottom, 10)
-                        #endif
                 }
                 #if os(macOS)
+                .padding(.top, 10)
                 .offset(y: yOffset)
                 .onAppear {
                     if (viewModel.broadcastMode) {

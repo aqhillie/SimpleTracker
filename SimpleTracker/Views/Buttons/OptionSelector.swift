@@ -36,11 +36,11 @@ struct OptionSelector: View {
     
     var body: some View {
         #if os(macOS)
-        VStack(spacing: viewModel.seedOptionsSpacing) {
+        VStack(spacing: viewModel.seedOptionSpacing) {
             Text(title.uppercased())
                 .background(.black)
-                .foregroundColor(.white)
-                .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
+                .foregroundColor(Color(0xE8E8E8))
+                .font(.custom("CG pixel 4x5", size: viewModel.seedOptionTitleFontSize))
             Text(options[selection].uppercased())
                 .frame(width: viewModel.seedOptionsWidth, alignment: .center)
                 .background(.black)
@@ -69,7 +69,7 @@ struct OptionSelector: View {
         VStack {
             Text(title.uppercased())
                 .background(.black)
-                .foregroundColor(.white)
+                .foregroundColor(Color(0xE8E8E8))
                 .font(.custom("Apple Symbols", size: viewModel.seedOptionTitleFontSize))
             Spacer()
                 .frame(minHeight: 2, maxHeight: 5)

@@ -36,6 +36,9 @@ struct SimpleTrackerApp: App {
         }
         
         #if os(macOS)
+        if let fontURL = Bundle.main.url(forResource: "CG pixel 4x5", withExtension: "ttf") {
+            CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
+        }
         if let fontURL = Bundle.main.url(forResource: "super-metroid-snes", withExtension: "ttf") {
             CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, nil)
         }

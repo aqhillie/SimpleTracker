@@ -46,6 +46,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Fonts/big_noodle_titling.ttf,
+				"Fonts/CG pixel 4x5.ttf",
 				"Fonts/super-metroid-snes.ttf",
 			);
 			target = FAA0EEDE2CB38061008D6B24 /* SimpleTrackerTests */;
@@ -54,6 +55,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Fonts/big_noodle_titling.ttf,
+				"Fonts/CG pixel 4x5.ttf",
 				"Fonts/super-metroid-snes.ttf",
 			);
 			target = FAA0EEE82CB38061008D6B24 /* SimpleTrackerUITests */;
