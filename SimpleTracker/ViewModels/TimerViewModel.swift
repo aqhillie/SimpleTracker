@@ -18,6 +18,13 @@ class TimerViewModel {
     var timer: Timer?
     var isRunning: Bool = false
     var isVisible: Bool = UserDefaults.standard.boolWithDefaultValue(forKey: "timerVisibility", defaultValue: false)
+    var isEditing: Bool = false
+    
+    // time editor values
+    var editHours: Int = 0
+    var editMinutes: Int = 0
+    var editSeconds: Int = 0
+    
     #endif
     #if os(iOS)
     var isRunning: Bool = false
@@ -59,9 +66,21 @@ class TimerViewModel {
         self.save()
     }
 
-    private func updateElapsedTime() {
-        guard let startTime = startTime else { return }
-        elapsedTime = Date().timeIntervalSince(startTime)
+    func updateElapsedTime(withValues: Bool = false) {
+        if (withValues) {
+            elapsedTime = TimeInterval(editHours * 3600 + editMinutes * 60 + editSeconds)
+            startTime = Date().addingTimeInterval(-elapsedTime)
+            stopTime = Date()
+        } else {
+            guard let startTime = startTime else { return }
+            elapsedTime = Date().timeIntervalSince(startTime)
+        }
+    }
+    
+    func prepareTimeEditor() {
+        editHours = getIntHours()
+        editMinutes = getIntMinutes()
+        editSeconds = getIntSeconds()
     }
     
     func getIntHours() -> Int {
@@ -74,7 +93,7 @@ class TimerViewModel {
     }
 
     func getIntMinutes() -> Int {
-        return Int(elapsedTime) / 60
+        return Int(elapsedTime) / 60 - (getIntHours() * 60)
     }
     
     func getMinutes() -> String {
@@ -84,6 +103,10 @@ class TimerViewModel {
         return String(format: format, minutes)
     }
 
+    func getIntSeconds() -> Int {
+        return Int(elapsedTime) % 60
+    }
+    
     func getSeconds() -> String {
         let format = getIntMinutes() > 0 ? "%02d" : "%d"
         let seconds = Int(elapsedTime) % 60

@@ -131,4 +131,51 @@ struct TimerView: View {
         }
     }
 }
+
+struct TimerEditView: View {
+    @Environment(TimerViewModel.self) private var viewModel
+    @Binding var hours: Int
+    @Binding var minutes: Int
+    @Binding var seconds: Int
+    var onDone: () -> Void
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Edit Timer")
+                .font(.headline)
+
+            HStack {
+                Picker("", selection: $hours) {
+                    ForEach(0..<24) { Text("\($0) hour\($0 == 1 ? "" : "s")").tag($0) }
+                }.frame(width: 100).clipped()
+                Spacer()
+                Text(":")
+                Spacer()
+                Picker("", selection: $minutes) {
+                    ForEach(0..<60) { Text("\($0) minute\($0 == 1 ? "" : "s")").tag($0) }
+                }.frame(width: 100).clipped()
+                Spacer()
+                Text(":")
+                Spacer()
+                Picker("", selection: $seconds) {
+                    ForEach(0..<60) { Text("\($0) second\($0 == 1 ? "" : "s")").tag($0) }
+                }.frame(width: 100).clipped()
+            }
+
+            HStack {
+                Button("Cancel") {
+                    onDone()
+                }
+                .buttonStyle(.bordered)
+                Button("Done") {
+                    viewModel.updateElapsedTime(withValues: true)
+                    onDone()
+                }
+                .buttonStyle(.borderedProminent)
+
+            }
+        }
+        .padding()
+    }
+}
 #endif

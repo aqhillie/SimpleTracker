@@ -156,6 +156,14 @@ struct SimpleTrackerApp: App {
                     peerConnection.setupBrowser()
                     peerConnection.viewModel = viewModel
                 }
+                #if os(macOS)
+                .sheet(isPresented: $timerViewModel.isEditing) {
+                    TimerEditView(hours: $timerViewModel.editHours, minutes: $timerViewModel.editMinutes, seconds: $timerViewModel.editSeconds) {
+                        timerViewModel.isEditing = false
+                    }
+                    .environment(timerViewModel)
+                }
+                #endif
         }
         #if os(macOS)
         .defaultSize(width: 857, height: 468)

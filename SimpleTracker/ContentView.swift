@@ -23,6 +23,10 @@ struct ContentView: View {
                 if (timerViewModel.isVisible) {
                     TimerView()
                         .environment(timerViewModel)
+                        .gesture(TapGesture(count: 2).onEnded {
+                            timerViewModel.prepareTimeEditor()
+                            timerViewModel.isEditing = true
+                        })
                 }
 //                SeedName()
                 HStack(alignment: .top, spacing: viewModel.rootHStackSpacing) {
